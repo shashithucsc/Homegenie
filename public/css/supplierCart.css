@@ -1,0 +1,128 @@
+/* General styles for the entire page */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #f4f4f4;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #3830c9;
+    color: #fff;
+    padding: 20px;
+}
+
+/* Cart container styling */
+.cart-container {
+    width: 90%;
+    margin: 20px auto;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.cart-table th, .cart-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.cart-table th {
+    background-color: #3830c9;
+    color: white;
+}
+
+/* Cart summary styling */
+.cart-summary {
+    background: #f8f8f8;
+    padding: 20px;
+    border-top: 1px solid #ddd;
+    text-align: right;
+    margin-top: 20px;
+}
+
+.checkout {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #08f, #04c);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background: linear-gradient(135deg, #04c, #08f);
+}
+
+/* Adjusting for responsiveness */
+@media (max-width: 768px) {
+    .cart-table th, .cart-table td {
+        padding: 8px;
+    }
+
+    .cart-container {
+        width: 100%;
+    }
+}
+
+.cart-item-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.update{
+    background-color: #151168;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.update:hover{
+    background-color: #2b259e;
+}
+.remove{
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.remove:hover{
+    background-color: #cc0000;
+}
+
+textarea {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1rem;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    resize: vertical;
+}
+
+input[type="radio"] {
+    margin-right: 10px;
+    margin-top: 10px;
+}

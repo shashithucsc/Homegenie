@@ -1,0 +1,204 @@
+:root {
+    --primary-color: #4a6cf7;
+    --secondary-color: #6a7aff;
+    --background-color: #f4f7ff;
+    --sidebar-background: #ffffff;
+    --text-color: #333;
+    --hover-color: rgba(74, 108, 247, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background-color);
+}
+
+.test {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 250px;
+}
+
+.sidebar {
+    height: 100%;
+    width: 250px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    padding: 20px 0;
+    box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+
+.sidebar header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.image-text {
+    display: flex;
+    align-items: center;
+}
+
+.image-text .image {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+}
+
+.image-text .image img {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.image-text .image img:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.header-text .name {
+    font-size: 22px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 1px;
+}
+
+.menu-bar {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.menu-links {
+    list-style: none;
+    padding: 0;
+}
+
+.nav-link {
+    margin: 10px 0;
+    position: relative;
+}
+
+.nav-link a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 12px 20px;
+    color: white;
+    transition: all 0.3s ease;
+    border-radius: 0 30px 30px 0;
+}
+
+.nav-link a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateX(10px);
+}
+
+.nav-link a i {
+    margin-right: 15px;
+    font-size: 24px;
+    transition: transform 0.3s ease;
+}
+
+.nav-link a:hover i {
+    transform: rotate(360deg) scale(1.1);
+}
+
+.text.nav-text {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.bottom-content {
+    margin-top: auto;
+    padding: 20px;
+}
+
+.log-out {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+}
+
+.log-out a {
+    display: flex;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    padding: 12px 20px;
+    transition: all 0.3s ease;
+}
+
+.log-out a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateX(-10px);
+}
+
+.log-out .icon {
+    margin-right: 15px;
+    font-size: 24px;
+    transition: transform 0.3s ease;
+}
+
+.log-out a:hover .icon {
+    transform: rotate(180deg);
+}
+
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+}
+
+.nav-link:hover::before {
+    background-color: white;
+}
+
+/* Active state */
+.nav-link.active a {
+    background-color: rgba(255, 255, 255, 0.2);
+    font-weight: 700;
+}
+
+/* Pulse animation for logo */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.image-text .image img:hover {
+    animation: pulse 1.5s infinite;
+}
+
+
+

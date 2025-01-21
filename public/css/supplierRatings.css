@@ -1,0 +1,129 @@
+
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .supplier-ratings-container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            box-sizing: border-box;
+            margin-left: 280px;
+        }
+
+        .supplier-ratings-container h1 {
+            font-size: 28px;
+            color: #021e73;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .supplier-review {
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .supplier-review:last-child {
+            border-bottom: none;
+        }
+
+        .supplier-reviewer {
+            font-weight: bold;
+            color: #021e73;
+            font-size: 18px;
+        }
+
+        .supplier-stars {
+            color: #f0c800;
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        .supplier-review-text {
+            color: #555;
+            margin: 10px 0;
+        }
+
+        .supplier-read-more {
+            display: inline-block;
+            margin-top: 10px;
+            background-color: #021e73;
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .supplier-read-more:hover {
+            background-color: #021e73;
+            transform: scale(1.05);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .supplier-ratings-container {
+                width: 90%;
+                margin-left: 20px;
+                margin-right: 20px;
+            }
+
+            .supplier-ratings-container h1 {
+                font-size: 24px;
+            }
+
+            .supplier-reviewer {
+                font-size: 16px;
+            }
+
+            .supplier-stars {
+                font-size: 14px;
+            }
+
+            .supplier-review-text {
+                font-size: 14px;
+            }
+
+            .supplier-read-more {
+                font-size: 12px;
+                padding: 4px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .supplier-ratings-container {
+                width: 95%;
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+
+            .supplier-ratings-container h1 {
+                font-size: 20px;
+            }
+
+            .supplier-reviewer {
+                font-size: 14px;
+            }
+
+            .supplier-stars {
+                font-size: 12px;
+            }
+
+            .supplier-review-text {
+                font-size: 12px;
+            }
+
+            .supplier-read-more {
+                font-size: 10px;
+                padding: 3px 10px;
+            }
+        }
+  

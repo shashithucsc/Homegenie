@@ -1,16 +1,5 @@
 <?php
-
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-if (!isset($_SESSION['user_id'])) {
-    header("Location: " . URLROOT . "/login");
-    exit();
-}
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">

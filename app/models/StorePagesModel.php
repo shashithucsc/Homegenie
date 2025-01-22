@@ -10,40 +10,121 @@ class StorePagesModel {
 
     //fetch cards for store pages
     public function getPlumbingItems() {
-        $this->db->query("SELECT * FROM inventory where category = 'Plumbing'");
+        $query = "
+            SELECT 
+                i.item_id,
+                i.item_name,
+                i.quantity,
+                i.selling_price,
+                i.category,
+                i.image_path,
+                u.first_name AS supplier_name
+            FROM 
+                inventory i
+            JOIN 
+                users u ON i.user_id = u.user_id
+            WHERE 
+                i.category = 'Plumbing'";
+        $this->db->query($query);
         $results = $this->db->resultset();
-       return $results;
+        return $results;
     }
+    
 
     public function getCarpentryItems() {
-        $this->db->query("SELECT * FROM inventory where category = 'Carpentry'");
+        $this->db->query("SELECT 
+                i.item_id,
+                i.item_name,
+                i.quantity,
+                i.selling_price,
+                i.category,
+                i.image_path,
+                u.first_name AS supplier_name
+            FROM 
+                inventory i
+            JOIN 
+                users u ON i.user_id = u.user_id
+            WHERE 
+                i.category = 'Carpentry'");
         $results = $this->db->resultset();
         return $results;
 
     }
     public function getCleaningItems() {
-        $this->db->query("SELECT * FROM inventory where category = 'Cleaning'");
+        $this->db->query("SELECT 
+                i.item_id,
+                i.item_name,
+                i.quantity,
+                i.selling_price,
+                i.category,
+                i.image_path,
+                u.first_name AS supplier_name
+            FROM 
+                inventory i
+            JOIN 
+                users u ON i.user_id = u.user_id
+            WHERE 
+                i.category = 'Cleaning'");
         $results = $this->db->resultset();
         return $results;
 
     } 
     
     public function getElectricityItems() {
-        $this->db->query("SELECT * FROM inventory where category = 'Electricity'");
+        $this->db->query("SELECT 
+                i.item_id,
+                i.item_name,
+                i.quantity,
+                i.selling_price,
+                i.category,
+                i.image_path,
+                u.first_name AS supplier_name
+            FROM 
+                inventory i
+            JOIN 
+                users u ON i.user_id = u.user_id
+            WHERE 
+                i.category = 'Electricity'");
         $results = $this->db->resultset();
         return $results;
 
     }
 
     public function getMasonaryItems() {
-        $this->db->query("SELECT * FROM inventory where category = 'Masonary'");
+        $this->db->query("SELECT 
+                i.item_id,
+                i.item_name,
+                i.quantity,
+                i.selling_price,
+                i.category,
+                i.image_path,
+                u.first_name AS supplier_name
+            FROM 
+                inventory i
+            JOIN 
+                users u ON i.user_id = u.user_id
+            WHERE 
+                i.category = 'Masonary'");
         $results = $this->db->resultset();
         return $results;
 
     }
 
     public function getPaintingItems() {
-        $this->db->query("SELECT * FROM inventory where category = 'Painting'");
+        $this->db->query("SELECT 
+                i.item_id,
+                i.item_name,
+                i.quantity,
+                i.selling_price,
+                i.category,
+                i.image_path,
+                u.first_name AS supplier_name
+            FROM 
+                inventory i
+            JOIN 
+                users u ON i.user_id = u.user_id
+            WHERE 
+                i.category = 'Painting'");
         $results = $this->db->resultset();
         return $results;
 

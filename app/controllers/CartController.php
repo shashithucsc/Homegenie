@@ -7,7 +7,6 @@ class CartController {
 
     public function __construct() {
         $this->cartModel = new CartModel();
-        session_start();
         session_regenerate_id(true);
     }
 

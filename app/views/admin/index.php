@@ -2,6 +2,7 @@
 
 
 
+
 $user_name = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest'; 
 $profile_pic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'default.png'; 
 $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
@@ -24,6 +25,7 @@ require_once APPROOT . '/views/admin/sidebar.php';
    
     <div class="dashboard-container">
         <header>
+           
             <div class="welcome-container">
                 <h2>Welcome to Sales Dashboard</h2>
             </div>

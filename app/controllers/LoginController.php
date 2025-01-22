@@ -3,7 +3,6 @@ class LoginController extends Controller {
     private $UserModel;
     public function __construct() {
         $this->UserModel = $this->model('UserModel');
-        session_start();
         session_regenerate_id(true);
     }
 
@@ -46,9 +45,9 @@ class LoginController extends Controller {
 
                     // Redirect based on role
                     $redirectUrl = match ($loggedInUser->role) {
-                        'customer' => URLROOT . '/CustomerController',
+                        'customer' => URLROOT . '/StorePageController',
                         'service_provider' => URLROOT . '/ServiceProviderController',
-                        'supplier' => URLROOT . '/StorePageController',
+                        'supplier' => URLROOT . '/SupplierController',
                         'admin' => URLROOT . '/SupplierController',
                         default => URLROOT . '/HomeController'
                     };
@@ -73,7 +72,6 @@ class LoginController extends Controller {
     }
 
     public function logout() {
-        session_start();
         unset($_SESSION['user_id']);
         unset($_SESSION['email']);
         unset($_SESSION['role']);

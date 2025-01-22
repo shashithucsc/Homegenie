@@ -2,6 +2,9 @@
 //load configuarations 
 require_once 'config/config.php';
 
+//load session
+require_once 'helpers/SessionHelper.php';
+
 
 // load libraries
 require_once 'libraries/Core.php';

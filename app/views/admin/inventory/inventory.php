@@ -1,9 +1,10 @@
 <?php
 
-session_start();
 
 $user_name = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest'; 
 $profile_pic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'default.png'; 
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +14,7 @@ $profile_pic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'def
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory Management</title>
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/inventory.css">
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/style.css">
+   
     
 
 </head>

@@ -91,6 +91,7 @@ main {
     border-right: 2px solid #F6F5FF;
     padding: 10px;
     overflow-y: auto;
+    max-height: 90vh;
 }
 
 .inventory-list h3 {

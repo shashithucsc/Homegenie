@@ -18,23 +18,30 @@ class CartController {
         $userId = $_SESSION['user_id'];
         $itemId = $_POST['item_id'];
         $quantity = (int)$_POST['quantity'];
-    
+        
+        // Get supplier_id based on the item_id (assuming each item has a supplier associated with it)
+        $supplierId = $this->cartModel->getSupplierIdByItemId($itemId);
+        
+        if (!$supplierId) {
+            die('Error: Supplier ID not found.');
+        }
+        
         // Check available inventory
         $availableQuantity = $this->cartModel->getAvailableQuantity($itemId);
         if ($quantity > $availableQuantity) {
-            $this->showPopup("Not enough stock available.", URLROOT . "/HomeController");
+            $this->showPopup("Not enough stock available.", URLROOT . "/StorePagesController");
             return;
         }
     
         // Add item to cart and update inventory
-        if ($this->cartModel->addItemToCart($userId, $itemId, $quantity)) {
+        if ($this->cartModel->addItemToCart($userId, $itemId, $quantity, $supplierId)) {
             $this->cartModel->updateInventoryLevel($itemId, $availableQuantity - $quantity);
-            $this->showPopup("Item(s) added to cart successfully!", URLROOT . "/HomeController");
+            $this->showPopup("Item(s) added to cart successfully!", URLROOT . "/StorePagesController");
         } else {
-            $this->showPopup("Failed to add items to cart.", URLROOT . "/HomeController");
+            $this->showPopup("Failed to add items to cart.", URLROOT . "/StorePagesController");
         }
     }
-
+    
     public function removeItem($cartItemId) {
         if (!isset($_SESSION['user_id'])) {
             die('Error: User not logged in.');
@@ -151,12 +158,12 @@ class CartController {
         }
     
         // Create the order in the sales table
-        $saleId = $this->cartModel->createOrder($userId, $totalAmount, $paymentMethod, $deliveryAddress);
+        $saleId = $this->cartModel->createOrder($userId, $totalAmount, $paymentMethod, $deliveryAddress, $supplierId);
     
         if ($saleId) {
             // Add each item to the sales_items table using sale_id
             foreach ($cartItems as $item) {
-                $this->cartModel->addOrderItem($saleId, $item->item_id, $item->quantity, $item->selling_price);
+                $this->cartModel->addOrderItem($saleId, $item->item_id, $item->quantity, $item->selling_price,$item->supplier_id);
             }
     
             // Clear the cart after the order is placed

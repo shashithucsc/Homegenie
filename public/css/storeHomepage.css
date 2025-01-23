@@ -84,6 +84,7 @@
     .categories {
         margin: 20px 0;
         text-align: center;
+        justify-content: flex-start;
     }
 
     .categories h2 {

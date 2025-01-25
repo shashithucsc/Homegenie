@@ -21,12 +21,20 @@ class CartModel {
         // Return user_id as the supplier_id if found, else null
         return $result ? $result->user_id : null; // Using user_id as supplier_id
     }
+
+    public function isSupplierValid($supplierId) {
+        $this->db->query("SELECT COUNT(*) as count FROM users WHERE user_id = :supplier_id AND role = 'supplier'");
+        $this->db->bind(':supplier_id', $supplierId);
+        $result = $this->db->single();
+        return $result->count > 0;
+    }
+    
     
     
 
-    public function addItemToCart($userId, $itemId, $quantity,$supplierId) {
-        $this->db->query("INSERT INTO cart (user_id, item_id, quantity, supplier_id) VALUES (:user_id, :item_id, :quantity, :supplier_id)");
-        $this->db->bind(':user_id', $userId);
+    public function addItemToCart( $customerId, $itemId, $quantity,$supplierId) {
+        $this->db->query("INSERT INTO cart (customer_id, item_id, quantity, supplier_id) VALUES (:user_id, :item_id, :quantity, :supplier_id)");
+        $this->db->bind(':user_id',  $customerId);
         $this->db->bind(':item_id', $itemId);
         $this->db->bind(':quantity', $quantity);
         $this->db->bind(':supplier_id', $supplierId);
@@ -48,15 +56,15 @@ class CartModel {
                 inventory.item_name,
                 inventory.selling_price,
                 cart.created_at,
-                cart.user_id,
+                cart.customer_id,
                 cart.quantity,
                 cart.supplier_id,
                 inventory.quantity AS available_quantity
             FROM cart
             JOIN inventory ON cart.item_id = inventory.item_id
-            WHERE cart.user_id = :user_id
+            WHERE cart.customer_id = :user_id
         ");
-        $this->db->bind(':user_id', $userId);
+        $this->db->bind(':user_id',  $userId);
         return $this->db->resultSet();
     }
 
@@ -80,22 +88,24 @@ class CartModel {
     }
     
     // Create an order
-    public function createOrder($userId, $totalAmount, $paymentMethod, $deliveryAddress) {
-        $this->db->query("
-            INSERT INTO sales (user_id, total_amount, payment_method, delivery_address, supplier_id) 
-            VALUES (:user_id, :total_amount, :payment_method, :delivery_address, :supplier_id)
-        ");
-        $this->db->bind(':user_id', $userId);
+    public function createOrder($customerId, $totalAmount, $paymentMethod, $deliveryAddress, $supplierId) {
+        $this->db->query("INSERT INTO sales (customer_id, total_amount, payment_method, delivery_address, supplier_id, created_at) 
+                          VALUES (:customer_id, :total_amount, :payment_method, :delivery_address, :supplier_id, NOW())");
+        
+        $this->db->bind(':customer_id', $customerId);
         $this->db->bind(':total_amount', $totalAmount);
         $this->db->bind(':payment_method', $paymentMethod);
         $this->db->bind(':delivery_address', $deliveryAddress);
         $this->db->bind(':supplier_id', $supplierId);
     
         if ($this->db->execute()) {
-            return $this->db->lastInsertId(); // Get the ID of the inserted order
+            return $this->db->lastInsertId(); // Return order ID if successful
         }
         return false; // Return false if the query fails
     }
+    
+    
+    
     
 
    // Add item to order
@@ -115,7 +125,7 @@ public function addOrderItem($saleId, $itemId, $quantity, $price,$supplierId) {
 
     // Clear the cart
     public function clearCart($userId) {
-        $this->db->query("DELETE FROM cart WHERE user_id = :user_id");
+        $this->db->query("DELETE FROM cart WHERE customer_id = :user_id");
         $this->db->bind(':user_id', $userId);
         return $this->db->execute();
     }

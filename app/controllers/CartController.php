@@ -15,7 +15,7 @@ class CartController {
             die('Error: User not logged in.');
         }
     
-        $userId = $_SESSION['user_id'];
+        $customerId = $_SESSION['user_id'];
         $itemId = $_POST['item_id'];
         $quantity = (int)$_POST['quantity'];
         
@@ -34,7 +34,7 @@ class CartController {
         }
     
         // Add item to cart and update inventory
-        if ($this->cartModel->addItemToCart($userId, $itemId, $quantity, $supplierId)) {
+        if ($this->cartModel->addItemToCart($customerId, $itemId, $quantity, $supplierId)) {
             $this->cartModel->updateInventoryLevel($itemId, $availableQuantity - $quantity);
             $this->showPopup("Item(s) added to cart successfully!", URLROOT . "/StorePagesController");
         } else {
@@ -100,9 +100,9 @@ class CartController {
     }
 
     public function viewCart() {
-        $userId = $_SESSION['user_id'];
+        $customerId = $_SESSION['user_id'];
     
-        $cartItems = $this->cartModel->getCartItemsByUserId($userId);
+        $cartItems = $this->cartModel->getCartItemsByUserId( $customerId);
         $total = 0;
     
         foreach ($cartItems as $item) {
@@ -117,8 +117,8 @@ class CartController {
 
 
     public function checkout() {
-        $userId = $_SESSION['user_id']; // Assuming user_id is set in session
-        $cartItems = $this->cartModel->getCartItemsByUserId($userId);
+        $customerId = $_SESSION['user_id']; // Assuming user_id is set in session
+        $cartItems = $this->cartModel->getCartItemsByUserId( $customerId);
         
         $totalItems = 0;
         $subtotal = 0;
@@ -140,15 +140,23 @@ class CartController {
             die('Error: User not logged in.');
         }
     
-        $userId = $_SESSION['user_id'];
-        $cartItems = $this->cartModel->getCartItemsByUserId($userId);
+        $customerId = $_SESSION['user_id'];
+    
+        // Fetch cart items for the user
+        $cartItems = $this->cartModel->getCartItemsByUserId($customerId);
+    
+        if (empty($cartItems)) {
+            $this->showPopup("Your cart is empty.", URLROOT . "/CartController/viewCart");
+            return;
+        }
+    
         $totalAmount = 0;
     
         foreach ($cartItems as $item) {
             $totalAmount += $item->quantity * $item->selling_price;
         }
     
-        // Get payment and delivery details
+        // Validate payment and delivery details
         $paymentMethod = $_POST['payment_method'] ?? null;
         $deliveryAddress = $_POST['delivery_address'] ?? null;
     
@@ -157,25 +165,42 @@ class CartController {
             return;
         }
     
-        // Create the order in the sales table
-        $saleId = $this->cartModel->createOrder($userId, $totalAmount, $paymentMethod, $deliveryAddress, $supplierId);
+        // Extract supplier ID (assumes all items belong to the same supplier)
+        $supplierId = $cartItems[0]->supplier_id ?? null;
+    
+        if (!$supplierId) {
+            $this->showPopup("Error: Supplier not found for items in the cart.", URLROOT . "/CartController/viewCart");
+            return;
+        }
+    
+        // Ensure the supplier exists
+        if (!$this->cartModel->isSupplierValid($supplierId)) {
+            $this->showPopup("Error: Invalid supplier.", URLROOT . "/CartController/viewCart");
+            return;
+        }
+    
+        // Create the order
+        $saleId = $this->cartModel->createOrder($customerId, $totalAmount, $paymentMethod, $deliveryAddress, $supplierId);
     
         if ($saleId) {
-            // Add each item to the sales_items table using sale_id
+            // Add each item to the sales_items table
             foreach ($cartItems as $item) {
-                $this->cartModel->addOrderItem($saleId, $item->item_id, $item->quantity, $item->selling_price,$item->supplier_id);
+                $this->cartModel->addOrderItem($saleId, $item->item_id, $item->quantity, $item->selling_price, $supplierId);
             }
     
-            // Clear the cart after the order is placed
-            $this->cartModel->clearCart($userId);
+            // Clear the cart
+            $this->cartModel->clearCart($customerId);
     
-            // Show success popup and redirect
+            // Success popup
             $this->showPopup("Purchase successful! Thank you for your order.", URLROOT . "/StorePageController/index");
         } else {
-            // Show failure popup
-            $this->showPopup("Failed to complete the purchase. Please try again.", URLROOT . "/CartController/viewCart");
+            // Failure popup
+            $this->showPopup("Order creation failed. Please try again.", URLROOT . "/CartController/viewCart");
         }
     }
+    
+        
+    
     
     
     

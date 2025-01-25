@@ -7,19 +7,16 @@ class SupplierModel {
     }
 
     public function getTotalSales($userId) {
-        $this->db->query("SELECT SUM(total_amount) AS total_sales FROM sales WHERE user_id = :user_id");
-        $this->db->bind(':user_id', $userId);
+        $this->db->query("SELECT SUM(total_amount) AS total_sales FROM sales WHERE supplier_id = :user_id");
+        $this->db->bind(':user_id', $userId); // Make sure you use supplier_id here
         $results = $this->db->resultSet();
         return $results;
     }
+    
 
     public function getTotalCustomers($userId) {
-        $this->db->query("
-            SELECT COUNT(DISTINCT user_id) AS total_customers 
-            FROM sales 
-            WHERE user_id = :user_id
-        ");
-        $this->db->bind(':user_id', $userId);
+        $this->db->query("SELECT COUNT(DISTINCT customer_id) AS total_customers FROM sales WHERE supplier_id = :user_id");
+        $this->db->bind(':user_id', $userId); // Make sure you use supplier_id here
         $results = $this->db->resultSet();
         return $results;
     }
@@ -37,15 +34,16 @@ class SupplierModel {
             FROM sales_items si
             JOIN inventory i ON si.item_id = i.item_id
             JOIN sales s ON si.sale_id = s.id
-            WHERE s.user_id = :user_id
+            WHERE s.supplier_id = :user_id
             GROUP BY i.category
             ORDER BY total_sold DESC
             LIMIT 1
         ");
-        $this->db->bind(':user_id', $userId);
+        $this->db->bind(':user_id', $userId); // Make sure you use supplier_id here
         $results = $this->db->resultSet();
         return $results;
     }
+    
 
     public function getTopProduct($userId) {
         $this->db->query("
@@ -53,18 +51,18 @@ class SupplierModel {
             FROM sales_items si
             JOIN inventory i ON si.item_id = i.item_id
             JOIN sales s ON si.sale_id = s.id
-            WHERE s.user_id = :user_id
+            WHERE s.supplier_id = :user_id
             GROUP BY si.item_id
             ORDER BY total_sold DESC
             LIMIT 1
         ");
-        $this->db->bind(':user_id', $userId);
+        $this->db->bind(':user_id', $userId); // Make sure you use supplier_id here
         $results = $this->db->resultSet();
         return $results;
     }
+    
 
-     // Fetch overall inventory statistics grouped by category
-     public function getInventoryReport($userId) {
+    public function getInventoryReport($userId) {
         $this->db->query("
             SELECT 
                 i.category,
@@ -81,8 +79,7 @@ class SupplierModel {
         $this->db->bind(':user_id', $userId);
         return $this->db->resultSet();
     }
-    
-    // Fetch sales report (item-level sales and revenue)
+
     public function getSalesReport($userId) {
         $this->db->query("
             SELECT 
@@ -99,7 +96,6 @@ class SupplierModel {
         return $this->db->resultSet();
     }
 
-    // Fetch reorder suggestions for inventory
     public function getReorderSuggestions($userId) {
         $this->db->query("
             SELECT 
@@ -110,9 +106,21 @@ class SupplierModel {
             FROM inventory i
             WHERE i.user_id = :user_id AND i.quantity < :default_threshold
         ");
-        $this->db->bind(':default_threshold', 20); // Default threshold value (e.g., 20 units)
+        $this->db->bind(':user_id', $userId);
+        $this->db->bind(':default_threshold', 50);  // Example threshold
+        return $this->db->resultSet();
+    }
+
+    public function getSupplierById($userId) {
+        $this->db->query("SELECT * FROM suppliers WHERE supplier_id = :user_id");
+        $this->db->bind(':user_id', $userId);
+        $result = $this->db->single();
+        return $result;
+    }
+
+    public function getProductsBySupplierId($userId) {
+        $this->db->query("SELECT * FROM inventory WHERE user_id = :user_id");
         $this->db->bind(':user_id', $userId);
         return $this->db->resultSet();
     }
-    
 }

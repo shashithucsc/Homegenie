@@ -127,7 +127,7 @@
 <body>
 <?php require APPROOT . '/views/admin/sidebar.php'; ?>
 <div class="payments-container">
-    <h2>Pending Orders</h2>
+    <h2>Completed Orders</h2>
     <table>
         <thead>
             <tr>
@@ -138,12 +138,12 @@
                 <th>Payment Method</th>
                 <th>Delivery Address</th>
                 <th>Order Date</th>
-                <th>Actions</th>
+               
             </tr>
         </thead>
         <tbody>
-        <?php if (!empty($data['pendingOrders'])): ?>
-            <?php foreach ($data['pendingOrders'] as $order): ?>
+        <?php if (!empty($data['completedOrders'])): ?>
+            <?php foreach ($data['completedOrders'] as $order): ?>
                 <tr>
                     <td><?php echo $order->order_id; ?></td>
                     <td><?php echo $order->customer_id; ?></td>
@@ -169,24 +169,13 @@
                     <td><?php echo $order->delivery_address; ?></td>
                     <td><?php echo $order->created_at; ?></td>
                     <td>
-                        <div class="action-buttons">
-                            <form action="<?php echo URLROOT; ?>/SupplierController/updateOrderStatus" method="POST">
-                                <input type="hidden" name="order_id" value="<?php echo $order->order_id; ?>">
-                                <input type="hidden" name="status" value="Accepted">
-                                <button type="submit" class="accept-btn">Accept</button>
-                            </form>
-                            <form action="<?php echo URLROOT; ?>/SupplierController/updateOrderStatus" method="POST">
-                                <input type="hidden" name="order_id" value="<?php echo $order->order_id; ?>">
-                                <input type="hidden" name="status" value="Rejected">
-                                <button type="submit" class="cancel-btn">Cancel</button>
-                            </form>
-                        </div>
+                        
                     </td>
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>
             <tr>
-                <td colspan="8" style="text-align: center;">No pending orders available.</td>
+                <td colspan="8" style="text-align: center;">No Completed orders available.</td>
             </tr>
         <?php endif; ?>
         </tbody>

@@ -47,6 +47,7 @@
                                 <span class="text nav-text">Pending Orders</span>
                             </a>
                         </li>
+                        
                         <li class="nav-link">
                             <a href="<?php echo URLROOT; ?>/SupplierController/quotations" class="nav-link">
                                 <i class='bx bx-message-rounded-dots'></i>

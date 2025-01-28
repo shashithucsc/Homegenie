@@ -36,9 +36,9 @@ class CartController {
         // Add item to cart and update inventory
         if ($this->cartModel->addItemToCart($customerId, $itemId, $quantity, $supplierId)) {
             $this->cartModel->updateInventoryLevel($itemId, $availableQuantity - $quantity);
-            $this->showPopup("Item(s) added to cart successfully!", URLROOT . "/StorePagesController");
+            $this->showPopup("Item(s) added to cart successfully!", URLROOT . "/CartController/viewCart");
         } else {
-            $this->showPopup("Failed to add items to cart.", URLROOT . "/StorePagesController");
+            $this->showPopup("Failed to add items to cart.", URLROOT . "/CartController/viewCart");
         }
     }
     

@@ -117,12 +117,12 @@ class SupplierModel {
         return $this->db->resultSet();
     }
 
-    public function getSupplierById($userId) {
-        $this->db->query("SELECT * FROM suppliers WHERE supplier_id = :user_id");
-        $this->db->bind(':user_id', $userId);
-        $result = $this->db->single();
-        return $result;
-    }
+    // public function getSupplierById($userId) {
+    //     $this->db->query("SELECT * FROM suppliers WHERE supplier_id = :user_id");
+    //     $this->db->bind(':user_id', $userId);
+    //     $result = $this->db->single();
+    //     return $result;
+    // }
 
     public function getProductsBySupplierId($userId) {
         $this->db->query("SELECT * FROM inventory WHERE user_id = :user_id");
@@ -227,6 +227,64 @@ public function getCompletedOrders($supplierId)
 
     // Return the result set, defaulting to an empty array if null
     return $this->db->resultSet() ?? [];
+}
+
+
+public function getSupplierById($userId) {
+    $sql = "SELECT u.user_id, u.first_name, u.last_name, u.contact_number, u.email, u.address, u.profile_image, s.expertise, s.service_areas
+            FROM users u
+            LEFT JOIN suppliers s ON u.user_id = s.user_id
+            WHERE u.user_id = :user_id";
+    $this->db->query($sql);
+    $this->db->bind(':user_id', $userId);
+    return $this->db->single();
+}
+
+// Fetch supplier's products
+public function getProductsBySupplier($userId) {
+    $sql = "SELECT * FROM inventory WHERE user_id = :user_id";
+    $this->db->query($sql);
+    $this->db->bind(':user_id', $userId);
+    return $this->db->resultSet();
+}
+
+// Update supplier profile
+public function updateSupplierProfile($data) {
+    $sql = "UPDATE users
+            SET first_name = :first_name, last_name = :last_name, contact_number = :contact_number, address = :address
+            WHERE user_id = :user_id";
+    $this->db->query($sql);
+
+    // Bind user details
+    $this->db->bind(':first_name', $data['first_name']);
+    $this->db->bind(':last_name', $data['last_name']);
+    $this->db->bind(':contact_number', $data['contact_number']);
+    $this->db->bind(':address', $data['address']);
+    $this->db->bind(':user_id', $data['user_id']);
+    $this->db->execute();
+
+    // Update supplier details
+    $sql = "UPDATE suppliers
+            SET expertise = :expertise, service_areas = :service_areas
+            WHERE user_id = :user_id";
+    $this->db->query($sql);
+
+    $this->db->bind(':expertise', $data['expertise']);
+    $this->db->bind(':service_areas', $data['service_areas']);
+    $this->db->bind(':user_id', $data['user_id']);
+
+    return $this->db->execute();
+}
+
+// Update profile picture
+public function updateProfilePicture($userId, $profileImage) {
+    $sql = "UPDATE users SET profile_image = :profile_image WHERE user_id = :user_id";
+    $this->db->query($sql);
+
+    $this->db->bind(':profile_image', $profileImage, PDO::PARAM_LOB);
+    $this->db->bind(':user_id', $userId);
+
+    return $this->db->execute();
 }
 
 

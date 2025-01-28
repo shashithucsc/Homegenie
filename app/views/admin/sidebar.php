@@ -61,7 +61,7 @@
                             </a>
                         </li>
                         <li class="nav-link">
-                            <a href="<?php echo URLROOT; ?>/SupplierController/supplierProfile" class="nav-link">
+                            <a href="<?php echo URLROOT; ?>/SupplierController/profile" class="nav-link">
                                 <i class='bx bxs-id-card'></i>
                                 <span class="text nav-text">Profile</span>
                             </a>

@@ -44,7 +44,7 @@
                         <li class="nav-link">
                             <a href="<?php echo URLROOT; ?>/SupplierController/payments" class="nav-link">
                                 <i class='bx bx-money-withdraw'></i>
-                                <span class="text nav-text">Payments</span>
+                                <span class="text nav-text">Pending Orders</span>
                             </a>
                         </li>
                         <li class="nav-link">

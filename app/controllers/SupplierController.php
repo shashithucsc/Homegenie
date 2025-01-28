@@ -42,9 +42,50 @@ class SupplierController extends Controller {
         $this->view('admin/index', $data);
     }
 
-    public function payments() {
-        $this->view('admin/Payments/Payments');
+    public function payments()
+    {
+        // Check if the user is logged in
+        $loggedUserId = $_SESSION['user_id'] ?? null;
+    
+        if (!$loggedUserId) {
+            die('User not logged in.');
+        }
+    
+        // Fetch pending orders
+        $pendingOrders = $this->SupplierModel->getPendingOrders($loggedUserId);
+    
+        // Ensure the pending orders data is always set
+        $data = [
+            'pendingOrders' => isset($pendingOrders) ? $pendingOrders : [] // Safely pass an empty array if null
+        ];
+    
+        // Load the view with the data
+        $this->view('admin/pendingOrders/pendingOrders', $data);
     }
+    
+    public function updateOrderStatus()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $orderId = $_POST['order_id'];
+            $status = $_POST['status'];
+    
+            // Update order status in the database
+            $this->SupplierModel->updateOrderStatus($orderId, $status);
+    
+            // Redirect back to the pending orders page
+            header('Location: ' . URLROOT . '/SupplierController/payments');
+            exit();
+        }
+    }
+    
+
+
+    
+    
+    
+
+   
+    
 
     public function quotations() {
         $this->view('admin/Quotations/Quotations');

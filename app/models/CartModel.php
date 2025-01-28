@@ -89,7 +89,7 @@ class CartModel {
     
     // Create an order
     public function createOrder($customerId, $totalAmount, $paymentMethod, $deliveryAddress, $supplierId) {
-        $this->db->query("INSERT INTO sales (customer_id, total_amount, payment_method, delivery_address, supplier_id, created_at) 
+        $this->db->query("INSERT INTO sales_orders (customer_id, total_amount, payment_method, delivery_address, supplier_id, created_at) 
                           VALUES (:customer_id, :total_amount, :payment_method, :delivery_address, :supplier_id, NOW())");
         
         $this->db->bind(':customer_id', $customerId);

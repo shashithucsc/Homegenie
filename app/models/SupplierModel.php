@@ -123,4 +123,61 @@ class SupplierModel {
         $this->db->bind(':user_id', $userId);
         return $this->db->resultSet();
     }
+
+    public function getPendingOrders($supplierId)
+{
+    // Query to fetch pending orders
+    $this->db->query(
+        "SELECT 
+            so.id AS order_id,
+            so.customer_id,
+            so.total_amount,
+            so.payment_method,
+            so.delivery_address,
+            so.created_at,
+            si.item_id,
+            si.quantity,
+            si.price,
+            u.first_name AS customer_name,
+            u.contact_number,
+            u.email
+         FROM 
+            sales_orders so
+         JOIN 
+            sales_items si ON so.id = si.sale_id
+         JOIN 
+            users u ON so.customer_id = u.user_id
+         WHERE 
+            so.supplier_id = :supplier_id AND si.status = 'Pending'
+         ORDER BY 
+            so.created_at DESC"
+    );
+
+    // Bind the supplier ID
+    $this->db->bind(':supplier_id', $supplierId);
+
+    // Return the result set, defaulting to an empty array if null
+    return $this->db->resultSet() ?? [];
+}
+
+public function updateOrderStatus($orderId, $status)
+{
+    // Update the status of the sales order
+    $this->db->query("UPDATE sales_orders SET status = :status WHERE id = :order_id");
+    $this->db->bind(':status', $status);
+    $this->db->bind(':order_id', $orderId);
+    
+    // Execute the update for the sales_orders table
+    $this->db->execute();
+
+    // Update the status of the sales items associated with the order
+    $this->db->query("UPDATE sales_items SET status = :status WHERE sale_id = :order_id");
+    $this->db->bind(':status', $status);
+    $this->db->bind(':order_id', $orderId);
+
+    // Execute the update for the sales_items table
+    return $this->db->execute();
+}
+
+
 }

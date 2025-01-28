@@ -148,12 +148,21 @@
                     <td><?php echo $order->order_id; ?></td>
                     <td><?php echo $order->customer_id; ?></td>
                     <td>
-                        <ul>
-                            <li>Item ID: <?php echo $order->item_id; ?></li>
-                            <li>Quantity: <?php echo $order->quantity; ?></li>
-                            <li>Price: <?php echo $order->price; ?></li>
-                        </ul>
-                    </td>
+    <?php if (!empty($order->items) && is_array($order->items)): ?>
+        <ul>
+            <?php foreach ($order->items as $item): ?>
+                <li>
+                    <strong>Item ID:</strong> <?php echo $item->item_id; ?><br> 
+                    <strong>Quantity:</strong> <?php echo $item->quantity; ?> <br>
+                    <strong>Price:</strong> <?php echo $item->price; ?><br><br>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php else: ?>
+        <p>No items found.</p>
+    <?php endif; ?>
+</td>
+
                     <td><?php echo $order->total_amount; ?></td>
                     <td><?php echo $order->payment_method; ?></td>
                     <td><?php echo $order->delivery_address; ?></td>
@@ -182,5 +191,4 @@
         </tbody>
     </table>
 </div>
-</body>
-</html>
+</body></html>

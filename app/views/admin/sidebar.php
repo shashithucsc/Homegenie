@@ -42,22 +42,22 @@
                             </a>
                         </li>
                         <li class="nav-link">
-                            <a href="<?php echo URLROOT; ?>/SupplierController/payments" class="nav-link">
+                            <a href="<?php echo URLROOT; ?>/SupplierController/pendingOrders" class="nav-link">
                                 <i class='bx bx-money-withdraw'></i>
                                 <span class="text nav-text">Pending Orders</span>
                             </a>
                         </li>
                         
                         <li class="nav-link">
-                            <a href="<?php echo URLROOT; ?>/SupplierController/quotations" class="nav-link">
-                                <i class='bx bx-message-rounded-dots'></i>
-                                <span class="text nav-text">Quotations</span>
+                            <a href="<?php echo URLROOT; ?>/SupplierController/completedOrders" class="nav-link">
+                                <i class='bx bx-star'></i>
+                                <span class="text nav-text">Completed Orders</span>
                             </a>
                         </li>
                         <li class="nav-link">
-                            <a href="<?php echo URLROOT; ?>/SupplierController/ratings" class="nav-link">
-                                <i class='bx bx-star'></i>
-                                <span class="text nav-text">Ratings</span>
+                            <a href="<?php echo URLROOT; ?>/SupplierController/quotations" class="nav-link">
+                                <i class='bx bx-message-rounded-dots'></i>
+                                <span class="text nav-text">Quotations</span>
                             </a>
                         </li>
                         <li class="nav-link">

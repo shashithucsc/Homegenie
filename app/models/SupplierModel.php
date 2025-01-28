@@ -190,4 +190,44 @@ public function updateOrderStatus($orderId, $status)
 }
 
 
+public function getCompletedOrders($supplierId)
+{
+    // Query to fetch pending orders with item details
+    $this->db->query(
+        "SELECT 
+            so.id AS order_id,
+            so.customer_id,
+            so.total_amount,
+            so.payment_method,
+            so.delivery_address,
+            so.created_at,
+            si.item_id,
+            si.quantity,
+            si.price,
+            i.item_name, -- Include the item name from the inventory table
+            u.first_name AS customer_name,
+            u.contact_number,
+            u.email
+         FROM 
+            sales_orders so
+         JOIN 
+            sales_items si ON so.id = si.sale_id
+         JOIN 
+            inventory i ON si.item_id = i.item_id -- Join with inventory table to get item details
+         JOIN 
+            users u ON so.customer_id = u.user_id
+         WHERE 
+            so.supplier_id = :supplier_id AND si.status = 'Accepted'
+         ORDER BY 
+            so.created_at DESC"
+    );
+
+    // Bind the supplier ID
+    $this->db->bind(':supplier_id', $supplierId);
+
+    // Return the result set, defaulting to an empty array if null
+    return $this->db->resultSet() ?? [];
+}
+
+
 }

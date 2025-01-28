@@ -42,7 +42,7 @@ class SupplierController extends Controller {
         $this->view('admin/index', $data);
     }
 
-    public function payments()
+    public function pendingOrders()
 {
     // Check if the user is logged in
     $loggedUserId = $_SESSION['user_id'] ?? null;
@@ -90,6 +90,57 @@ class SupplierController extends Controller {
     ];
 
     $this->view('admin/pendingOrders/pendingOrders', $data);
+}
+
+
+public function completedOrders()
+{
+    // Check if the user is logged in
+    $loggedUserId = $_SESSION['user_id'] ?? null;
+
+    if (!$loggedUserId) {
+        die('User not logged in.');
+    }
+
+    // Fetch completed orders
+    $completedOrders = $this->SupplierModel->getCompletedOrders($loggedUserId);
+
+    // Process the orders to group items
+    $orders = [];
+    foreach ($completedOrders as $row) {
+        $orderId = $row->order_id;
+    
+        if (!isset($orders[$orderId])) {
+            $orders[$orderId] = (object)[
+                'order_id' => $row->order_id,
+                'customer_id' => $row->customer_id,
+                'total_amount' => $row->total_amount,
+                'payment_method' => $row->payment_method,
+                'delivery_address' => $row->delivery_address,
+                'created_at' => $row->created_at,
+                'customer_name' => $row->customer_name,
+                'contact_number' => $row->contact_number,
+                'email' => $row->email,
+                'items' => [] // Initialize an empty items array
+            ];
+        }
+    
+        // Add item details, including item_name, to the order
+        $orders[$orderId]->items[] = (object)[
+            'item_id' => $row->item_id,
+            'item_name' => $row->item_name, // Add item_name here
+            'quantity' => $row->quantity,
+            'price' => $row->price
+        ];
+    }
+    
+
+    // Pass the processed orders to the view
+    $data = [
+        'completedOrders' => array_values($orders) // Convert associative array to indexed array
+    ];
+
+    $this->view('admin/completedOrders/completedOrders', $data);
 }
 
     

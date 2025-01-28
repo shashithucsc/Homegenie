@@ -43,25 +43,54 @@ class SupplierController extends Controller {
     }
 
     public function payments()
-    {
-        // Check if the user is logged in
-        $loggedUserId = $_SESSION['user_id'] ?? null;
-    
-        if (!$loggedUserId) {
-            die('User not logged in.');
-        }
-    
-        // Fetch pending orders
-        $pendingOrders = $this->SupplierModel->getPendingOrders($loggedUserId);
-    
-        // Ensure the pending orders data is always set
-        $data = [
-            'pendingOrders' => isset($pendingOrders) ? $pendingOrders : [] // Safely pass an empty array if null
-        ];
-    
-        // Load the view with the data
-        $this->view('admin/pendingOrders/pendingOrders', $data);
+{
+    // Check if the user is logged in
+    $loggedUserId = $_SESSION['user_id'] ?? null;
+
+    if (!$loggedUserId) {
+        die('User not logged in.');
     }
+
+    // Fetch pending orders
+    $pendingOrders = $this->SupplierModel->getPendingOrders($loggedUserId);
+
+    // Process the orders to group items
+    $orders = [];
+    foreach ($pendingOrders as $row) {
+        $orderId = $row->order_id;
+
+        // Initialize the order if it doesn't exist in the array
+        if (!isset($orders[$orderId])) {
+            $orders[$orderId] = (object)[
+                'order_id' => $row->order_id,
+                'customer_id' => $row->customer_id,
+                'total_amount' => $row->total_amount,
+                'payment_method' => $row->payment_method,
+                'delivery_address' => $row->delivery_address,
+                'created_at' => $row->created_at,
+                'customer_name' => $row->customer_name,
+                'contact_number' => $row->contact_number,
+                'email' => $row->email,
+                'items' => [] // Initialize an empty items array
+            ];
+        }
+
+        // Add item details to the order
+        $orders[$orderId]->items[] = (object)[
+            'item_id' => $row->item_id,
+            'quantity' => $row->quantity,
+            'price' => $row->price
+        ];
+    }
+
+    // Pass the processed orders to the view
+    $data = [
+        'pendingOrders' => array_values($orders) // Convert associative array to indexed array
+    ];
+
+    $this->view('admin/pendingOrders/pendingOrders', $data);
+}
+
     
     public function updateOrderStatus()
     {
@@ -77,6 +106,7 @@ class SupplierController extends Controller {
             exit();
         }
     }
+    
     
 
 

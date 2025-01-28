@@ -166,7 +166,7 @@ public function updateOrderStatus($orderId, $status)
     $this->db->query("UPDATE sales_orders SET status = :status WHERE id = :order_id");
     $this->db->bind(':status', $status);
     $this->db->bind(':order_id', $orderId);
-    
+
     // Execute the update for the sales_orders table
     $this->db->execute();
 

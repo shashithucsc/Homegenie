@@ -161,14 +161,6 @@ public function completedOrders()
     
     
 
-
-    
-    
-    
-
-   
-    
-
     public function quotations() {
         $this->view('admin/Quotations/Quotations');
     }
@@ -238,19 +230,105 @@ public function completedOrders()
         $this->view('admin/inventory/reports', $data);
     }
 
-    public function supplierProfile($user_id = null) {
-        if (is_null($user_id)) {
-            die('Error: Supplier ID is required');
+    public function profile() {
+        // Get the logged-in user_id from the session
+        $loggedUserId = $_SESSION['user_id'] ?? null;
+    
+        if (!$loggedUserId) {
+            // Redirect to login if the user is not logged in
+            header('Location: /login');
+            exit;
         }
-
-        $supplier = $this->SupplierModel->getSupplierById($user_id);
-        $products = $this->SupplierModel->getProductsBySupplierId($user_id);
-
+    
+        // Fetch supplier details and their products using the logged-in user_id
+        $supplier = $this->SupplierModel->getSupplierById($loggedUserId);
+        $products = $this->SupplierModel->getProductsBySupplier($loggedUserId);
+    
+        // Check if supplier data exists, else redirect or handle errors
+        if (!$supplier) {
+            die('Supplier not found.');
+        }
+    
+        // Prepare data for the view
         $data = [
             'supplier' => $supplier,
-            'products' => $products
+            'products' => $products,
         ];
+    
+        // Load the profile view with the data
+        $this->view('admin/profile/Profile', $data);
+    }
+    
+    // Update profile details
+    public function updateProfile() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Sanitize POST data
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-        $this->view('admin/profile/profile', $data);
+            $data = [
+                'user_id' => $_POST['user_id'],
+                'first_name' => trim($_POST['first_name']),
+                'last_name' => trim($_POST['last_name']),
+                'contact_number' => trim($_POST['contact_number']),
+                'address' => trim($_POST['address']),
+                'expertise' => trim($_POST['expertise']),
+                'service_areas' => trim($_POST['service_areas']),
+                'message' => '' // Message for the view
+            ];
+
+            if ($this->SupplierModel->updateSupplierProfile($data)) {
+                $data['message'] = 'Profile updated successfully.';
+            } else {
+                $data['message'] = 'Error updating profile.';
+            }
+
+            // Reload the view with the message
+            $supplier = $this->SupplierModel->getSupplierById($data['user_id']);
+            $data['supplier'] = $supplier;
+            $this->view('admin/profile/profile', $data);
+        } else {
+            die('Invalid request.');
+        }
+    }
+
+    // Update profile picture
+    public function updateProfilePicture() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $userId = intval($_POST['user_id']);
+            $message = '';
+
+            if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPLOAD_ERR_OK) {
+                $fileTmpPath = $_FILES['profile_image']['tmp_name'];
+                $fileType = $_FILES['profile_image']['type'];
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+                if (in_array($fileType, $allowedTypes)) {
+                    $profileImage = file_get_contents($fileTmpPath);
+                    if ($this->SupplierModel->updateProfilePicture($userId, $profileImage)) {
+                        $message = 'Profile picture updated successfully.';
+                    } else {
+                        $message = 'Error updating profile picture.';
+                    }
+                } else {
+                    $message = 'Invalid file type. Only JPEG, PNG, and GIF are allowed.';
+                }
+            } else {
+                $message = 'Error uploading file.';
+            }
+
+            // Reload the view with the message
+            $supplier = $this->SupplierModel->getSupplierById($userId);
+            $products = $this->SupplierModel->getProductsBySupplier($userId);
+
+            $data = [
+                'supplier' => $supplier,
+                'products' => $products,
+                'message' => $message
+            ];
+
+            $this->view('admin/profile/profile', $data);
+        } else {
+            die('Invalid request.');
+        }
     }
 }

@@ -3,63 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supplier Profile - HomeGenie</title>
+    <title>Supplier Profile</title>
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/supplierProfile.css">
-   
 </head>
 <body>
-    <?php require APPROOT . '/views/admin/sidebar.php'; ?>
+<?php require APPROOT . '/views/admin/sidebar.php'; ?>
     <div class="hg-supplier-container">
-        <header class="hg-supplier-header">
+        <header>
             <h1>Supplier Profile</h1>
         </header>
-        <main class="hg-supplier-main">
+        <main>
+            <!-- Display message if exists -->
+            <?php if (!empty($data['message'])): ?>
+                <div class="message-box">
+                    <p><?php echo $data['message']; ?></p>
+                </div>
+            <?php endif; ?>
+
             <section class="hg-supplier-info">
-                <img src="<?php echo URLROOT; ?>/public/img/<?php echo $data['supplier']->profile_image; ?>" alt="Supplier Avatar" class="hg-supplier-avatar">
-                <div class="hg-supplier-details">
-                    <h2 class="hg-supplier-name"><?php echo $data['supplier']->first_name . ' ' . $data['supplier']->last_name; ?></h2>
-                    <p class="hg-supplier-email"><?php echo $data['supplier']->email; ?></p>
-                    <p class="hg-supplier-phone"><?php echo $data['supplier']->contact_number; ?></p>
-                    <p class="hg-supplier-address"><?php echo $data['supplier']->address; ?></p>
-                </div>
+                <img src="data:image/jpeg;base64,<?php echo base64_encode($data['supplier']->profile_image); ?>" alt="Profile Picture">
+                <h2><?php echo $data['supplier']->first_name . ' ' . $data['supplier']->last_name; ?></h2>
+                <p>Email: <?php echo $data['supplier']->email; ?></p>
+                <p>Contact: <?php echo $data['supplier']->contact_number; ?></p>
+                <p>Address: <?php echo $data['supplier']->address; ?></p>
+                <p>Expertise: <?php echo $data['supplier']->expertise; ?></p>
+                <p>Service Areas: <?php echo $data['supplier']->service_areas; ?></p>
             </section>
-            <section class="hg-supplier-stats">
-                <h3>Statistics</h3>
-                <div class="hg-stats-grid">
-                    <div class="hg-stat-item">
-                        <h4>Total Products</h4>
-                        <p><?php echo count($data['products']); ?></p>
-                    </div>
-                    <div class="hg-stat-item">
-                        <h4>Orders Fulfilled</h4>
-                        <p>120</p> <!-- Replace with actual data -->
-                    </div>
-                    <div class="hg-stat-item">
-                        <h4>Pending Orders</h4>
-                        <p>30</p> <!-- Replace with actual data -->
-                    </div>
-                    <div class="hg-stat-item">
-                        <h4>Rating</h4>
-                        <p>4.8/5</p> <!-- Replace with actual data -->
-                    </div>
-                </div>
-            </section>
+
             <section class="hg-supplier-actions">
-                <h3>Actions</h3>
-                <button class="hg-action-btn">Edit Profile</button>
-                <button class="hg-action-btn">View Products</button>
-                <button class="hg-action-btn">Logout</button>
-            </section>
-            <section class="hg-supplier-products">
-                <h3>Supplier Products</h3>
-                <div class="hg-products-grid">
-                    <?php foreach ($data['products'] as $product): ?>
-                        <div class="hg-product-item">
-                            <h4><?php echo $product->product_name; ?></h4>
-                            <p>Rs. <?php echo $product->price; ?></p>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
+                <h3>Update Profile</h3>
+                <form action="<?php echo URLROOT; ?>/SupplierController/updateProfile" method="POST">
+                    <input type="hidden" name="user_id" value="<?php echo $data['supplier']->user_id; ?>">
+                    <label for="first_name">First Name:</label>
+                    <input type="text" name="first_name" value="<?php echo $data['supplier']->first_name; ?>" required>
+                    <label for="last_name">Last Name:</label>
+                    <input type="text" name="last_name" value="<?php echo $data['supplier']->last_name; ?>" required>
+                    <label for="contact_number">Contact Number:</label>
+                    <input type="text" name="contact_number" value="<?php echo $data['supplier']->contact_number; ?>" required>
+                    <label for="address">Address:</label>
+                    <input type="text" name="address" value="<?php echo $data['supplier']->address; ?>" required>
+                    <label for="expertise">Expertise:</label>
+                    <input type="text" name="expertise" value="<?php echo $data['supplier']->expertise; ?>">
+                    <label for="service_areas">Service Areas:</label>
+                    <input type="text" name="service_areas" value="<?php echo $data['supplier']->service_areas; ?>">
+                    <button type="submit">Save Changes</button>
+                </form>
+
+                <h3>Update Profile Picture</h3>
+                <form action="<?php echo URLROOT; ?>/SupplierController/updateProfilePicture" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="user_id" value="<?php echo $data['supplier']->user_id; ?>">
+                    <input type="file" name="profile_image" accept="image/*" required>
+                    <button type="submit">Upload Picture</button>
+                </form>
             </section>
         </main>
     </div>

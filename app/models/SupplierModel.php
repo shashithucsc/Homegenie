@@ -7,15 +7,19 @@ class SupplierModel {
     }
 
     public function getTotalSales($userId) {
-        $this->db->query("SELECT SUM(total_amount) AS total_sales FROM sales WHERE supplier_id = :user_id");
-        $this->db->bind(':user_id', $userId); // Make sure you use supplier_id here
+        $this->db->query("SELECT SUM(total_amount) AS total_sales 
+                          FROM sales_orders
+                          WHERE supplier_id = :user_id 
+                          AND status = 'Accepted'");
+        $this->db->bind(':user_id', $userId); 
         $results = $this->db->resultSet();
         return $results;
     }
     
+    
 
     public function getTotalCustomers($userId) {
-        $this->db->query("SELECT COUNT(DISTINCT customer_id) AS total_customers FROM sales WHERE supplier_id = :user_id");
+        $this->db->query("SELECT COUNT(DISTINCT customer_id) AS total_customers FROM sales_orders WHERE supplier_id = :user_id");
         $this->db->bind(':user_id', $userId); // Make sure you use supplier_id here
         $results = $this->db->resultSet();
         return $results;
@@ -29,37 +33,39 @@ class SupplierModel {
     }
 
     public function getTopCategory($userId) {
-        $this->db->query("
-            SELECT i.category, SUM(si.quantity) AS total_sold
-            FROM sales_items si
-            JOIN inventory i ON si.item_id = i.item_id
-            JOIN sales s ON si.sale_id = s.id
-            WHERE s.supplier_id = :user_id
-            GROUP BY i.category
-            ORDER BY total_sold DESC
-            LIMIT 1
-        ");
-        $this->db->bind(':user_id', $userId); // Make sure you use supplier_id here
+        $this->db->query("SELECT i.category, SUM(si.quantity) AS total_sold
+                          FROM sales_items si
+                          JOIN inventory i ON si.item_id = i.item_id
+                          JOIN sales_orders so ON si.sale_id = so.id
+                          WHERE so.supplier_id = :user_id
+                          AND si.status = 'Accepted'
+                          AND so.status = 'Accepted'
+                          GROUP BY i.category
+                          ORDER BY total_sold DESC
+                          LIMIT 1");
+        $this->db->bind(':user_id', $userId); 
         $results = $this->db->resultSet();
         return $results;
     }
     
+    
 
     public function getTopProduct($userId) {
-        $this->db->query("
-            SELECT i.item_name, SUM(si.quantity) AS total_sold
-            FROM sales_items si
-            JOIN inventory i ON si.item_id = i.item_id
-            JOIN sales s ON si.sale_id = s.id
-            WHERE s.supplier_id = :user_id
-            GROUP BY si.item_id
-            ORDER BY total_sold DESC
-            LIMIT 1
-        ");
-        $this->db->bind(':user_id', $userId); // Make sure you use supplier_id here
+        $this->db->query("SELECT i.item_name, SUM(si.quantity) AS total_sold
+                          FROM sales_items si
+                          JOIN inventory i ON si.item_id = i.item_id
+                          JOIN sales_orders so ON si.sale_id = so.id
+                          WHERE so.supplier_id = :user_id
+                          AND si.status = 'Accepted'
+                          AND so.status = 'Accepted'
+                          GROUP BY si.item_id
+                          ORDER BY total_sold DESC
+                          LIMIT 1");
+        $this->db->bind(':user_id', $userId); 
         $results = $this->db->resultSet();
         return $results;
     }
+    
     
 
     public function getInventoryReport($userId) {
@@ -126,7 +132,7 @@ class SupplierModel {
 
     public function getPendingOrders($supplierId)
 {
-    // Query to fetch pending orders
+    // Query to fetch pending orders with item details
     $this->db->query(
         "SELECT 
             so.id AS order_id,
@@ -138,6 +144,7 @@ class SupplierModel {
             si.item_id,
             si.quantity,
             si.price,
+            i.item_name, -- Include the item name from the inventory table
             u.first_name AS customer_name,
             u.contact_number,
             u.email
@@ -145,6 +152,8 @@ class SupplierModel {
             sales_orders so
          JOIN 
             sales_items si ON so.id = si.sale_id
+         JOIN 
+            inventory i ON si.item_id = i.item_id -- Join with inventory table to get item details
          JOIN 
             users u ON so.customer_id = u.user_id
          WHERE 
@@ -159,6 +168,7 @@ class SupplierModel {
     // Return the result set, defaulting to an empty array if null
     return $this->db->resultSet() ?? [];
 }
+
 
 public function updateOrderStatus($orderId, $status)
 {

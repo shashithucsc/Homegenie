@@ -58,8 +58,7 @@ class SupplierController extends Controller {
     $orders = [];
     foreach ($pendingOrders as $row) {
         $orderId = $row->order_id;
-
-        // Initialize the order if it doesn't exist in the array
+    
         if (!isset($orders[$orderId])) {
             $orders[$orderId] = (object)[
                 'order_id' => $row->order_id,
@@ -74,14 +73,16 @@ class SupplierController extends Controller {
                 'items' => [] // Initialize an empty items array
             ];
         }
-
-        // Add item details to the order
+    
+        // Add item details, including item_name, to the order
         $orders[$orderId]->items[] = (object)[
             'item_id' => $row->item_id,
+            'item_name' => $row->item_name, // Add item_name here
             'quantity' => $row->quantity,
             'price' => $row->price
         ];
     }
+    
 
     // Pass the processed orders to the view
     $data = [

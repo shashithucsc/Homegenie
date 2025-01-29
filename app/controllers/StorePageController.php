@@ -2,6 +2,13 @@
 require_once APPROOT . '/controllers/CartController.php';
 
 class StorePageController extends Controller {
+
+
+   private $StorePagesModel;
+
+    public function __construct() {
+        $this->StorePagesModel = $this->model('StorePagesModel');
+    }
     public function index() {
         $storePagesModel = $this->model('StorePagesModel');
         $data = $storePagesModel->getPlumbingItems();
@@ -65,6 +72,23 @@ class StorePageController extends Controller {
         $wishListModel = $this->model('wishListModel');
         $items = $wishListModel->getAllWishList();
         $this->view('supplier/homepage/wishList', ['items' => $items]);
+    }
+
+    public function search() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $searchQuery = filter_input(INPUT_POST, 'search_query', FILTER_SANITIZE_STRING);
+            if (!empty($searchQuery)) {
+                $items = $this->StorePagesModel->searchItems($searchQuery);
+                $data = ['items' => $items];
+                $this->view('supplier/homepage/index', $data);
+            } else {
+                header('Location: ' . URLROOT . '/StorePageController/index');
+                exit();
+            }
+        } else {
+            header('Location: ' . URLROOT . '/StorePageController/index');
+            exit();
+        }
     }
 
 }    

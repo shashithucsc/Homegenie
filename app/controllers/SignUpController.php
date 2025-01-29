@@ -14,4 +14,8 @@ class SignUpController extends Controller {
         $this->view('users/v_register_sp');
     }
 
+    public function register(){
+        
+    }
+
 }    

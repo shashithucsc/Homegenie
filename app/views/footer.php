@@ -1,4 +1,3 @@
-
 <footer>
         <div class="footer-content">
             <div class="footer-section brand">

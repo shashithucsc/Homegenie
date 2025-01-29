@@ -12,6 +12,7 @@
 </head>
 <?php require_once APPROOT . '/views/supplier/navbar/navbar.php'; ?>
 <body>
+<?php require_once APPROOT . '/views/supplier/homepage/SearchBar/SearchBar.php'; ?>
     
     <br>
     <br>

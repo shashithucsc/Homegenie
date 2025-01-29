@@ -75,16 +75,17 @@ class SupplierModel {
                 SUM(i.quantity) AS total_items,
                 IFNULL(SUM(si.quantity), 0) AS sold_items,
                 SUM(i.quantity) - IFNULL(SUM(si.quantity), 0) AS remaining_stock,
-                SUM(i.quantity * i.selling_price) AS total_value
+                IFNULL(SUM(i.quantity * i.selling_price), 0) AS total_value
             FROM inventory i
             LEFT JOIN sales_items si ON i.item_id = si.item_id
-            JOIN sales s ON si.sale_id = s.id
+            LEFT JOIN sales_orders s ON si.sale_id = s.id
             WHERE i.user_id = :user_id
             GROUP BY i.category
         ");
         $this->db->bind(':user_id', $userId);
         return $this->db->resultSet();
     }
+    
 
     public function getSalesReport($userId) {
         $this->db->query("
@@ -94,13 +95,15 @@ class SupplierModel {
                 SUM(si.price * si.quantity) AS revenue
             FROM sales_items si
             JOIN inventory i ON si.item_id = i.item_id
-            JOIN sales s ON si.sale_id = s.id
-            WHERE i.user_id = :user_id
+            JOIN sales_orders s ON si.sale_id = s.id
+            WHERE s.status = 'Accepted' 
+            AND i.user_id = :user_id
             GROUP BY si.item_id
         ");
         $this->db->bind(':user_id', $userId);
         return $this->db->resultSet();
     }
+    
 
     public function getReorderSuggestions($userId) {
         $this->db->query("

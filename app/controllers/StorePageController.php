@@ -6,7 +6,7 @@ class StorePageController extends Controller {
         $storePagesModel = $this->model('StorePagesModel');
         $data = $storePagesModel->getPlumbingItems();
         $data1 = $storePagesModel->getSeasonalOffers();
-        $this->view('homepage/index', ['items' => $data, 'data1' => $data1]);
+        $this->view('supplier/homepage/index', ['items' => $data, 'data1' => $data1]);
     }
 
     public function navbar() {
@@ -14,7 +14,7 @@ class StorePageController extends Controller {
     }
 
     public function wishlist() {
-        $this->view('homepage/wishlist');
+        $this->view('supplier/homepage/wishlist');
     }
 
     public function yourCart() {
@@ -24,47 +24,47 @@ class StorePageController extends Controller {
     }
 
     public function contact() {
-        $this->view('homepage/contact');
+        $this->view('supplier/homepage/contact');
     }
 
     public function aboutUs() {
-        $this->view('homepage/about');
+        $this->view('supplier/homepage/about');
     }
 
     public function carpentry() {
         $carpentryModel = $this->model('StorePagesModel');
         $items = $carpentryModel->getCarpentryItems();
-        $this->view('homepage/carpentry', ['items' => $items]);
+        $this->view('supplier/homepage/carpentry', ['items' => $items]);
     }
 
     public function electricity() {
         $carpentryModel = $this->model('StorePagesModel');
         $items = $carpentryModel->getElectricityItems();
-        $this->view('homepage/electricity', ['items' => $items]);
+        $this->view('supplier/homepage/electricity', ['items' => $items]);
     }
 
     public function masonary() {
         $carpentryModel = $this->model('StorePagesModel');
         $items = $carpentryModel->getMasonaryItems();
-        $this->view('homepage/masonary', ['items' => $items]);
+        $this->view('supplier/homepage/masonary', ['items' => $items]);
     }
 
     public function painting() {
         $carpentryModel = $this->model('StorePagesModel');
         $items = $carpentryModel->getPaintingItems();
-        $this->view('homepage/painting', ['items' => $items]);
+        $this->view('supplier/homepage/painting', ['items' => $items]);
     }
 
     public function cleaning() {
         $carpentryModel = $this->model('StorePagesModel');
         $items = $carpentryModel->getCleaningItems();
-        $this->view('homepage/cleaning', ['items' => $items]);
+        $this->view('supplier/homepage/cleaning', ['items' => $items]);
     }
 
     public function getAllWishList() {
         $wishListModel = $this->model('wishListModel');
         $items = $wishListModel->getAllWishList();
-        $this->view('homepage/wishList', ['items' => $items]);
+        $this->view('supplier/homepage/wishList', ['items' => $items]);
     }
 
 }    

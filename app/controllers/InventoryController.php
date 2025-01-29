@@ -8,11 +8,11 @@ class InventoryController extends Controller {
 
     public function index() {
         $results = $this->inventoryModel->getAllItems();
-        $this->view('admin/inventory/inventory', $results);
+        $this->view('supplier/admin/inventory/inventory', $results);
     }
 
     public function add() {
-        $this->view('admin/inventory/add');
+        $this->view('supplier/admin/inventory/add');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 

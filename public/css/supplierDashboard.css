@@ -26,7 +26,7 @@
             padding: 30px;
         }
 
-        header {
+        .header1 {
             display: flex;
             justify-content: space-between;
             align-items: center;

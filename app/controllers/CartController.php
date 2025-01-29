@@ -91,7 +91,7 @@ class CartController {
     private function showPopup($message, $redirectUrl) {
         // Pass message and redirect URL to the view
         $data = ['message' => $message, 'redirectUrl' => $redirectUrl];
-        $this->view('homepage/cartElements/popup', $data);
+        $this->view('supplier/homepage/cartElements/popup', $data);
     }
 
     private function view($view, $data = []) {
@@ -109,7 +109,7 @@ class CartController {
             $total += $item->quantity * $item->selling_price;
         }
         
-        $this->view('homepage/cart', [
+        $this->view('supplier/homepage/cart', [
             'cartItems' => $cartItems,
             'total' => $total
         ]);
@@ -128,7 +128,7 @@ class CartController {
             $subtotal += $item->quantity * $item->selling_price;
         }
     
-        $this->view('homepage/V_checkOutpage', [
+        $this->view('supplier/homepage/V_checkOutpage', [
             'total_items' => $totalItems,
             'subtotal' => $subtotal
         ]);

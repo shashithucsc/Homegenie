@@ -45,7 +45,7 @@ class LoginController extends Controller {
 
                     // Redirect based on role
                     $redirectUrl = match ($loggedInUser->role) {
-                        'customer' => URLROOT . '/StorePageController',
+                        'customer' => URLROOT . '/CustomerController',
                         'service_provider' => URLROOT . '/ServiceProviderController',
                         'supplier' => URLROOT . '/SupplierController',
                         'admin' => URLROOT . '/SupplierController',

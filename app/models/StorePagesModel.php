@@ -179,6 +179,17 @@ class StorePagesModel {
         return $this->db->execute();
     }
 
+    public function searchItems($searchQuery) {
+        $this->db->query("SELECT i.*, u.first_name AS supplier_name 
+                          FROM inventory i
+                          LEFT JOIN users u ON i.user_id = u.user_id
+                          WHERE i.item_name LIKE :searchQuery 
+                          OR i.category LIKE :searchQuery");
+        $this->db->bind(':searchQuery', '%' . $searchQuery . '%');
+        return $this->db->resultSet();
+    }
+    
+
     
     
     

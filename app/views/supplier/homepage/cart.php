@@ -33,7 +33,7 @@
                                 <td><?php echo htmlspecialchars($item->item_name); ?></td>
                                 <td>Rs. <?php echo htmlspecialchars($item->selling_price); ?></td>
                                 <td>
-                                    <form action="<?php echo URLROOT; ?>/CartController/updateItemQuantity" method="POST">
+                                    <form action="<?php echo URLROOT; ?>/StorePageController/updateItemQuantity" method="POST">
                                         <input type="hidden" name="cart_item_id" value="<?php echo $item->id; ?>">
                                         <input type="number" name="new_quantity" value="<?php echo $item->quantity; ?>" min="1" max="<?php echo $item->available_quantity; ?>">
                                         <button type="submit" class="update">Update</button>
@@ -41,7 +41,7 @@
                                 </td>
                                 <td>Rs. <?php echo htmlspecialchars($item->quantity * $item->selling_price); ?></td>
                                 <td>
-                                    <form action="<?php echo URLROOT; ?>/CartController/removeItem/<?php echo $item->id; ?>" method="POST">
+                                    <form action="<?php echo URLROOT; ?>/StorePageController/removeItem/<?php echo $item->id; ?>" method="POST">
                                         <button type="submit" class="remove">Remove</button>
                                     </form>
                                 </td>
@@ -62,7 +62,7 @@
             </div>
 
             <div class="checkout">
-                <a href="<?php echo URLROOT; ?>/CartController/checkout" class="button">Proceed to Checkout</a>
+                <a href="<?php echo URLROOT; ?>/StorePageController/checkout" class="button">Proceed to Checkout</a>
                 <br><br>
                 <a href="<?php echo URLROOT; ?>/StorePageController/index" class="button">Back to Store</a>
             </div>

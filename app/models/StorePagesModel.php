@@ -179,6 +179,12 @@ class StorePagesModel {
         return $this->db->execute();
     }
 
+    public function getSavedItem($user_id) {
+        $this->db->query('SELECT * FROM wishlist WHERE user_id = :user_id');
+        $this->db->bind(':user_id', $user_id);
+        return $this->db->resultSet();
+    }
+
     public function searchItems($searchQuery) {
         $this->db->query("SELECT i.*, u.first_name AS supplier_name 
                           FROM inventory i

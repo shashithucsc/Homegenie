@@ -24,47 +24,18 @@
         </div>
     </div>
 
-    <div class="main2">
-        <div class="box-container">
-            <div class="left-section">
-                <img src="<?php echo URLROOT; ?>/public/img/slide1.jpg" alt="Descriptive Image">
-            </div>
-            <div class="right-section">
-                <h2>HomeGenie Special Christmas Offers</h2>
-                <p>Celebrate this Christmas with HomeGenie! Enjoy exclusive discounts on essential home services and products.</p>
-            </div>
+    
         </div>
 
         <section class="categories">
-            <h1>Explore Popular Categories</h1>
-            <div class="category-buttons">
-                <a href="<?php echo URLROOT; ?>/StorePageController/cleaning" class="button">Cleaning</a>
-                <a href="<?php echo URLROOT; ?>/StorePageController/electricity" class="button">Electrical</a>
-                <a href="<?php echo URLROOT; ?>/StorePageController/painting" class="button">Painting</a>
-                <a href="<?php echo URLROOT; ?>/StorePageController/carpentry" class="button">Carpentry</a>
-                <a href="<?php echo URLROOT; ?>/StorePageController/masonary" class="button">Masonry</a>
-            </div>
+            <h1>Your Search Result</h1>
+            
         </section>
 
-        <section class="seasonal">
-            <h1>Special Offers</h1>
-            <div class="seasonal-card">
-                <?php if (isset($data['data1']) && is_array($data['data1'])): ?>
-                    <?php foreach ($data['data1'] as $item): ?>
-                        <div class="offer-item">
-                            <img src="data:image/jpeg;base64,<?php echo base64_encode($item->image); ?>" 
-                                 alt="<?php echo htmlspecialchars($item->description); ?>">
-                            <h3><?php echo htmlspecialchars($item->description); ?></h3>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p>No items available.</p>
-                <?php endif; ?>
-            </div>
-        </section>
+       
 
         <section class="box">
-            <h1>Plumbing...</h1>
+        
             <section class="fetch-items">
                 <?php if (!empty($data['items'])): ?>
                     <?php foreach ($data['items'] as $item): ?>
@@ -74,7 +45,7 @@
                             <h3><?php echo htmlspecialchars($item->item_name); ?></h3>
                             <p>Supplier: <?php echo htmlspecialchars($item->supplier_name); ?></p>
                             <p>Rs. <?php echo htmlspecialchars($item->selling_price); ?></p>
-
+                            
                             <div class="quantity-container">
                                 <label for="quantity_<?php echo $item->item_id; ?>">Quantity:</label>
                                 <input type="number" id="quantity_<?php echo $item->item_id; ?>" name="quantity" value="1"

@@ -31,6 +31,13 @@
                     echo '<p>Supplier: ' . htmlspecialchars($item->supplier_name) . '</p>'; // Display supplier name
                     echo 'Rs. ' . htmlspecialchars($item->selling_price) . '';
                     ?>
+                     <!-- Quantity Spinner -->
+                     <div class="quantity-container">
+                                <label for="quantity_<?php echo $item->item_id; ?>">Quantity:</label>
+                                <input type="number" id="quantity_<?php echo $item->item_id; ?>" name="quantity" value="1"
+                                    min="1" max="<?php echo $item->available_quantity; ?>"
+                                    onchange="checkQuantity(<?php echo $item->item_id; ?>)">
+                    </div>
                     <div class="button-container">
                         <!-- Add to Cart Button -->
                         <form action="<?php echo URLROOT; ?>/CartController/addToCart" method="POST">
@@ -38,13 +45,7 @@
                             <input type="hidden" id="available_quantity_<?php echo $item->item_id; ?>"
                                 value="<?php echo $item->available_quantity; ?>">
 
-                            <!-- Quantity Spinner -->
-                             <div class="quantity-container">
-                                <label for="quantity_<?php echo $item->item_id; ?>">Quantity:</label>
-                                <input type="number" id="quantity_<?php echo $item->item_id; ?>" name="quantity" value="1"
-                                    min="1" max="<?php echo $item->available_quantity; ?>"
-                                    onchange="checkQuantity(<?php echo $item->item_id; ?>)">
-                            </div>
+                           
                             <button type="submit" class="add-button">Add</button>
                         </form>
 

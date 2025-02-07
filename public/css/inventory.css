@@ -50,7 +50,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: linear-gradient(135deg, #08f, #04c);
+    background: linear-gradient(135deg, #4a6cf7, #4a6cf7);
     padding: 10px;
     border-bottom: 2px solid #F6F5FF;
     height: 60px;

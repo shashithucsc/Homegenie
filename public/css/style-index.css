@@ -6,7 +6,7 @@ header {
     /* background: linear-gradient(rgba(37, 99, 235, 0.1), rgba(37, 99, 235, 0.2)),
                 url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1500&auto=format'); */
     background: linear-gradient(rgba(37, 99, 235, 0.1), rgba(37, 99, 235, 0.2)),
-                url('../resources/painting.jpg');
+                url('../img/painting.jpg');
     background-size: cover;
     background-position: center;
     display: flex;

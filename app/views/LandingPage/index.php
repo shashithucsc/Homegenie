@@ -17,11 +17,11 @@
     <nav class="top-nav">
         <a href="index.php" class="nav-brand">Home<span>Genie</span></a>
         <div class="nav-links">
-            <a href="index.php">Home</a>
-            <a href="services.php">Services</a>
-            <a href="../../../supplier/HomeController.php">Store</a>
-            <a href="about.php">About</a>
-            <button onclick="document.location='../login/login.php'" class="login-btn">Login</button>
+            <a href="<?php echo URLROOT; ?>/CustomerController">Home</a>
+            <a href="<?php echo URLROOT; ?>/CustomerController/services">Services</a>
+            <a href="<?php echo URLROOT; ?>/CustomerController">Store</a>
+            <a href="<?php echo URLROOT; ?>/CustomerController/about">About</a>
+            <button onclick="document.location='<?php echo URLROOT; ?>/app/controllers/LoginController'" class="login-btn">Login</button>
         </div>
     </nav>
 

@@ -171,19 +171,25 @@ class StorePagesModel {
         return $this->db->execute();
     }
 
-    //wishlist section
     public function saveItem($item_id, $user_id) {
-        $this->db->query('INSERT INTO wishlist (user_id, item_id) VALUES (:user_id, :item_id)');
+        $this->db->query('INSERT INTO saved_items (user_id, item_id) VALUES (:user_id, :item_id)');
         $this->db->bind(':user_id', $user_id);
         $this->db->bind(':item_id', $item_id);
         return $this->db->execute();
     }
-
+    
     public function getSavedItem($user_id) {
-        $this->db->query('SELECT * FROM wishlist WHERE user_id = :user_id');
+        $this->db->query('
+            SELECT i.item_id, i.item_name, i.selling_price, i.image_path, i.quantity AS available_quantity, u.first_name AS supplier_name
+            FROM saved_items s
+            JOIN inventory i ON s.item_id = i.item_id
+            JOIN users u ON i.user_id = u.user_id
+            WHERE s.user_id = :user_id
+        ');
         $this->db->bind(':user_id', $user_id);
         return $this->db->resultSet();
     }
+    
 
     public function searchItems($searchQuery) {
         $this->db->query("SELECT i.*, u.first_name AS supplier_name 

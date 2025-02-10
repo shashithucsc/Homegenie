@@ -24,17 +24,6 @@ class StorePageController extends Controller {
         $this->view('navbar/navbar');
     }
 
-    public function wishlist() {
-        $storePagesModel = $this->model('StorePagesModel');
-        $data = $storePagesModel->getSavedItem();
-        $this->view('supplier/homepage/wishlist', ['items' => $data]);
-    }
-
-    // public function yourCart() {
-    //     $this->view('supplier/homepage/cart');
-
-    // }
-
     public function contact() {
         $this->view('supplier/homepage/contact');
     }
@@ -73,11 +62,43 @@ class StorePageController extends Controller {
         $this->view('supplier/homepage/cleaning', ['items' => $items]);
     }
 
-    public function getAllWishList() {
-        $wishListModel = $this->model('wishListModel');
-        $items = $wishListModel->getAllWishList();
+    public function wishlist() {
+        if (!isset($_SESSION['user_id'])) {
+            die("User not logged in.");
+        }
+    
+        $user_id = $_SESSION['user_id']; // Get logged-in user's ID
+
+        $wishList = $this->model('StorePagesModel');
+        $items = $wishList->getSavedItem($user_id); // Pass user_id
+    
+        // Pass data to the wishlist view
         $this->view('supplier/homepage/wishList', ['items' => $items]);
     }
+
+    public function addToWishlist() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Ensure the user is logged in
+            if (!isset($_SESSION['user_id'])) {
+                die("User not logged in.");
+            }
+
+            $user_id = $_SESSION['user_id'];  // Get user ID
+            $item_id = $_POST['item_id'];    // Get item ID from form
+
+            if ($this->StorePagesModel->saveItem($user_id, $item_id)) {
+                // Redirect to wishlist page or show success message
+                header("Location: " . URLROOT . "/storepage/wishlist");
+                exit();
+            } else {
+                die("Failed to add item.");
+            }
+        } else {
+            die("Invalid request.");
+        }
+    }
+    
+    
 
     public function search() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {

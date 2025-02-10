@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pending Orders</title>
+    <title>Completed Orders</title>
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/style.css">
     <style>
         /* Base Colors */
@@ -12,8 +12,14 @@
             --secondary-color: #6a7aff;
             --background-color: #f4f7ff;
             --text-color: #333;
-            --button-hover-color: #3a5bf1;
-            --border-radius: 8px;
+            --accent-color:rgb(255, 255, 255);
+            --hover-color: #3a5bf1;
+            --white-color: #fff;
+            --light-grey: #f9f9f9;
+            --border-radius: 10px;
+            --item-header-color: #333;
+            --item-bg-color: #f8f8f8;
+            --item-border-color: #ddd;
         }
 
         /* General Styling */
@@ -27,18 +33,20 @@
         h2 {
             color: var(--primary-color);
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
         }
 
         .payments-container {
             width: 90%;
             max-width: 1200px;
-            margin: 20px auto;
-            background-color: white;
-            padding: 20px;
+            margin: 30px auto;
+            background-color: var(--white-color);
+            padding: 30px;
             border-radius: var(--border-radius);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
             margin-left: 280px;
+            overflow-x: auto;
         }
 
         table {
@@ -51,20 +59,21 @@
             padding: 15px;
             text-align: left;
             border-bottom: 1px solid #ddd;
+            font-size: 1rem;
         }
 
         th {
             background-color: var(--primary-color);
-            color: white;
+            color: var(--white-color);
         }
 
         td {
-            background-color: #fff;
+            background-color: var(--white-color);
             color: var(--text-color);
         }
 
         tr:nth-child(even) {
-            background-color: #f9f9f9;
+            background-color: var(--light-grey);
         }
 
         tr:hover {
@@ -80,27 +89,67 @@
             padding: 12px 20px;
             border: none;
             border-radius: var(--border-radius);
-            font-size: 0.95rem;
+            font-size: 1rem;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
         .accept-btn {
             background-color: rgb(241, 0, 0);
-            color: white;
+            color: var(--white-color);
         }
 
         .accept-btn:hover {
-            background-color:rgb(172, 52, 52);
+            background-color: rgb(172, 52, 52);
         }
 
         .cancel-btn {
             background-color: var(--secondary-color);
-            color: white;
+            color: var(--white-color);
         }
 
         .cancel-btn:hover {
             background-color: #4d61f7;
+        }
+
+        .item-details {
+           
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-top: 15px;
+            color: rgb(0, 0, 0);
+           
+        }
+
+        .item-details ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .item-details li {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--item-border-color);
+        }
+
+        .item-details li:last-child {
+            border-bottom: none;
+        }
+
+        .item-details strong {
+            font-weight: bold;
+            color: var(--item-header-color);
+        }
+
+        .item-details .item-attribute {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+
+        .item-details .item-attribute span {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            text-align: right;
         }
 
         /* Responsive Design */
@@ -138,7 +187,6 @@
                 <th>Payment Method</th>
                 <th>Delivery Address</th>
                 <th>Order Date</th>
-               
             </tr>
         </thead>
         <tbody>
@@ -148,18 +196,32 @@
                     <td><?php echo $order->order_id; ?></td>
                     <td><?php echo $order->customer_id; ?></td>
                     <td>
-                        <!-- Display Items Details in a list -->
+                        <!-- Display Items Details in a more structured and colorful way -->
                         <?php if (!empty($order->items) && is_array($order->items)): ?>
-                            <ul>
-                                <?php foreach ($order->items as $item): ?>
-                                    <li>
-                                        <strong>Item Name:</strong> <?php echo $item->item_name; ?><br>
-                                        <strong>Item ID:</strong> <?php echo $item->item_id; ?><br>
-                                        <strong>Quantity:</strong> <?php echo $item->quantity; ?><br>
-                                        <strong>Price:</strong> <?php echo $item->price; ?><br><br>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
+                            <div class="item-details">
+                                <ul>
+                                    <?php foreach ($order->items as $item): ?>
+                                        <li>
+                                            <div class="item-attribute">
+                                                <strong>Item Name:</strong>
+                                                <span><?php echo $item->item_name; ?></span>
+                                            </div>
+                                            <div class="item-attribute">
+                                                <strong>Item ID:</strong>
+                                                <span><?php echo $item->item_id; ?></span>
+                                            </div>
+                                            <div class="item-attribute">
+                                                <strong>Quantity:</strong>
+                                                <span><?php echo $item->quantity; ?></span>
+                                            </div>
+                                            <div class="item-attribute">
+                                                <strong>Price:</strong>
+                                                <span><?php echo $item->price; ?></span>
+                                            </div>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
                         <?php else: ?>
                             <p>No items found.</p>
                         <?php endif; ?>
@@ -168,14 +230,11 @@
                     <td><?php echo $order->payment_method; ?></td>
                     <td><?php echo $order->delivery_address; ?></td>
                     <td><?php echo $order->created_at; ?></td>
-                    <td>
-                        
-                    </td>
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>
             <tr>
-                <td colspan="8" style="text-align: center;">No Completed orders available.</td>
+                <td colspan="7" style="text-align: center;">No Completed orders available.</td>
             </tr>
         <?php endif; ?>
         </tbody>

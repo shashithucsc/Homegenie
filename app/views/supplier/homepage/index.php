@@ -92,7 +92,7 @@
                                 </form>
 
                                 <!-- Save to Wishlist -->
-                                <form action="<?php echo URLROOT; ?>/WishlistController/saveItem" method="POST">
+                                <form action="<?php echo URLROOT; ?>/StorePageController/addToWishlist" method="POST">
                                     <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
                                     <button type="submit" class="save-button">Save</button>
                                 </form>

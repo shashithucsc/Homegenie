@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Inventory Item</title>
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/add_item.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/SupplierAddItems.css">
 </head>
 <body>
 <?php require APPROOT . '/views/supplier/admin/sidebar.php'; ?>

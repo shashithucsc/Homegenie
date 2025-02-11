@@ -245,12 +245,6 @@ tr:hover {
     cursor: pointer;
 }
 
-/* Sidebar Styles */
-.sidebarR {
-    /* flex: 1; */
-    /* margin-left: 20px; */
-}
-
 main {
     display: flex;
     gap: 20px;

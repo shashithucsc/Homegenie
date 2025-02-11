@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HomeGenie - Connect with Service Providers & Sellers</title>
     <link rel="stylesheet" href="../../css/style-index.css">
+    
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
@@ -15,7 +16,7 @@
         <div class="nav-links">
             <a href="cu_home.php">Home</a>
             <a href="services.php">Services</a>
-            <a href="../../../supplier/HomeController.php">Store</a>
+            <a href="<?php echo URLROOT; ?>/StorePageController/index">Store</a>
             <a href="cu_about.php">About</a>
             <div class="profile-container">
                 <span class="name"><?php echo htmlspecialchars($customerName); ?></span>

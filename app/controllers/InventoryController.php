@@ -7,7 +7,12 @@ class InventoryController extends Controller {
     }
 
     public function index() {
-        $results = $this->inventoryModel->getAllItems();
+        if (!isset($_SESSION['user_id'])) {
+            die("User not logged in.");
+        }
+    
+        $user_id = $_SESSION['user_id'];
+        $results = $this->inventoryModel->getAllItems($user_id);
         $this->view('supplier/admin/inventory/inventory', $results);
     }
 

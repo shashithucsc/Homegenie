@@ -28,7 +28,7 @@
             <!-- Address Input -->
             <div class="checkout-section">
                 <h2>Delivery Address</h2>
-                <form action="<?php echo URLROOT; ?>/CartController/confirmOrder" method="POST">
+                <form action="<?php echo URLROOT; ?>/StorePageController/confirmOrder" method="POST">
     <textarea name="delivery_address" rows="4" placeholder="Enter your delivery address here..." required></textarea>
 
     <label>

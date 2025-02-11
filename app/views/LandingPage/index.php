@@ -17,11 +17,11 @@
     <nav class="top-nav">
         <a href="index.php" class="nav-brand">Home<span>Genie</span></a>
         <div class="nav-links">
-            <a href="index.php">Home</a>
-            <a href="services.php">Services</a>
-            <a href="../../../supplier/HomeController.php">Store</a>
-            <a href="about.php">About</a>
-            <button onclick="document.location='../login/login.php'" class="login-btn">Login</button>
+            <a href="<?php echo URLROOT; ?>/CustomerController">Home</a>
+            <a href="<?php echo URLROOT; ?>/CustomerController/services">Services</a>
+            <a href="<?php echo URLROOT; ?>/CustomerController">Store</a>
+            <a href="<?php echo URLROOT; ?>/CustomerController/about">About</a>
+            <button onclick="document.location='<?php echo URLROOT; ?>/LoginController'" class="login-btn">Login</button>
         </div>
     </nav>
 
@@ -65,7 +65,7 @@
         <div class="carousel-container">
             <div class="carousel">
                 <div class="carousel-card">
-                    <img src="../../resources/plumber.jpg" alt="Plumbing">
+                    <img src="<?php echo URLROOT; ?>/public/img/plumber.jpg" alt="Plumbing">
                     <div class="card-content">
                         <h3>Plumbing Services</h3>
                         <p>Expert plumbing solutions for your home</p>
@@ -79,7 +79,7 @@
                     </div>
                 </div>
                 <div class="carousel-card">
-                    <img src="../../resources/electric.jpg" alt="Plumbing">
+                    <img src="<?php echo URLROOT; ?>/public/img/electric.jpg" alt="Plumbing">
                     <div class="card-content">
                         <h3>Electrical Work</h3>
                         <p>Professional electrical services</p>
@@ -93,7 +93,7 @@
                     </div>
                 </div>
                 <div class="carousel-card">
-                    <img src="../../resources/cleaning.jpg" alt="Plumbing">
+                    <img src="<?php echo URLROOT; ?>/public/img/cleaning.jpg" alt="Plumbing">
                     <div class="card-content">
                         <h3>Home Cleaning</h3>
                         <p>Premium cleaning services</p>
@@ -107,7 +107,7 @@
                     </div>
                 </div>
                 <div class="carousel-card">
-                    <img src="../../resources/painting.jpg" alt="Plumbing">
+                    <img src="<?php echo URLROOT; ?>/public/img/painting.jpg" alt="Plumbing">
                     <div class="card-content">
                         <h3>Home Painting</h3>
                         <p>Transform your space with color</p>
@@ -121,7 +121,7 @@
                     </div>
                 </div>
                 <div class="carousel-card">
-                    <img src="../../resources/gardening.jpg" alt="Plumbing">
+                    <img src="<?php echo URLROOT; ?>/public/img/gardening.jpg" alt="Plumbing">
                     <div class="card-content">
                         <h3>Gardening</h3>
                         <p>Professional garden maintenance</p>
@@ -141,6 +141,6 @@
     </section>
 
     <?php require_once APPROOT . '/views/footer.php'; ?>
-    <script src="../../js/script-index.js"></script>
+    <script src="<?php echo URLROOT; ?>/public/js/script-index.js"></script>
 </body>
 </html>

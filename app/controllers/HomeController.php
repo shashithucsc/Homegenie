@@ -1,6 +1,5 @@
 <?php
-
-class CustomerController extends Controller {
+Class HomeController extends Controller {
 
     private $CustomerModel;
     public function __construct(){
@@ -8,7 +7,7 @@ class CustomerController extends Controller {
     }
 
     public function index(){
-        $this->view('Customer/home');
+        $this->view('LandingPage/index');
     }
 
     public function services(){
@@ -19,17 +18,16 @@ class CustomerController extends Controller {
         $data = [
             'serviceProviders' => $serviceProviders
         ];
-        $this->view('Customer/services', $data);
+        $this->view('LandingPage/services', $data);
     }
 
     public function about(){
-        $this->view('Customer/about');
+        $this->view('LandingPage/about');
     }
 
     public function contact(){
-        $this->view('Customer/contact');
+        $this->view('LandingPage/contact');
     }
    
 }
-
 ?>

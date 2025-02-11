@@ -6,9 +6,10 @@ class InventoryModel {
         $this->db = new Database();
     }
 
-    public function getAllItems() {
-        $this->db->query("SELECT * FROM inventory");
-        $results=$this->db->resultSet();
+    public function getAllItems($userId) {
+        $this->db->query("SELECT * FROM inventory WHERE user_id = :user_id");
+        $this->db->bind(':user_id', $userId);
+        $results = $this->db->resultSet();
         return $results;
     }
 

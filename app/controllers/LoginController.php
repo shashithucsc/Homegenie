@@ -48,7 +48,7 @@ class LoginController extends Controller {
                         'customer' => URLROOT . '/CustomerController/index',
                         'service_provider' => URLROOT . '/ServiceProviderController',
                         'supplier' => URLROOT . '/SupplierController',
-                        'admin' => URLROOT . '/SupplierController',
+                        'admin' => URLROOT . '/AdminController',
                         default => URLROOT . '/HomeController'
                     };
                     header('Location: ' . $redirectUrl);

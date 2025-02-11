@@ -1,6 +1,6 @@
 <?php
 class Core {
-    protected $currentController = 'CustomerController'; // Default controller
+    protected $currentController = 'LoginController'; // Default controller
     protected $currentMethod = 'index'; // Default method
     protected $params = []; // Default params
 

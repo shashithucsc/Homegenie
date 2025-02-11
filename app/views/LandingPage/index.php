@@ -21,7 +21,7 @@
             <a href="<?php echo URLROOT; ?>/CustomerController/services">Services</a>
             <a href="<?php echo URLROOT; ?>/CustomerController">Store</a>
             <a href="<?php echo URLROOT; ?>/CustomerController/about">About</a>
-            <button onclick="document.location='<?php echo URLROOT; ?>/app/controllers/LoginController'" class="login-btn">Login</button>
+            <button onclick="document.location='<?php echo URLROOT; ?>/LoginController'" class="login-btn">Login</button>
         </div>
     </nav>
 

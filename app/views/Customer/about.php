@@ -125,7 +125,7 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
         </section>
     </main>
 
-    <?php require_once APPROOT . '/views/footer.php'; ?>
+    <?php require_once APPROOT . '/views/Customer/footer.php'; ?>
 
     <script src="../../js/script-index.js"></script>
 </body>

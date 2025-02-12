@@ -1,252 +1,19 @@
 <?php
-require_once APPROOT . '/views/ServiceProvider/navbar.php';
+require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Appointments Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --background: #f9fafb;
-            --card-background: #ffffff;
-            --text: #111827;
-            --text-secondary: #6b7280;
-            --border: #e5e7eb;
-            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-            --shadow-hover: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--background);
-            color: var(--text);
-            line-height: 1.5;
-        } */
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .header h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-        }
-
-        .header svg {
-            color: var(--primary);
-        }
-
-        .tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 0.75rem;
-            border: 1px solid var(--border);
-            background: var(--card-background);
-            color: var(--text);
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .tab-btn:hover {
-            background: var(--background);
-        }
-
-        .tab-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .appointments-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .appointment-card {
-            background: var(--card-background);
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            transition: all 0.2s;
-        }
-
-        .appointment-card:hover {
-            box-shadow: var(--shadow-hover);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 1rem;
-        }
-
-        .service-category {
-            font-weight: 600;
-            font-size: 1.125rem;
-        }
-
-        .appointment-id {
-            background: var(--background);
-            padding: 0.25rem 0.75rem;
-            border-radius: 1rem;
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        .card-content {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .info-row {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.875rem;
-        }
-
-        .info-row svg {
-            color: var(--primary);
-            flex-shrink: 0;
-        }
-
-        .card-actions {
-            display: flex;
-            gap: 0.75rem;
-            margin-top: 1rem;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 0.5rem;
-            border-radius: 0.375rem;
-            border: 1px solid transparent;
-            font-size: 0.875rem;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            transition: all 0.2s;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-hover);
-        }
-
-        .btn-outline {
-            border-color: var(--border);
-            background: transparent;
-        }
-
-        .btn-outline:hover {
-            background: var(--background);
-        }
-
-        .table-container {
-            background: var(--card-background);
-            border-radius: 0.5rem;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-
-        th {
-            background: var(--background);
-            font-weight: 600;
-        }
-
-        tr:hover {
-            background: var(--background);
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-
-            .appointments-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .table-container {
-                overflow-x: auto;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/SVP/SVP_appointments.css">
 </head>
+
 <body>
     <div class="container">
-        <!-- <header class="header">
-            <h1>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M20 7h-3a2 2 0 0 1-2-2V2"></path>
-                    <path d="M9 2v3a2 2 0 0 1-2 2H4"></path>
-                    <path d="M20 17h-3a2 2 0 0 0-2 2v3"></path>
-                    <path d="M9 22v-3a2 2 0 0 0-2-2H4"></path>
-                    <rect width="16" height="16" x="4" y="4"></rect>
-                </svg>
-                Appointments Dashboard
-            </h1>
-        </header> -->
-
         <div class="tabs">
             <button class="tab-btn active" data-tab="pending">Pending Appointments</button>
             <button class="tab-btn" data-tab="approved">Approved Appointments</button>
@@ -388,7 +155,7 @@ require_once APPROOT . '/views/ServiceProvider/navbar.php';
 
             // Render pending appointments
             const appointmentsGrid = document.querySelector('.appointments-grid');
-            
+
             pendingAppointments.forEach(appointment => {
                 const card = document.createElement('div');
                 card.className = 'appointment-card';
@@ -458,7 +225,7 @@ require_once APPROOT . '/views/ServiceProvider/navbar.php';
 
             // Render approved appointments
             const approvedTableBody = document.getElementById('approved-table-body');
-            
+
             approvedAppointments.forEach(appointment => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
@@ -482,5 +249,9 @@ require_once APPROOT . '/views/ServiceProvider/navbar.php';
         }
     </script>
 </body>
+
 </html>
 
+<?php
+require_once APPROOT . '/views/ServiceProvider/footer_svp.php';
+?>

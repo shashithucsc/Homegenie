@@ -185,6 +185,7 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
 
 <body>
     <?php require_once APPROOT . '/views/Customer/loggedNavBar.php'; ?>
+    <?php $user = isset($data['user']) ? $data['user'] : null; // Changed 'row' to 'user' ?>
     <section class="container">
         <div class="profile-header">
             <div class="profile-avatar">
@@ -207,55 +208,37 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
                         <i class='bx bx-phone'></i>
                         <div>
                             <label>Phone</label>
-                            <p id="profilePhone"></p>
+                            <!-- Directly access $data['customer'] -->
+                            <p id="profilePhone">
+                                <?php
+                                if (!empty($data['customer']) && isset($data['customer']->contact_number)) {
+                                    echo htmlspecialchars($data['customer']->contact_number);
+                                } else {
+                                    echo 'N/A';
+                                }
+                                ?>
+                            </p>
                         </div>
                     </div>
                     <div class="info-item">
                         <i class='bx bx-map'></i>
                         <div>
                             <label>Address</label>
-                            <p id="profileAddress"></p>
+                            <!-- Directly access $data['customer'] -->
+                            <p id="profileAddress">
+                                <?php
+                                if (!empty($data['customer']) && isset($data['customer']->address)) {
+                                    echo htmlspecialchars($data['customer']->address);
+                                } else {
+                                    echo 'N/A';
+                                }
+                                ?>
+                            </p>
                         </div>
                     </div>
                 </div>
             </section>
-            <section class="profile-section">
-                <h2>Appointments History</h2>
-                <div class="info-grid">
-                    <?php if (isset($appointments) && is_array($appointments)): ?>
-                        <?php foreach ($appointments as $appointment): ?>
-                            <div class="info-item">
-                                <i class='bx bx-task'></i>
-                                <div>
-                                    <div class="field">
-                                        <label>Service Provider :</label>
-                                        <span id="sp_id"><?php echo htmlspecialchars($appointment['sp_first_name'] . ' ' . $appointment['sp_last_name']); ?></span>
-                                    </div>
-                                    <div class="field">
-                                        <label>Date :</label>
-                                        <span id="date"><?php echo htmlspecialchars($appointment['date']); ?></span>
-                                    </div>
-                                    <div class="field">
-                                        <label>Time :</label>
-                                        <span id="time"><?php echo htmlspecialchars($appointment['time']); ?></span>
-                                    </div>
-                                    <div class="field">
-                                        <label>Notes :</label><br>
-                                        <span id="notes"><?php echo htmlspecialchars($appointment['notes']); ?></span>
-                                    </div>
-                                    <div class="field">
-                                        <span class="edit-btn" onclick="openEditModal(<?php echo $appointment['id']; ?>, '<?php echo $appointment['date']; ?>', '<?php echo $appointment['time']; ?>', '<?php echo htmlspecialchars($appointment['notes']); ?>')"><i class='bx bx-edit-alt'></i></span>
-                                        <span class="delete-btn" onclick="deleteAppointment(<?php echo $appointment['id']; ?>)"><i class='bx bx-trash'></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <p>No appointments found.</p>
-                    <?php endif; ?>
-                </div>
-            </section>
-        </div>
+
     </section>
 
     <div id="editModal" class="modal">

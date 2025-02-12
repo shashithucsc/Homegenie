@@ -6,170 +6,175 @@
     <title>Completed Orders</title>
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/style.css">
     <style>
-        /* Base Colors */
+        /* Modern Color Scheme */
         :root {
-            --primary-color: #4a6cf7;
-            --secondary-color: #6a7aff;
-            --background-color: #f4f7ff;
-            --text-color: #333;
-            --accent-color:rgb(255, 255, 255);
-            --hover-color: #3a5bf1;
-            --white-color: #fff;
-            --light-grey: #f9f9f9;
-            --border-radius: 10px;
-            --item-header-color: #333;
-            --item-bg-color: #f8f8f8;
-            --item-border-color: #ddd;
+            --primary-color: #2a3f9d;
+            --secondary-color: #4a5fc1;
+            --background-color: #f8f9ff;
+            --text-color: #2d3748;
+            --accent-color: #e2e8f0;
+            --hover-color: #1a2c6b;
+            --white-color: #ffffff;
+            --success-color: #38a169;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        /* General Styling */
+        /* Improved Typography */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: poppins;
             background-color: var(--background-color);
-            margin: 0;
-            padding: 0;
+            line-height: 1.6;
+            color: var(--text-color);
         }
 
         h2 {
             color: var(--primary-color);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
             text-align: center;
-            margin-bottom: 30px;
-            font-size: 1.5rem;
+            letter-spacing: -0.5px;
         }
 
+        /* Enhanced Container Styling */
         .payments-container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 30px auto;
-            background-color: var(--white-color);
-            padding: 30px;
+            width: calc(100% - 300px);
+            max-width: 1400px;
+            margin: 2rem auto;
+            background: var(--white-color);
             border-radius: var(--border-radius);
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--box-shadow);
+            padding: 2.5rem;
             margin-left: 280px;
             overflow-x: auto;
         }
 
+        /* Sophisticated Table Design */
         table {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-            font-size: 1rem;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: var(--white-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
         }
 
         th {
             background-color: var(--primary-color);
             color: var(--white-color);
+            font-weight: 600;
+            padding: 1.25rem;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
         }
 
         td {
-            background-color: var(--white-color);
-            color: var(--text-color);
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--accent-color);
+            font-size: 0.95rem;
+            vertical-align: top;
         }
 
-        tr:nth-child(even) {
-            background-color: var(--light-grey);
+        tr:last-child td {
+            border-bottom: none;
         }
 
-        tr:hover {
-            background-color: #f1f1f1;
+        tr:hover td {
+            background-color: #f6f7ff;
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .action-buttons button {
-            padding: 12px 20px;
-            border: none;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .accept-btn {
-            background-color: rgb(241, 0, 0);
-            color: var(--white-color);
-        }
-
-        .accept-btn:hover {
-            background-color: rgb(172, 52, 52);
-        }
-
-        .cancel-btn {
-            background-color: var(--secondary-color);
-            color: var(--white-color);
-        }
-
-        .cancel-btn:hover {
-            background-color: #4d61f7;
-        }
-
+        /* Enhanced Item Details Card */
         .item-details {
-           
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-top: 15px;
-            color: rgb(0, 0, 0);
-           
+            background: var(--background-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .item-details ul {
-            list-style-type: none;
+            margin: 0;
             padding: 0;
         }
 
         .item-details li {
-            padding: 12px 0;
-            border-bottom: 1px solid var(--item-border-color);
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--accent-color);
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
         }
 
         .item-details li:last-child {
             border-bottom: none;
         }
 
-        .item-details strong {
-            font-weight: bold;
-            color: var(--item-header-color);
-        }
-
-        .item-details .item-attribute {
+        .item-attribute {
             display: flex;
             justify-content: space-between;
-            padding: 5px 0;
+            align-items: center;
+            padding: 0.25rem 0;
         }
 
-        .item-details .item-attribute span {
-            font-size: 0.9rem;
+        .item-attribute strong {
+            color: var(--primary-color);
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .item-attribute span {
             color: var(--text-color);
+            font-weight: 400;
             text-align: right;
         }
 
+        /* Status Badges */
+        .payment-method {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+
         /* Responsive Design */
+        @media (max-width: 1200px) {
+            .payments-container {
+                width: calc(100% - 60px);
+                margin-left: 60px;
+                padding: 1.5rem;
+            }
+        }
+
         @media (max-width: 768px) {
-            table {
-                font-size: 0.85rem;
+            .payments-container {
+                width: 100%;
+                margin-left: 0;
+                border-radius: 0;
             }
 
             th, td {
-                padding: 10px;
+                padding: 1rem;
+                font-size: 0.85rem;
             }
 
-            .action-buttons {
-                flex-direction: column;
-                gap: 10px;
+            .item-details li {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
             }
+        }
 
-            .accept-btn, .cancel-btn {
-                width: 100%;
-            }
+        /* Empty State Styling */
+        td[colspan="7"] {
+            text-align: center;
+            padding: 3rem;
+            color: #718096;
+            font-style: italic;
         }
     </style>
 </head>
@@ -181,12 +186,12 @@
         <thead>
             <tr>
                 <th>Order ID</th>
-                <th>Customer ID</th>
-                <th>Items Details</th>
-                <th>Total Amount</th>
-                <th>Payment Method</th>
-                <th>Delivery Address</th>
-                <th>Order Date</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Payment</th>
+                <th>Address</th>
+                <th>Date</th>
             </tr>
         </thead>
         <tbody>
@@ -196,45 +201,44 @@
                     <td><?php echo $order->order_id; ?></td>
                     <td><?php echo $order->customer_id; ?></td>
                     <td>
-                        <!-- Display Items Details in a more structured and colorful way -->
                         <?php if (!empty($order->items) && is_array($order->items)): ?>
                             <div class="item-details">
                                 <ul>
                                     <?php foreach ($order->items as $item): ?>
                                         <li>
                                             <div class="item-attribute">
-                                                <strong>Item Name:</strong>
+                                                <strong>Item</strong>
                                                 <span><?php echo $item->item_name; ?></span>
                                             </div>
                                             <div class="item-attribute">
-                                                <strong>Item ID:</strong>
-                                                <span><?php echo $item->item_id; ?></span>
-                                            </div>
-                                            <div class="item-attribute">
-                                                <strong>Quantity:</strong>
+                                                <strong>Qty</strong>
                                                 <span><?php echo $item->quantity; ?></span>
                                             </div>
                                             <div class="item-attribute">
-                                                <strong>Price:</strong>
-                                                <span><?php echo $item->price; ?></span>
+                                                <strong>Price</strong>
+                                                <span><?php echo number_format($item->price, 2); ?></span>
                                             </div>
                                         </li>
                                     <?php endforeach; ?>
                                 </ul>
                             </div>
                         <?php else: ?>
-                            <p>No items found.</p>
+                            <div class="item-details">No items found</div>
                         <?php endif; ?>
                     </td>
-                    <td><?php echo $order->total_amount; ?></td>
-                    <td><?php echo $order->payment_method; ?></td>
-                    <td><?php echo $order->delivery_address; ?></td>
-                    <td><?php echo $order->created_at; ?></td>
+                    <td><?php echo number_format($order->total_amount, 2); ?></td>
+                    <td>
+                        <span class="payment-method" style="background: <?php echo $order->payment_method === 'credit_card' ? '#e6f4ea' : '#ebf8ff' ?>; color: <?php echo $order->payment_method === 'credit_card' ? '#137333' : '#2b6cb0' ?>;">
+                            <?php echo str_replace('_', ' ', $order->payment_method); ?>
+                        </span>
+                    </td>
+                    <td><?php echo substr($order->delivery_address, 0, 30) . '...'; ?></td>
+                    <td><?php echo date('M j, Y', strtotime($order->created_at)); ?></td>
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>
             <tr>
-                <td colspan="7" style="text-align: center;">No Completed orders available.</td>
+                <td colspan="7">No completed orders available</td>
             </tr>
         <?php endif; ?>
         </tbody>

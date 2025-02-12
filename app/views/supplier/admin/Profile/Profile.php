@@ -173,11 +173,13 @@
 
             <!-- Profile Info Section -->
             <section class="hg-supplier-info">
-                <?php if (!empty($data['supplier']->profile_image)): ?>
-                    <img src="data:image/jpeg;base64,<?php echo base64_encode($data['supplier']->profile_image); ?>" alt="Profile Picture">
-                <?php else: ?>
-                    <img src="<?php echo URLROOT; ?>/public/images/default-profile.png" alt="Default Profile Picture">
-                <?php endif; ?>
+            <?php if (!empty($data['supplier']->profile_image)): ?>
+                <img src="data:image/png;base64,<?php echo base64_encode($data['supplier']->profile_image); ?>" alt="Profile Picture">
+
+<?php else: ?>
+    <img src="<?php echo URLROOT; ?>/public/images/default-profile.png" alt="Default Profile Picture">
+<?php endif; ?>
+
                 <div class="profile-details">
                     <h2><?php echo htmlspecialchars($data['supplier']->first_name . ' ' . $data['supplier']->last_name); ?></h2>
                     <p><i class="fas fa-envelope"></i> <?php echo htmlspecialchars($data['supplier']->email); ?></p>

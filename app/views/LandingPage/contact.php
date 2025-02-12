@@ -5,21 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - HomeServe Hub</title>
-    <link rel="stylesheet" href="../../css/style-contact.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/style-contact.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/navigationbar.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
-<nav class="top-nav">
-        <a href="index.php" class="nav-brand">Home<span>Genie</span></a>
-        <div class="nav-links">
-            <a href="index.php">Home</a>
-            <a href="services.php">Services</a>
-            <a href="../../../supplier/HomeController.php">Store</a>
-            <a href="about.php">About</a>
-            <button onclick="document.location='../login/login.php'" class="login-btn">Login</button>
-        </div>
-    </nav>
+    <?php require_once APPROOT . '/views/LandingPage/navBar.php'; ?>
 
     <main class="contact-page">
         <section class="contact-hero">

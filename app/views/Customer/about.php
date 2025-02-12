@@ -11,7 +11,8 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HomeGenie - Connect with Service Providers & Sellers</title>
-    <link rel="stylesheet" href="../../css/style-about.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/about-page.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/navigationbar.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 

@@ -15,10 +15,10 @@
                 <h3>Quick Links</h3>
                 <div class="two-column-links">
                     <div>
-                        <a href="#home">Home</a>
-                        <a href="#services">Services</a>
-                        <a href="#store">Store</a>
-                        <a href="#about">About</a>
+                        <a href="<?php echo URLROOT; ?>/HomeController">Home</a>
+                        <a href="<?php echo URLROOT; ?>/HomeController/services">Services</a>
+                        <a href="<?php echo URLROOT; ?>/StorePageController">Store</a>
+                        <a href="<?php echo URLROOT; ?>/HomeController/about">About</a>
                     </div>
                     <div>
                         <a href="#privacy">Privacy Policy</a>

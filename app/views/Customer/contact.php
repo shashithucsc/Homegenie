@@ -1,32 +1,7 @@
 <?php
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../login/login.php");
-    exit;
-}
-
-
-require_once '../db.php';
-
-$query = "SELECT * FROM users WHERE id = :user_id";
-$stmt = $conn->prepare($query);
-$stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
-$stmt->execute();
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if (!$user) {
-    echo "User not found.";
-    exit;
-}
-$customerName = $user["first_name"] . " " . $user["last_name"]; // Get the admin's name
-
-$profileImage = $user['profile_image'];
-
-$profileImagePath = "../register/uploads/" . $profileImage;
-if (!file_exists($profileImagePath)) {
-    echo "Profile image not found: " . htmlspecialchars($profileImagePath);
-    exit;
-}
+$user_name = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
+$profile_pic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'default.png';
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,32 +10,13 @@ if (!file_exists($profileImagePath)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - HomeServe Hub</title>
-    <link rel="stylesheet" href="../../css/style-contact.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/style-contact.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/navigationbar.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
-<nav>
-        <a href="cu_home.php" class="nav-brand">Home<span>Genie</span></a>
-        <div class="nav-links">
-            <a href="cu_home.php">Home</a>
-            <a href="services.php">Services</a>
-            <a href="../../../supplier/HomeController.php">Store</a>
-            <a href="cu_about.php">About</a>
-            <div class="profile-container">
-                <span class="name"><?php echo htmlspecialchars($customerName); ?></span>
-                <img src="<?php echo htmlspecialchars($profileImagePath); ?>" alt="Profile Picture"
-                    class="profile-image">
-                <div class="profile-dropdown">
-                    <a href="cu_profile.php"><i class='bx bx-user'></i> My Profile</a>
-                    <!-- <a href="cu_appointments.php"><i class='bx bx-paperclip'></i> My Appointments</a> -->
-                    <!-- <a href="cu_settings.php"><i class='bx bx-cog'></i> Settings</a> -->
-                    <a href="../login/logout.php"><i class='bx bx-log-out'></i> Logout</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-
+    <?php require_once APPROOT . '/views/Customer/loggedNavBar.php'; ?>
     <main class="contact-page">
         <section class="contact-hero">
             <div class="container">
@@ -190,8 +146,6 @@ if (!file_exists($profileImagePath)) {
             <p>&copy; 2024 HomeServeHub. All rights reserved.</p>
         </div>
     </footer>
-
-    <script type="module" src="src/js/contact.js"></script>
 </body>
 
 </html>

@@ -23,8 +23,8 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
             <h1>Your One-Stop Platform for Home Services</h1>
             <p>Connect with trusted professionals and quality products for all your home needs</p>
             <div class="cta-buttons">
-                <button class="primary-btn" onclick="document.location='services.php'">Find Services</button>
-                <button class="secondary-btn" onclick="document.location='../../../supplier/HomeController.php'">Visit
+                <button class="primary-btn" onclick="document.location='<?php echo URLROOT; ?>/CustomerController/services'">Find Services</button>
+                <button class="secondary-btn" onclick="document.location='<?php echo URLROOT; ?>/StorePageController'">Visit
                     Store</button>
             </div>
         </div>

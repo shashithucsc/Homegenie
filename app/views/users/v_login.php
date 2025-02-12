@@ -1,6 +1,3 @@
-<?php
-require_once APPROOT . '/views/inc/components/logginNavbar.php';
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +9,7 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
 </head>
 
 <body>
-
+    <?php require_once APPROOT . '/views/inc/components/logginNavbar.php'; ?>
     <div class="container">
         <div class="left-panel">
             <img src="<?php echo URLROOT; ?>/public/img/backgroundLogin.png" alt="HomeGenie" class="back-image">
@@ -29,7 +26,7 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                         <?php echo isset($data['email_err']) ? $data['email_err'] : ''; ?>
                     </span>
                 </div>
-                
+
                 <div class="input-field">
                     <input type="password" name="password" placeholder="Password"
                         value="<?php echo isset($data['password']) ? $data['password'] : ''; ?>" required>
@@ -38,19 +35,15 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                     </span>
                 </div>
                 <input type="submit" class="login-btn" value="Login">
-            
+
             </form>
-            
+
             <div class="register-link">
                 <p>Don't have an account? <button class="signup-btn">Sign Up</button></p>
             </div>
-            
+
         </div>
     </div>
-
-
-
-
 
     <div class="modal" id="signupModal">
         <div class="modal-content">
@@ -67,8 +60,6 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
             </div>
         </div>
     </div>
-
-
 
     <script>
 

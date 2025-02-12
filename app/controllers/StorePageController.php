@@ -85,8 +85,12 @@ class StorePageController extends Controller {
 
             $user_id = $_SESSION['user_id'];  // Get user ID
             $item_id = $_POST['item_id'];    // Get item ID from form
+            $image_path = $_POST['image_path']; // Get image path from form
+            $item_name = $_POST['item_name']; // Get item name from form
+            $selling_price = $_POST['selling_price']; // Get selling price from form
+            
 
-            if ($this->StorePagesModel->saveItem($user_id, $item_id)) {
+            if ($this->StorePagesModel->saveItem($user_id, $item_id, $image_path, $item_name, $selling_price)) {
                 // Redirect to wishlist page or show success message
                 header("Location: " . URLROOT . "/storepage/wishlist");
                 exit();
@@ -127,8 +131,13 @@ class StorePageController extends Controller {
     
         $customerId = $_SESSION['user_id'];
         $itemId = $_POST['item_id'];
-        $quantity = (int)$_POST['quantity'];
-        
+        $quantity = isset($_POST['quantity']) ? (int)$_POST['quantity'] : 1; // Default to 1 if not set
+    
+        if ($quantity <= 0) {
+            $this->showPopup("Invalid quantity.", URLROOT . "/StorePagesController");
+            return;
+        }
+    
         // Get supplier_id based on the item_id (assuming each item has a supplier associated with it)
         $supplierId = $this->cartModel->getSupplierIdByItemId($itemId);
         
@@ -307,4 +316,4 @@ class StorePageController extends Controller {
     }
 
 
-}    
+}

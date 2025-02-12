@@ -171,21 +171,20 @@ class StorePagesModel {
         return $this->db->execute();
     }
 
-    public function saveItem($item_id, $user_id) {
-        $this->db->query('INSERT INTO saved_items (user_id, item_id) VALUES (:user_id, :item_id)');
+    public function saveItem($item_id, $user_id, $image_path, $item_name, $selling_price) {
+        //also add images_path to the database
+
+        $this->db->query('INSERT INTO saved_items (user_id, item_id, image_path, item_name, selling_price) VALUES (:user_id, :item_id, :image_path, :item_name, :selling_price)');
         $this->db->bind(':user_id', $user_id);
         $this->db->bind(':item_id', $item_id);
+        $this->db->bind(':image_path', $image_path);
+        $this->db->bind(':item_name', $item_name);
+        $this->db->bind(':selling_price', $selling_price);
         return $this->db->execute();
     }
     
     public function getSavedItem($user_id) {
-        $this->db->query('
-            SELECT i.item_id, i.item_name, i.selling_price, i.image_path, i.quantity AS available_quantity, u.first_name AS supplier_name
-            FROM saved_items s
-            JOIN inventory i ON s.item_id = i.item_id
-            JOIN users u ON i.user_id = u.user_id
-            WHERE s.user_id = :user_id
-        ');
+        $this->db->query('SELECT * FROM saved_items WHERE user_id = :user_id');
         $this->db->bind(':user_id', $user_id);
         return $this->db->resultSet();
     }

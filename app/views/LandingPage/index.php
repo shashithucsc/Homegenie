@@ -14,17 +14,7 @@
     </style>
 </head>
 <body>
-    <nav class="top-nav">
-        <a href="index.php" class="nav-brand">Home<span>Genie</span></a>
-        <div class="nav-links">
-            <a href="<?php echo URLROOT; ?>/CustomerController">Home</a>
-            <a href="<?php echo URLROOT; ?>/CustomerController/services">Services</a>
-            <a href="<?php echo URLROOT; ?>/CustomerController">Store</a>
-            <a href="<?php echo URLROOT; ?>/CustomerController/about">About</a>
-            <button onclick="document.location='<?php echo URLROOT; ?>/LoginController'" class="login-btn">Login</button>
-        </div>
-    </nav>
-
+    <?php require_once APPROOT . '/views/LandingPage/navBar.php'; ?>
     <header id="home">
         <div class="hero">
             <h1>Your One-Stop Platform for Home Services</h1>
@@ -60,87 +50,10 @@
         </div>
     </section>
 
-    <section class="services-showcase">
-        <h2>Popular Services</h2>
-        <div class="carousel-container">
-            <div class="carousel">
-                <div class="carousel-card">
-                    <img src="<?php echo URLROOT; ?>/public/img/plumber.jpg" alt="Plumbing">
-                    <div class="card-content">
-                        <h3>Plumbing Services</h3>
-                        <p>Expert plumbing solutions for your home</p>
-                        <span class="rating">
-                            <i class='bx bxs-star'></i>
-                            <i class='bx bxs-star'></i>
-                            <i class='bx bxs-star'></i>
-                            <i class='bx bxs-star'></i>
-                            <i class='bx bxs-star-half'></i>
-                        </span>
-                    </div>
-                </div>
-                <div class="carousel-card">
-                    <img src="<?php echo URLROOT; ?>/public/img/electric.jpg" alt="Plumbing">
-                    <div class="card-content">
-                        <h3>Electrical Work</h3>
-                        <p>Professional electrical services</p>
-                        <span class="rating">
-                            <i class='bx bxs-star'></i>
-                            <i class='bx bxs-star'></i>
-                            <i class='bx bxs-star'></i>
-                            <i class='bx bxs-star'></i>
-                            <i class='bx bxs-star-half'></i>
-                        </span>
-                    </div>
-                </div>
-                <div class="carousel-card">
-                    <img src="<?php echo URLROOT; ?>/public/img/cleaning.jpg" alt="Plumbing">
-                    <div class="card-content">
-                        <h3>Home Cleaning</h3>
-                        <p>Premium cleaning services</p>
-                        <span class="rating">
-                            <i class='bx bxs-star'></i>
-                            <i class='bx bxs-star'></i>
-                            <i class='bx bxs-star'></i>
-                            <i class='bx bxs-star'></i>
-                            <i class='bx bxs-star-half'></i>
-                        </span>
-                    </div>
-                </div>
-                <div class="carousel-card">
-                    <img src="<?php echo URLROOT; ?>/public/img/painting.jpg" alt="Plumbing">
-                    <div class="card-content">
-                        <h3>Home Painting</h3>
-                        <p>Transform your space with color</p>
-                        <span class="rating">
-                            <i class='bx bxs-star'></i>
-                            <i class='bx bxs-star'></i>
-                            <i class='bx bxs-star'></i>
-                            <i class='bx bxs-star'></i>
-                            <i class='bx bxs-star-half'></i>
-                        </span>
-                    </div>
-                </div>
-                <div class="carousel-card">
-                    <img src="<?php echo URLROOT; ?>/public/img/gardening.jpg" alt="Plumbing">
-                    <div class="card-content">
-                        <h3>Gardening</h3>
-                        <p>Professional garden maintenance</p>
-                        <span class="rating">
-                            <i class='bx bxs-star'></i>
-                            <i class='bx bxs-star'></i>
-                            <i class='bx bxs-star'></i>
-                            <i class='bx bxs-star'></i>
-                            <i class='bx bxs-star-half'></i>
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <button class="carousel-btn prev">❮</button>
-            <button class="carousel-btn next">❯</button>
-        </div>
-    </section>
+    <?php require_once APPROOT . '/views/LandingPage/servicesShowcase.php'; ?>
 
     <?php require_once APPROOT . '/views/footer.php'; ?>
+    
     <script src="<?php echo URLROOT; ?>/public/js/script-index.js"></script>
 </body>
 </html>

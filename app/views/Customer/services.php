@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Services - HomeGenie</title>
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/style-services.css">
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/style-index.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/navigationbar.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
@@ -123,8 +123,7 @@
         </section>
     </main>
 
-    <script type="module" src="src/js/services.js"></script>
-    <script type="module" src="../../js/script-index.js"></script>
+    <script src="<?php echo URLROOT; ?>/public/js/script-index.js"></script>
 </body>
 
 </html>

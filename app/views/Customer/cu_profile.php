@@ -1,6 +1,8 @@
 <?php
-$user_name = isset($customer->first_name) ? $customer->first_name . ' ' . $customer->last_name : 'Guest';
-$profile_pic = isset($customer->profile_image) ? $customer->profile_image : 'default.png';
+$user_name = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
+$profile_pic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'default.png';
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+$email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,9 +11,7 @@ $profile_pic = isset($customer->profile_image) ? $customer->profile_image : 'def
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - HomeGenie</title>
-    <link rel="stylesheet" href="../../css/appointment.css">
-    <link rel="stylesheet" href="../../css/style-index.css">
-    <!-- <link rel="stylesheet" href="../../css/style-profile.css"> -->
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/navigationbar.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <style>
@@ -181,31 +181,10 @@ $profile_pic = isset($customer->profile_image) ? $customer->profile_image : 'def
             cursor: pointer;
         }
     </style>
-
 </head>
 
 <body>
-<nav>
-        <a href="cu_home.php" class="nav-brand">Home<span>Genie</span></a>
-        <div class="nav-links">
-            <a href="cu_home.php">Home</a>
-            <a href="services.php">Services</a>
-            <a href="../../../supplier/HomeController.php">Store</a>
-            <a href="cu_about.php">About</a>
-            <div class="profile-container">
-                <span class="name"><?php echo htmlspecialchars($user_name); ?></span>
-                <img src="<?php echo htmlspecialchars($profile_pic); ?>" alt="Profile Picture"
-                    class="profile-image">
-                <div class="profile-dropdown">
-                    <a href="cu_profile.php"><i class='bx bx-user'></i> My Profile</a>
-                    <!-- <a href="cu_appointments.php"><i class='bx bx-paperclip'></i> My Appointments</a> -->
-                    <!-- <a href="cu_settings.php"><i class='bx bx-cog'></i> Settings</a> -->
-                    <a href="../login/logout.php"><i class='bx bx-log-out'></i> Logout</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-
+    <?php require_once APPROOT . '/views/Customer/loggedNavBar.php'; ?>
     <section class="container">
         <div class="profile-header">
             <div class="profile-avatar">
@@ -213,7 +192,7 @@ $profile_pic = isset($customer->profile_image) ? $customer->profile_image : 'def
             </div>
             <div class="profile-info">
                 <h1 id="profileName"><?php echo htmlspecialchars($user_name); ?></h1>
-                <p id="profileEmail"><?php echo htmlspecialchars($customer->email); ?></p>
+                <p id="profileEmail"><?php echo htmlspecialchars($email); ?></p>
                 <a href="cu_settings.php" class="edit-profile-btn">
                     <i class='bx bx-edit-alt'></i> Edit Profile
                 </a>
@@ -228,14 +207,14 @@ $profile_pic = isset($customer->profile_image) ? $customer->profile_image : 'def
                         <i class='bx bx-phone'></i>
                         <div>
                             <label>Phone</label>
-                            <p id="profilePhone"><?php echo htmlspecialchars($customer->contact_number); ?></p>
+                            <p id="profilePhone"></p>
                         </div>
                     </div>
                     <div class="info-item">
                         <i class='bx bx-map'></i>
                         <div>
                             <label>Address</label>
-                            <p id="profileAddress"><?php echo htmlspecialchars($customer->address); ?></p>
+                            <p id="profileAddress"></p>
                         </div>
                     </div>
                 </div>

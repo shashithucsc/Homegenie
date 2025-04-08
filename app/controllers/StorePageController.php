@@ -32,6 +32,21 @@ class StorePageController extends Controller {
         $this->view('supplier/homepage/about');
     }
 
+    public function myOrders() {
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: " . URLROOT . "/StorePageController/index");
+        }
+
+        $userId = $_SESSION['user_id'];
+        $orders = $this->StorePagesModel->getMyorders($userId);
+
+        $data = [
+            'orders' => $orders
+        ];
+
+        $this->view('supplier/homepage/myOrders', $data);
+    }
+
     public function carpentry() {
         $carpentryModel = $this->model('StorePagesModel');
         $items = $carpentryModel->getCarpentryItems();
@@ -67,14 +82,36 @@ class StorePageController extends Controller {
             die("User not logged in.");
         }
     
-        $user_id = $_SESSION['user_id']; // Get logged-in user's ID
+        $user_id = $_SESSION['user_id']; 
 
-        $wishList = $this->model('StorePagesModel');
+        $wishList = $this->model(model: 'StorePagesModel');
         $items = $wishList->getSavedItem($user_id); // Pass user_id
     
-        // Pass data to the wishlist view
+        
         $this->view('supplier/homepage/wishList', ['items' => $items]);
     }
+
+    public function removeFromWishlist() {
+        if (!isset($_SESSION['user_id'])) {
+            die("User not logged in.");
+        }
+    
+        if (!isset($_POST['item_id'])) {
+            die("Item ID not provided.");
+        }
+    
+        $user_id = $_SESSION['user_id']; // Get user ID
+        $item_id = $_POST['item_id']; // Get item ID from form
+    
+        if ($this->StorePagesModel->removeSavedItem($user_id, $item_id)) {
+            // Redirect to wishlist page or show success message
+            header("Location: " . URLROOT . "/StorePageController/wishlist");
+            exit();
+        } else {
+            die("Failed to remove item.");
+        }
+    }
+    
 
     public function addToWishlist() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -82,17 +119,23 @@ class StorePageController extends Controller {
             if (!isset($_SESSION['user_id'])) {
                 die("User not logged in.");
             }
-
+    
+            // Check if required form fields are set
+            if (!isset($_POST['item_id'], $_POST['image_path'], $_POST['item_name'], $_POST['selling_price'], $_POST['supplier_id'])) {
+                die("Missing required form fields.");
+            }
+    
             $user_id = $_SESSION['user_id'];  // Get user ID
-            $item_id = $_POST['item_id'];    // Get item ID from form
-            $image_path = $_POST['image_path']; // Get image path from form
-            $item_name = $_POST['item_name']; // Get item name from form
-            $selling_price = $_POST['selling_price']; // Get selling price from form
-            
-
-            if ($this->StorePagesModel->saveItem($user_id, $item_id, $image_path, $item_name, $selling_price)) {
+            $item_id = $_POST['item_id'];    // Get item ID
+            $image_path = $_POST['image_path']; // Get image path
+            $item_name = $_POST['item_name']; // Get item name
+            $selling_price = $_POST['selling_price']; // Get selling price
+            $supplier_id = $_POST['supplier_id']; // Get supplier ID
+    
+            // Call the model to save the item
+            if ($this->StorePagesModel->saveItem($user_id, $item_id, $image_path, $item_name, $selling_price, $supplier_id)) {
                 // Redirect to wishlist page or show success message
-                header("Location: " . URLROOT . "/storepage/wishlist");
+                header("Location: " . URLROOT . "/StorePageController/wishlist");
                 exit();
             } else {
                 die("Failed to add item.");
@@ -101,6 +144,7 @@ class StorePageController extends Controller {
             die("Invalid request.");
         }
     }
+    
     
     
 

@@ -14,9 +14,9 @@ if (session_status() == PHP_SESSION_NONE) {
         <nav>
             <ul>
                 <li><a href="<?php echo URLROOT; ?>/StorePageController/index" target="main">Home</a></li>
-                <li><a href="<?php echo URLROOT; ?>/StorePageController/wishList" target="main">Wishlist</a></li>
+                <li><a href="<?php echo URLROOT; ?>/StorePageController/wishList" target="main">WishList</a></li>
                 <li><a href="<?php echo URLROOT; ?>/StorePageController/viewCart" target="main">Your Cart</a></li>
-                <li><a href="" target="main">Contact Us</a></li>
+                <li><a href="<?php echo URLROOT; ?>/StorePageController/myOrders" target="main">My Orders</a></li>
                 <li><a href="<?php echo URLROOT; ?>/StorePageController/aboutUs" target="main">About Us</a></li>
             </ul>
         </nav>

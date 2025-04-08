@@ -6,6 +6,13 @@ class SupplierModel {
         $this->db = new Database(); // Assumes a Database class exists for handling DB operations
     }
 
+
+    // public function getProfileImage($userId) {
+    //     $this->db->query("SELECT * FROM users WHERE user_id = :user_id");
+    //     $this->db->bind(':user_id', $userId);
+    //     return $this->db->single();
+    // }
+
     public function getTotalSales($userId) {
         $this->db->query("SELECT SUM(total_amount) AS total_sales 
                           FROM sales_orders
@@ -120,12 +127,7 @@ class SupplierModel {
         return $this->db->resultSet();
     }
 
-    // public function getSupplierById($userId) {
-    //     $this->db->query("SELECT * FROM suppliers WHERE supplier_id = :user_id");
-    //     $this->db->bind(':user_id', $userId);
-    //     $result = $this->db->single();
-    //     return $result;
-    // }
+   
 
     public function getProductsBySupplierId($userId) {
         $this->db->query("SELECT * FROM inventory WHERE user_id = :user_id");

@@ -18,7 +18,8 @@ class StorePagesModel {
                 i.selling_price,
                 i.category,
                 i.image_path,
-                u.first_name AS supplier_name
+                u.first_name AS supplier_name,
+                u.user_id AS supplier_id
             FROM 
                 inventory i
             JOIN 
@@ -171,23 +172,45 @@ class StorePagesModel {
         return $this->db->execute();
     }
 
-    public function saveItem($item_id, $user_id, $image_path, $item_name, $selling_price) {
-        //also add images_path to the database
+  public function saveItem($user_id, $item_id,) {
+    $this->db->query('INSERT INTO saved_items (user_id, item_id) 
+                      VALUES (:user_id, :item_id)');
+    $this->db->bind(':user_id', $user_id);
+    $this->db->bind(':item_id', $item_id);
+    return $this->db->execute();
+}
 
-        $this->db->query('INSERT INTO saved_items (user_id, item_id, image_path, item_name, selling_price) VALUES (:user_id, :item_id, :image_path, :item_name, :selling_price)');
-        $this->db->bind(':user_id', $user_id);
+
+    public function removeSavedItem($user_id, $item_id) {
+        $this->db->query('DELETE FROM saved_items WHERE item_id = :item_id AND user_id = :user_id');
         $this->db->bind(':item_id', $item_id);
-        $this->db->bind(':image_path', $image_path);
-        $this->db->bind(':item_name', $item_name);
-        $this->db->bind(':selling_price', $selling_price);
+        $this->db->bind(':user_id', $user_id);
         return $this->db->execute();
     }
     
     public function getSavedItem($user_id) {
-        $this->db->query('SELECT * FROM saved_items WHERE user_id = :user_id');
+        $this->db->query('
+            SELECT 
+                saved_items.*, 
+                inventory.item_name, 
+                inventory.selling_price, 
+                inventory.image_path, 
+                users.first_name AS supplier_name 
+            FROM saved_items
+            JOIN inventory ON saved_items.item_id = inventory.item_id
+            JOIN users ON inventory.user_id = users.user_id
+            WHERE saved_items.user_id = :user_id
+        ');
         $this->db->bind(':user_id', $user_id);
         return $this->db->resultSet();
     }
+
+    public function getMyorders($customer_id){
+        $this->db->query("SELECT * FROM sales_orders WHERE customer_id = :customer_id ORDER BY created_at DESC");
+        $this->db->bind(':customer_id', $customer_id);
+        return $this->db->resultSet();
+    }
+    
     
 
     public function searchItems($searchQuery) {

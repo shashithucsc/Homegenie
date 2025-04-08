@@ -18,7 +18,8 @@
             <form action="<?php echo URLROOT; ?>/StorePageController/search" method="POST">
                 <input type="text" name="search_query" placeholder="Search here..." class="top-bar-search-input">
                 <button type="submit" class="top-bar-search-button">
-                    <img src="<?php echo URLROOT; ?>/public/img/search.png" alt="Search Icon" class="top-bar-search-icon">
+                    <img src="<?php echo URLROOT; ?>/public/img/search.png" alt="Search Icon"
+                        class="top-bar-search-icon">
                 </button>
             </form>
         </div>
@@ -27,11 +28,37 @@
     <div class="main2">
         <div class="box-container">
             <div class="left-section">
-                <img src="<?php echo URLROOT; ?>/public/img/slide1.jpg" alt="Descriptive Image">
+                <img src="<?php echo URLROOT; ?>/public/img/slide8.jpg" alt="Descriptive Image">
             </div>
             <div class="right-section">
                 <h2>HomeGenie Special Christmas Offers</h2>
-                <p>Celebrate this Christmas with HomeGenie! Enjoy exclusive discounts on essential home services and products.</p>
+                <p>Celebrate this Christmas with HomeGenie! Enjoy exclusive discounts on essential home services and
+                    products.</p>
+                  
+
+                <!-- <p>Hurry! Offer ends in: <span id="timer"></span></p>
+                <script>
+                    const end = new Date("Dec 25, 2025 23:59:59").getTime();
+                    const timer = setInterval(function () {
+                        const now = new Date().getTime();
+                        const distance = end - now;
+
+                        if (distance < 0) {
+                            clearInterval(timer);
+                            document.getElementById("timer").innerHTML = "EXPIRED";
+                            return;
+                        }
+
+                        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                        const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+                        const minutes = Math.floor((distance / (1000 * 60)) % 60);
+                        const seconds = Math.floor((distance / 1000) % 60);
+
+                        document.getElementById("timer").innerHTML =
+                            `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                    }, 1000);
+                </script> -->
+
             </div>
         </div>
 
@@ -52,8 +79,8 @@
                 <?php if (isset($data['data1']) && is_array($data['data1'])): ?>
                     <?php foreach ($data['data1'] as $item): ?>
                         <div class="offer-item">
-                            <img src="data:image/jpeg;base64,<?php echo base64_encode($item->image); ?>" 
-                                 alt="<?php echo htmlspecialchars($item->description); ?>">
+                            <img src="data:image/jpeg;base64,<?php echo base64_encode($item->image); ?>"
+                                alt="<?php echo htmlspecialchars($item->description); ?>">
                             <h3><?php echo htmlspecialchars($item->description); ?></h3>
                         </div>
                     <?php endforeach; ?>
@@ -69,8 +96,8 @@
                 <?php if (!empty($data['items'])): ?>
                     <?php foreach ($data['items'] as $item): ?>
                         <div class="item">
-                            <img src="data:image/jpeg;base64,<?php echo base64_encode($item->image_path); ?>" 
-                                 alt="<?php echo htmlspecialchars($item->item_name); ?>">
+                            <img src="data:image/jpeg;base64,<?php echo base64_encode($item->image_path); ?>"
+                                alt="<?php echo htmlspecialchars($item->item_name); ?>">
                             <h3><?php echo htmlspecialchars($item->item_name); ?></h3>
                             <p>Supplier: <?php echo htmlspecialchars($item->supplier_name); ?></p>
                             <p>Rs. <?php echo htmlspecialchars($item->selling_price); ?></p>
@@ -78,15 +105,15 @@
                             <div class="quantity-container">
                                 <label for="quantity_<?php echo $item->item_id; ?>">Quantity:</label>
                                 <input type="number" id="quantity_<?php echo $item->item_id; ?>" name="quantity" value="1"
-                                       min="1" max="<?php echo $item->available_quantity; ?>"
-                                       onchange="checkQuantity(<?php echo $item->item_id; ?>)">
+                                    min="1" max="<?php echo $item->available_quantity; ?>"
+                                    onchange="checkQuantity(<?php echo $item->item_id; ?>)">
                             </div>
                             <div class="button-container">
                                 <!-- Add to Cart -->
                                 <form action="<?php echo URLROOT; ?>/StorePageController/addToCart" method="POST">
                                     <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
                                     <input type="hidden" id="available_quantity_<?php echo $item->item_id; ?>"
-                                           value="<?php echo $item->available_quantity; ?>">
+                                        value="<?php echo $item->available_quantity; ?>">
 
                                     <button type="submit" class="add-button">Add</button>
                                 </form>
@@ -94,8 +121,14 @@
                                 <!-- Save to Wishlist -->
                                 <form action="<?php echo URLROOT; ?>/StorePageController/addToWishlist" method="POST">
                                     <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
+                                    <input type="hidden" name="image_path"
+                                        value="<?php echo base64_encode($item->image_path); ?>">
+                                    <input type="hidden" name="item_name" value="<?php echo $item->item_name; ?>">
+                                    <input type="hidden" name="selling_price" value="<?php echo $item->selling_price; ?>">
+                                    <input type="hidden" name="supplier_id" value="<?php echo $item->supplier_id; ?>">
                                     <button type="submit" class="save-button">Save</button>
                                 </form>
+
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -119,4 +152,5 @@
 
     <?php require_once APPROOT . '/views/footer.php'; ?>
 </body>
+
 </html>

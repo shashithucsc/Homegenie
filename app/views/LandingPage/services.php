@@ -7,6 +7,7 @@
     <title>Services - HomeGenie</title>
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/style-services.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/style-index.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/navigationbar.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 

@@ -14,11 +14,7 @@
     <?php require_once APPROOT . '/views/supplier/navbar/navbar.php'; ?>
 
     <div class="container2">
-        <div class="header5">
-            <h1>Saved Items</h1>
-            <a href="<?php echo URLROOT; ?>/HomeController/index" class="back-button">Back to Home</a>
-        </div>
-
+        
         <section class="saved-items">
             <?php if (!empty($data['items'])): ?>
                 <?php foreach ($data['items'] as $item): ?>
@@ -33,9 +29,9 @@
 
 
                         <div class="button-container">
-                            <form action="<?php echo URLROOT; ?>/CartController/addToCart" method="POST">
+                            <form action="<?php echo URLROOT; ?>/StorePageController/removeFromWishlist" method="POST">
                                 <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
-                                <button type="submit" class="add-button">Add</button>
+                                <button type="submit" class="remove-button">Remove</button>
                             </form>
 
 

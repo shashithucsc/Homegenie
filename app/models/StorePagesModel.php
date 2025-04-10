@@ -171,15 +171,30 @@ class StorePagesModel {
         $this->db->bind(':id', $id);
         return $this->db->execute();
     }
-
-  public function saveItem($user_id, $item_id,) {
-    $this->db->query('INSERT INTO saved_items (user_id, item_id) 
-                      VALUES (:user_id, :item_id)');
-    $this->db->bind(':user_id', $user_id);
-    $this->db->bind(':item_id', $item_id);
-    return $this->db->execute();
-}
-
+    public function saveItem($user_id, $item_id)
+    {
+        // First, check if item already exists in wishlist
+        $this->db->query('SELECT * FROM saved_items WHERE user_id = :user_id AND item_id = :item_id');
+        $this->db->bind(':user_id', $user_id);
+        $this->db->bind(':item_id', $item_id);
+        $this->db->execute();
+    
+        if ($this->db->rowCount() > 0) {
+            return 'exists';
+        }
+    
+        // If not exists, insert the item
+        $this->db->query('INSERT INTO saved_items (user_id, item_id) VALUES (:user_id, :item_id)');
+        $this->db->bind(':user_id', $user_id);
+        $this->db->bind(':item_id', $item_id);
+    
+        if ($this->db->execute()) {
+            return 'saved';
+        } else {
+            return false;
+        }
+    }
+    
 
     public function removeSavedItem($user_id, $item_id) {
         $this->db->query('DELETE FROM saved_items WHERE item_id = :item_id AND user_id = :user_id');

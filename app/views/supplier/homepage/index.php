@@ -28,13 +28,13 @@
     <div class="main2">
         <div class="box-container">
             <div class="left-section">
-                <img src="<?php echo URLROOT; ?>/public/img/slide8.jpg" alt="Descriptive Image">
+                <img src="<?php echo URLROOT; ?>/public/img/home.png" alt="Descriptive Image">
             </div>
             <div class="right-section">
                 <h2>HomeGenie Special Christmas Offers</h2>
                 <p>Celebrate this Christmas with HomeGenie! Enjoy exclusive discounts on essential home services and
                     products.</p>
-                  
+
 
                 <!-- <p>Hurry! Offer ends in: <span id="timer"></span></p>
                 <script>
@@ -121,13 +121,9 @@
                                 <!-- Save to Wishlist -->
                                 <form action="<?php echo URLROOT; ?>/StorePageController/addToWishlist" method="POST">
                                     <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
-                                    <input type="hidden" name="image_path"
-                                        value="<?php echo base64_encode($item->image_path); ?>">
-                                    <input type="hidden" name="item_name" value="<?php echo $item->item_name; ?>">
-                                    <input type="hidden" name="selling_price" value="<?php echo $item->selling_price; ?>">
-                                    <input type="hidden" name="supplier_id" value="<?php echo $item->supplier_id; ?>">
                                     <button type="submit" class="save-button">Save</button>
                                 </form>
+
 
                             </div>
                         </div>
@@ -149,6 +145,15 @@
             }
         }
     </script>
+
+    <!-- save button popup messsage javascript -->
+    <?php if (isset($_SESSION['wishlist_msg'])): ?>
+        <script>
+            alert("<?php echo $_SESSION['wishlist_msg']; ?>");
+        </script>
+        <?php unset($_SESSION['wishlist_msg']); ?>
+    <?php endif; ?>
+
 
     <?php require_once APPROOT . '/views/footer.php'; ?>
 </body>

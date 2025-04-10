@@ -21,7 +21,7 @@ if (session_status() == PHP_SESSION_NONE) {
             </ul>
         </nav>
         <div class="user-profile">
-            <img src="<?php echo isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : URLROOT . '/public/img/default_user.png'; ?>" alt="User Profile" class="profile-pic">
+            <img src="<?php echo isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : URLROOT . '/public/img/profile.png'; ?>" alt="User Profile" class="profile-pic">
             <span class="user-name"><?php echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest'; ?></span>
         </div>
 

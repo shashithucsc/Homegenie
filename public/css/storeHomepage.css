@@ -246,10 +246,10 @@
         display: flex;
         flex-wrap: wrap;
         gap: 20px;
-        padding: 20px 35px;
+        padding: 20px 90px;
         margin-top: 20px;
         justify-content: flex-start;
-        gap: 30px;
+        gap: 60px;
     }
 
     .item {

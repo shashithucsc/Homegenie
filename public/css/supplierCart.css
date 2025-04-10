@@ -53,8 +53,8 @@
         }
         
         .cart-table th {
-            background-color: var(--secondary-color);
-            color: var(--text-color);
+            background-color: var(--primary-color);
+            color: #fff;
             font-weight: 600;
             padding: 1rem;
             text-align: left;

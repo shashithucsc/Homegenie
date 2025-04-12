@@ -36,28 +36,7 @@
                     products.</p>
 
 
-                <!-- <p>Hurry! Offer ends in: <span id="timer"></span></p>
-                <script>
-                    const end = new Date("Dec 25, 2025 23:59:59").getTime();
-                    const timer = setInterval(function () {
-                        const now = new Date().getTime();
-                        const distance = end - now;
 
-                        if (distance < 0) {
-                            clearInterval(timer);
-                            document.getElementById("timer").innerHTML = "EXPIRED";
-                            return;
-                        }
-
-                        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                        const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
-                        const minutes = Math.floor((distance / (1000 * 60)) % 60);
-                        const seconds = Math.floor((distance / 1000) % 60);
-
-                        document.getElementById("timer").innerHTML =
-                            `${days}d ${hours}h ${minutes}m ${seconds}s`;
-                    }, 1000);
-                </script> -->
 
             </div>
         </div>
@@ -91,49 +70,112 @@
         </section>
 
         <section class="box">
-            <h1>Plumbing...</h1>
-            <section class="fetch-items">
-                <?php if (!empty($data['items'])): ?>
-                    <?php foreach ($data['items'] as $item): ?>
-                        <div class="item">
-                            <img src="data:image/jpeg;base64,<?php echo base64_encode($item->image_path); ?>"
-                                alt="<?php echo htmlspecialchars($item->item_name); ?>">
-                            <h3><?php echo htmlspecialchars($item->item_name); ?></h3>
-                            <p>Supplier: <?php echo htmlspecialchars($item->supplier_name); ?></p>
-                            <p>Rs. <?php echo htmlspecialchars($item->selling_price); ?></p>
+    <h1>Plumbing...</h1>
+    <section class="fetch-items">
+        <?php if (!empty($data['items'])): ?>
+            <?php foreach ($data['items'] as $item): ?>
+                <div class="item">
+                    <img src="data:image/jpeg;base64,<?php echo base64_encode($item->image_path); ?>"
+                        alt="<?php echo htmlspecialchars($item->item_name); ?>">
+                    <h3><?php echo htmlspecialchars($item->item_name); ?></h3>
+                    <p>Supplier: <?php echo htmlspecialchars($item->supplier_name); ?></p>
+                    <p>Rs. <?php echo htmlspecialchars($item->selling_price); ?></p>
 
-                            <div class="quantity-container">
-                                <label for="quantity_<?php echo $item->item_id; ?>">Quantity:</label>
-                                <input type="number" id="quantity_<?php echo $item->item_id; ?>" name="quantity" value="1"
-                                    min="1" max="<?php echo $item->available_quantity; ?>"
-                                    onchange="checkQuantity(<?php echo $item->item_id; ?>)">
-                            </div>
-                            <div class="button-container">
-                                <!-- Add to Cart -->
-                                <form action="<?php echo URLROOT; ?>/StorePageController/addToCart" method="POST">
-                                    <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
-                                    <input type="hidden" id="available_quantity_<?php echo $item->item_id; ?>"
-                                        value="<?php echo $item->available_quantity; ?>">
+                    <!-- More Details Toggle -->
+                    <button class="more-btn" onclick="toggleDetails(<?php echo $item->item_id; ?>)">More Details</button>
 
-                                    <button type="submit" class="add-button">Add</button>
-                                </form>
+                    <!-- Floating More Details Box -->
+                    <div id="details_<?php echo $item->item_id; ?>" class="details-popup" style="display: none;">
+                        <span class="close-btn" onclick="toggleDetails(<?php echo $item->item_id; ?>)">✖</span>
 
-                                <!-- Save to Wishlist -->
-                                <form action="<?php echo URLROOT; ?>/StorePageController/addToWishlist" method="POST">
-                                    <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
-                                    <button type="submit" class="save-button">Save</button>
-                                </form>
+                        <!-- Description -->
+                        <p><?php echo nl2br(htmlspecialchars($item->description)); ?></p>
 
+                        <!-- Average Rating -->
+                        <p>Rating:
+                            <?php
+                            for ($i = 1; $i <= 5; $i++) {
+                                echo ($i <= round($item->average_rating)) ? '★' : '☆';
+                            }
+                            ?> (<?php echo number_format($item->average_rating, 1); ?>/5)
+                        </p>
 
-                            </div>
+                        <!-- Comments Section -->
+                        <div class="comments">
+                            <strong>Customer Reviews:</strong>
+                            <?php if (!empty($item->comments)): ?>
+                                <ul>
+                                    <?php foreach ($item->comments as $comment): ?>
+                                        <li>
+                                            <strong><?php echo htmlspecialchars($comment->first_name); ?>:</strong>
+                                            <span><?php echo htmlspecialchars($comment->comment); ?></span>
+                                            (<?php echo $comment->rating; ?>★)
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php else: ?>
+                                <p>No reviews yet.</p>
+                            <?php endif; ?>
                         </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p>No items available.</p>
-                <?php endif; ?>
-            </section>
-        </section>
+
+                        <!-- Rate & Comment Form -->
+                        <form action="<?php echo URLROOT; ?>/StorePageController/addReview" method="POST"
+                            class="review-form">
+                            <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
+
+                            <label for="rating">Rate:</label>
+                            <select name="rating" required>
+                                <option value="">Choose</option>
+                                <?php for ($r = 1; $r <= 5; $r++): ?>
+                                    <option value="<?php echo $r; ?>"><?php echo $r; ?> ★</option>
+                                <?php endfor; ?>
+                            </select>
+
+                            <label for="comment">Comment:</label>
+                            <textarea name="comment" rows="2" placeholder="Write a review..." required></textarea>
+
+                            <button type="submit">Submit Review</button>
+                        </form>
+                    </div>
+
+                    <div class="quantity-container">
+                        <label for="quantity_<?php echo $item->item_id; ?>">Quantity:</label>
+                        <input type="number" id="quantity_<?php echo $item->item_id; ?>" name="quantity" value="1"
+                            min="1" max="<?php echo $item->available_quantity; ?>"
+                            onchange="checkQuantity(<?php echo $item->item_id; ?>)">
+                    </div>
+                    <div class="button-container">
+                        <form action="<?php echo URLROOT; ?>/StorePageController/addToCart" method="POST">
+                            <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
+                            <input type="hidden" id="available_quantity_<?php echo $item->item_id; ?>"
+                                value="<?php echo $item->available_quantity; ?>">
+                            <button type="submit" class="add-button">Add</button>
+                        </form>
+
+                        <form action="<?php echo URLROOT; ?>/StorePageController/addToWishlist" method="POST">
+                            <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
+                            <button type="submit" class="save-button">Save</button>
+                        </form>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No items available.</p>
+        <?php endif; ?>
+    </section>
+</section>
+
+<script>
+function toggleDetails(id) {
+    const popup = document.getElementById('details_' + id);
+    popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+}
+</script>
+
     </div>
+
+   
+
 
     <script>
         function checkQuantity(itemId) {

@@ -14,13 +14,14 @@
     <?php require_once APPROOT . '/views/supplier/navbar/navbar.php'; ?>
 
     <div class="container2">
-        
+    <h1>Saved items</h1>
+
         <section class="saved-items">
             <?php if (!empty($data['items'])): ?>
                 <?php foreach ($data['items'] as $item): ?>
                     <div class="item">
-                    <img src="data:image/jpeg;base64,<?php echo base64_encode($item->image_path); ?>"
-                    alt="<?php echo htmlspecialchars($item->item_name); ?>">
+                        <img src="data:image/jpeg;base64,<?php echo base64_encode($item->image_path); ?>"
+                            alt="<?php echo htmlspecialchars($item->item_name); ?>">
 
                         <h3><?php echo htmlspecialchars($item->item_name); ?></h3>
                         <p>Supplier: <?php echo htmlspecialchars($item->supplier_name); ?></p>
@@ -45,6 +46,22 @@
     </div>
 
     <?php require_once APPROOT . '/views/footer.php'; ?>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const items = document.querySelectorAll('.item');
+            items.forEach((item, index) => {
+                item.style.opacity = 0;
+                item.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    item.style.transition = 'all 0.5s ease';
+                    item.style.opacity = 1;
+                    item.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+
 </body>
 
 </html>

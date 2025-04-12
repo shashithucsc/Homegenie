@@ -371,6 +371,21 @@ class StorePageController extends Controller
     }
 
 
+    public function addReview()
+{
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $item_id = $_POST['item_id'];
+        $user_id = $_SESSION['user_id']; // assuming you use sessions
+        $rating = $_POST['rating'];
+        $comment = trim($_POST['comment']);
+
+        $this->StorePagesModel->insertReview($item_id, $user_id, $rating, $comment);
+        $this->showPopup("Thank you for your feedback!", URLROOT . "/StorePageController");
+    }
+}
+
+
+
     private function showPopup($message, $redirectUrl)
     {
         // Pass message and redirect URL to the view

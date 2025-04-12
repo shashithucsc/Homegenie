@@ -14,22 +14,36 @@ class StorePagesModel {
             SELECT 
                 i.item_id,
                 i.item_name,
-                i.quantity,
+                i.quantity AS available_quantity,
                 i.selling_price,
                 i.category,
                 i.image_path,
+                i.description,
                 u.first_name AS supplier_name,
-                u.user_id AS supplier_id
+                u.user_id AS supplier_id,
+                (
+                    SELECT AVG(rating) 
+                    FROM item_reviews 
+                    WHERE item_id = i.item_id
+                ) AS average_rating
             FROM 
                 inventory i
             JOIN 
                 users u ON i.user_id = u.user_id
             WHERE 
                 i.category = 'Plumbing'";
+    
         $this->db->query($query);
-        $results = $this->db->resultset();
+        $results = $this->db->resultSet();
+    
+        // Attach comments to each item
+        foreach ($results as &$item) {
+            $item->comments = $this->getReviewsByItemId($item->item_id);
+        }
+    
         return $results;
     }
+    
     
 
     public function getCarpentryItems() {
@@ -237,6 +251,35 @@ class StorePagesModel {
         $this->db->bind(':searchQuery', '%' . $searchQuery . '%');
         return $this->db->resultSet();
     }
+
+
+    public function insertReview($item_id, $user_id, $rating, $comment)
+{
+    $sql = "INSERT INTO item_reviews (item_id, user_id, rating, comment) VALUES (:item_id, :user_id, :rating, :comment)";
+    $this->db->query($sql);
+    $this->db->bind(':item_id', $item_id);
+    $this->db->bind(':user_id', $user_id);
+    $this->db->bind(':rating', $rating);
+    $this->db->bind(':comment', $comment);
+    return $this->db->execute();
+}
+
+public function getReviewsByItemId($item_id)
+{
+    $sql = "SELECT r.*, u.first_name FROM item_reviews r JOIN users u ON r.user_id = u.user_id WHERE item_id = :item_id ORDER BY r.created_at DESC";
+    $this->db->query($sql);
+    $this->db->bind(':item_id', $item_id);
+    return $this->db->resultSet();
+}
+
+public function getAverageRating($item_id)
+{
+    $sql = "SELECT AVG(rating) as average_rating FROM item_reviews WHERE item_id = :item_id";
+    $this->db->query($sql);
+    $this->db->bind(':item_id', $item_id);
+    return $this->db->single()->average_rating ?? 0;
+}
+
     
 
     

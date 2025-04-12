@@ -37,14 +37,29 @@
                             <td><?php echo htmlspecialchars($order->delivery_address); ?></td>
                             <td><?php echo date('Y-m-d', strtotime($order->created_at)); ?></td>
                             <td>
-                                <?php if ($order->status == 'Completed'): ?>
-                                    <span style="color: var(--success-color); font-weight: bold;"><?php echo $order->status; ?></span>
-                                <?php elseif ($order->status == 'Cancelled'): ?>
-                                    <span style="color: var(--danger-color); font-weight: bold;"><?php echo $order->status; ?></span>
-                                <?php else: ?>
-                                    <span><?php echo $order->status; ?></span>
-                                <?php endif; ?>
-                            </td>
+    <?php
+        $status = strtolower($order->status);
+        $badgeClass = 'status-badge ';
+        switch ($status) {
+            case 'completed':
+                $badgeClass .= 'status-completed';
+                break;
+            case 'cancelled':
+                $badgeClass .= 'status-cancelled';
+                break;
+            case 'pending':
+                $badgeClass .= 'status-pending';
+                break;
+            case 'accepted':
+                $badgeClass .= 'status-accepted';
+                break;
+            default:
+                $badgeClass = ''; // fallback
+        }
+    ?>
+    <span class="<?php echo $badgeClass; ?>"><?php echo htmlspecialchars($order->status); ?></span>
+</td>
+
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

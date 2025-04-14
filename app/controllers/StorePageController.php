@@ -42,11 +42,10 @@ class StorePageController extends Controller
 
     public function carpentry()
     {
-        $carpentryModel = $this->model('StorePagesModel');
-        $items = $carpentryModel->getCarpentryItems();
+        $storePagesModel = $this->model('StorePagesModel');
+        $items = $storePagesModel->getCarpentryItems();
         $this->view('supplier/homepage/carpentry', ['items' => $items]);
     }
-
     public function electricity()
     {
         $carpentryModel = $this->model('StorePagesModel');

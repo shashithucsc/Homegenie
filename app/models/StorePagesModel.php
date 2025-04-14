@@ -36,7 +36,7 @@ class StorePagesModel {
         $this->db->query($query);
         $results = $this->db->resultSet();
     
-        // Attach comments to each item
+        
         foreach ($results as &$item) {
             $item->comments = $this->getReviewsByItemId($item->item_id);
         }
@@ -47,100 +47,178 @@ class StorePagesModel {
     
 
     public function getCarpentryItems() {
-        $this->db->query("SELECT 
+        $query = "
+            SELECT 
                 i.item_id,
                 i.item_name,
-                i.quantity,
+                i.quantity AS available_quantity,
                 i.selling_price,
                 i.category,
                 i.image_path,
-                u.first_name AS supplier_name
+                i.description,
+                u.first_name AS supplier_name,
+                u.user_id AS supplier_id,
+                (
+                    SELECT AVG(rating) 
+                    FROM item_reviews 
+                    WHERE item_id = i.item_id
+                ) AS average_rating
             FROM 
                 inventory i
             JOIN 
                 users u ON i.user_id = u.user_id
             WHERE 
-                i.category = 'Carpentry'");
-        $results = $this->db->resultset();
+                i.category = 'Carpentary'";
+    
+        $this->db->query($query);
+        $results = $this->db->resultSet();
+    
+        
+        foreach ($results as &$item) {
+            $item->comments = $this->getReviewsByItemId($item->item_id);
+        }
+    
         return $results;
-
     }
     public function getCleaningItems() {
-        $this->db->query("SELECT 
+        $query = "
+            SELECT 
                 i.item_id,
                 i.item_name,
-                i.quantity,
+                i.quantity AS available_quantity,
                 i.selling_price,
                 i.category,
                 i.image_path,
-                u.first_name AS supplier_name
+                i.description,
+                u.first_name AS supplier_name,
+                u.user_id AS supplier_id,
+                (
+                    SELECT AVG(rating) 
+                    FROM item_reviews 
+                    WHERE item_id = i.item_id
+                ) AS average_rating
             FROM 
                 inventory i
             JOIN 
                 users u ON i.user_id = u.user_id
             WHERE 
-                i.category = 'Cleaning'");
-        $results = $this->db->resultset();
+                i.category = 'Cleaning'";
+    
+        $this->db->query($query);
+        $results = $this->db->resultSet();
+    
+        
+        foreach ($results as &$item) {
+            $item->comments = $this->getReviewsByItemId($item->item_id);
+        }
+    
         return $results;
-
     } 
     
     public function getElectricityItems() {
-        $this->db->query("SELECT 
+        $query = "
+            SELECT 
                 i.item_id,
                 i.item_name,
-                i.quantity,
+                i.quantity AS available_quantity,
                 i.selling_price,
                 i.category,
                 i.image_path,
-                u.first_name AS supplier_name
+                i.description,
+                u.first_name AS supplier_name,
+                u.user_id AS supplier_id,
+                (
+                    SELECT AVG(rating) 
+                    FROM item_reviews 
+                    WHERE item_id = i.item_id
+                ) AS average_rating
             FROM 
                 inventory i
             JOIN 
                 users u ON i.user_id = u.user_id
             WHERE 
-                i.category = 'Electricity'");
-        $results = $this->db->resultset();
+                i.category = 'Electricity'";
+    
+        $this->db->query($query);
+        $results = $this->db->resultSet();
+    
+        
+        foreach ($results as &$item) {
+            $item->comments = $this->getReviewsByItemId($item->item_id);
+        }
+    
         return $results;
 
     }
 
     public function getMasonaryItems() {
-        $this->db->query("SELECT 
+        $query = "
+            SELECT 
                 i.item_id,
                 i.item_name,
-                i.quantity,
+                i.quantity AS available_quantity,
                 i.selling_price,
                 i.category,
                 i.image_path,
-                u.first_name AS supplier_name
+                i.description,
+                u.first_name AS supplier_name,
+                u.user_id AS supplier_id,
+                (
+                    SELECT AVG(rating) 
+                    FROM item_reviews 
+                    WHERE item_id = i.item_id
+                ) AS average_rating
             FROM 
                 inventory i
             JOIN 
                 users u ON i.user_id = u.user_id
             WHERE 
-                i.category = 'Masonary'");
-        $results = $this->db->resultset();
+                i.category = 'Masonary'";
+    
+        $this->db->query($query);
+        $results = $this->db->resultSet();
+    
+        
+        foreach ($results as &$item) {
+            $item->comments = $this->getReviewsByItemId($item->item_id);
+        }
+    
         return $results;
 
     }
 
     public function getPaintingItems() {
-        $this->db->query("SELECT 
+        $query = "
+            SELECT 
                 i.item_id,
                 i.item_name,
-                i.quantity,
+                i.quantity AS available_quantity,
                 i.selling_price,
                 i.category,
                 i.image_path,
-                u.first_name AS supplier_name
+                i.description,
+                u.first_name AS supplier_name,
+                u.user_id AS supplier_id,
+                (
+                    SELECT AVG(rating) 
+                    FROM item_reviews 
+                    WHERE item_id = i.item_id
+                ) AS average_rating
             FROM 
                 inventory i
             JOIN 
                 users u ON i.user_id = u.user_id
             WHERE 
-                i.category = 'Painting'");
-        $results = $this->db->resultset();
+                i.category = 'Painting'";
+    
+        $this->db->query($query);
+        $results = $this->db->resultSet();
+    
+        
+        foreach ($results as &$item) {
+            $item->comments = $this->getReviewsByItemId($item->item_id);
+        }
+    
         return $results;
 
     }

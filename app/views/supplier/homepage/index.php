@@ -87,31 +87,33 @@
 
 
                             <div class="button-container">
-    <div class="quantity-wrapper">
-        <form action="<?php echo URLROOT; ?>/StorePageController/addToCart" method="POST" class="form-left">
-            <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
-            <input type="hidden" id="available_quantity_<?php echo $item->item_id; ?>"
-                value="<?php echo $item->available_quantity; ?>">
+                                <div class="quantity-wrapper">
+                                    <form action="<?php echo URLROOT; ?>/StorePageController/addToCart" method="POST"
+                                        class="form-left">
+                                        <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
+                                        <input type="hidden" id="available_quantity_<?php echo $item->item_id; ?>"
+                                            value="<?php echo $item->available_quantity; ?>">
 
-            <div class="quantity-container">
-                <label for="quantity_<?php echo $item->item_id; ?>">Quantity:</label>
-                <input type="number" id="quantity_<?php echo $item->item_id; ?>" name="quantity"
-                    value="1" min="1" max="<?php echo $item->available_quantity; ?>"
-                    onchange="checkQuantity(<?php echo $item->item_id; ?>)">
-            </div>
+                                        <div class="quantity-container">
+                                            <label for="quantity_<?php echo $item->item_id; ?>">Quantity:</label>
+                                            <input type="number" id="quantity_<?php echo $item->item_id; ?>" name="quantity"
+                                                value="1" min="1" max="<?php echo $item->available_quantity; ?>"
+                                                onchange="checkQuantity(<?php echo $item->item_id; ?>)">
+                                        </div>
 
-            <button type="submit" class="add-button">Add</button>
-        </form>
-    </div>
+                                        <button type="submit" class="add-button">Add</button>
+                                    </form>
+                                </div>
 
-    <div class="button-row">
-        <!-- Save button form only -->
-        <form action="<?php echo URLROOT; ?>/StorePageController/addToWishlist" method="POST" class="form-right">
-            <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
-            <button type="submit" class="save-button">Save</button>
-        </form>
-    </div>
-</div>
+                                <div class="button-row">
+                                    <!-- Save button form only -->
+                                    <form action="<?php echo URLROOT; ?>/StorePageController/addToWishlist" method="POST"
+                                        class="form-right">
+                                        <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
+                                        <button type="submit" class="save-button">Save</button>
+                                    </form>
+                                </div>
+                            </div>
 
 
                         </div>
@@ -121,7 +123,7 @@
                 <?php endif; ?>
             </section>
 
-           
+
             <?php foreach ($data['items'] as $item): ?>
                 <div id="modal_<?php echo $item->item_id; ?>" class="modal">
                     <div class="modal-content">
@@ -176,43 +178,45 @@
             <?php endforeach; ?>
         </section>
 
-        <script>
-            function openModal(id) {
-                const modals = document.querySelectorAll('.modal');
-                modals.forEach(modal => modal.style.display = 'none');
-                document.getElementById('modal_' + id).style.display = 'flex';
-            }
-
-            function closeModal(id) {
-                document.getElementById('modal_' + id).style.display = 'none';
-            }
-
-            window.addEventListener('click', function (e) {
-                const modals = document.querySelectorAll('.modal');
-                modals.forEach(modal => {
-                    if (e.target === modal) {
-                        modal.style.display = 'none';
-                    }
-                });
-            });
-        </script>
-
-
-
     </div>
 
+
+
+    <script>
+        function openModal(id) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => modal.style.display = 'none');
+            document.getElementById('modal_' + id).style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            document.getElementById('modal_' + id).style.display = 'none';
+        }
+
+        window.addEventListener('click', function (e) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    </script>
 
 
 
     <script>
         function checkQuantity(itemId) {
             const quantityInput = document.getElementById('quantity_' + itemId);
-            const maxQuantity = document.getElementById('available_quantity_' + itemId).value;
-            if (quantityInput.value > maxQuantity) {
+            const maxQuantity = parseInt(document.getElementById('available_quantity_' + itemId).value, 10);
+            const selectedQuantity = parseInt(quantityInput.value, 10);
+
+            if (selectedQuantity > maxQuantity) {
                 alert('Cannot select more than available inventory!');
                 quantityInput.value = maxQuantity;
             }
         }
+
     </script>
 
     <!-- save button popup messsage javascript -->

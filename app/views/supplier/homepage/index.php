@@ -87,25 +87,33 @@
 
 
                             <div class="button-container">
-                                <form action="<?php echo URLROOT; ?>/StorePageController/addToCart" method="POST">
-                                    <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
-                                    <input type="hidden" id="available_quantity_<?php echo $item->item_id; ?>"
-                                        value="<?php echo $item->available_quantity; ?>">
+    <div class="quantity-wrapper">
+        <form action="<?php echo URLROOT; ?>/StorePageController/addToCart" method="POST" class="form-left">
+            <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
+            <input type="hidden" id="available_quantity_<?php echo $item->item_id; ?>"
+                value="<?php echo $item->available_quantity; ?>">
 
-                                    <div class="quantity-container">
-                                        <label for="quantity_<?php echo $item->item_id; ?>">Quantity:</label>
-                                        <input type="number" id="quantity_<?php echo $item->item_id; ?>" name="quantity"
-                                            value="1" min="1" max="<?php echo $item->available_quantity; ?>"
-                                            onchange="checkQuantity(<?php echo $item->item_id; ?>)">
-                                    </div>
-                                    <button type="submit" class="add-button">Add</button>
-                                </form>
+            <div class="quantity-container">
+                <label for="quantity_<?php echo $item->item_id; ?>">Quantity:</label>
+                <input type="number" id="quantity_<?php echo $item->item_id; ?>" name="quantity"
+                    value="1" min="1" max="<?php echo $item->available_quantity; ?>"
+                    onchange="checkQuantity(<?php echo $item->item_id; ?>)">
+            </div>
 
-                                <form action="<?php echo URLROOT; ?>/StorePageController/addToWishlist" method="POST">
-                                    <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
-                                    <button type="submit" class="save-button">Save</button>
-                                </form>
-                            </div>
+            <button type="submit" class="add-button">Add</button>
+        </form>
+    </div>
+
+    <div class="button-row">
+        <!-- Save button form only -->
+        <form action="<?php echo URLROOT; ?>/StorePageController/addToWishlist" method="POST" class="form-right">
+            <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
+            <button type="submit" class="save-button">Save</button>
+        </form>
+    </div>
+</div>
+
+
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
@@ -113,7 +121,7 @@
                 <?php endif; ?>
             </section>
 
-            <!-- ✅ MODALS ARE PLACED OUTSIDE LOOP -->
+           
             <?php foreach ($data['items'] as $item): ?>
                 <div id="modal_<?php echo $item->item_id; ?>" class="modal">
                     <div class="modal-content">

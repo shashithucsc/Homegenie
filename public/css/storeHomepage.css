@@ -591,16 +591,16 @@ body, html {
     color: red;
 }
 
-.button-container {
+/* .button-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-top: 20px;
     width: 100%;
     gap: 15px;
-}
+} */
 
-.quantity-wrapper {
+/* .quantity-wrapper {
     display: flex;
     justify-content: center;
     width: 100%;
@@ -618,9 +618,9 @@ body, html {
     font-size: 14px;
     font-weight: 500;
     color: #333;
-}
+} */
 
-input[type="number"] {
+/* input[type="number"] {
     width: 70px;
     text-align: center;
     padding: 5px;
@@ -635,14 +635,14 @@ input[type="number"] {
     width: 100%;
     max-width: 400px;
     gap: 10px;
-}
+} */
 
 .form-left,
 .form-right {
     flex: 1;
 }
 
-.add-button,
+/* .add-button,
 .save-button {
     width: 100%;
     padding: 10px 0;
@@ -651,6 +651,9 @@ input[type="number"] {
     border: none;
     border-radius: 5px;
     text-align: center;
+  
+    opacity: 0.9;
+    transition: background-color 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
 
 .add-button {
@@ -669,5 +672,118 @@ input[type="number"] {
 
 .save-button:hover {
     background-color: #ff8c00;
+} */
+
+.category-buttons .category-btn {
+    background: linear-gradient(135deg, #08f, #04c);
+    color: white;
+    padding: 10px 16px;
+    margin: 8px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.category-buttons .category-btn:hover {
+    background-color: #434190;
+}
+
+/* .modern-add-btn,
+.modern-save-btn {
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Add to Cart Style */
+/* .modern-add-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.modern-add-btn:hover {
+    background-color: #218838;
+} */
+
+/* Save to Wishlist Style */
+/* .modern-save-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.modern-save-btn:hover {
+    background-color: #0069d9;
+}  */
+
+
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+    align-items: center;
+}
+
+.same-row-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.quantity-container label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.quantity-container input[type="number"] {
+    width: 50px;
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: rgba(255, 255, 255, 0.3);
+    color: #000;
+}
+
+.modern-btn {
+    padding: 6px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 136, 255, 0.4);
+    background: rgba(255, 255, 255, 0.15);
+    color: #007BFF;
+    font-weight: bold;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: 0.3s ease;
+}
+
+.modern-btn:hover {
+    background: rgba(0, 136, 255, 0.1);
+    color: #0056b3;
+}
+
+.item {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 15px;
+    margin: 15px 0;
+    background: #fff;
 }
 

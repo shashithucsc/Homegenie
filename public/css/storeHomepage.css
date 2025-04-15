@@ -82,13 +82,12 @@ body, html {
 
     .top-bar-search-button {
         padding: 0.25rem 0.5rem;
-        background-color: #ffffff
+        background-color: #ffffff;
         color: white;
         border: none;
         border-radius: 20px;
         cursor: pointer;
         transition: background-color 0.3s ease-in-out;
-       
     }
     
     .top-bar-search-button:hover {
@@ -163,7 +162,6 @@ body, html {
         border-radius: 8px;
         padding: 10px;
         box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.7);
-        /* box-shadow: 0 8px 10px rgba(0, 0, 0, 0.1); */
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -171,7 +169,6 @@ body, html {
         width: 400px;
         height: 500px;
         overflow: hidden;
-        /* text-align: center; */
         transition: transform 0.2s;
         gap: 20px;
     }
@@ -227,8 +224,6 @@ body, html {
         display: block;
         margin-bottom: 10px;
     }
-
-
 
     .button {
         display: inline-block;
@@ -317,78 +312,6 @@ body, html {
         text-align: center;
     }
 
-    /* .button-container {
-        display: flex;
-        padding-top: 20px;
-        gap: 10px;
-        justify-content: center;
-        width: 100%;
-    }
-
-    .add-button{
-        padding: 10px 45px;
-        font-size: 1em;
-        cursor: pointer;
-        border: none;
-        border-radius: 5px;
-        flex: 1;
-        text-align: center;
-    
-       
-    }
-
-    .save-button {
-        padding: 10px 45px;
-        font-size: 1em;
-        cursor: pointer;
-        border: none;
-        border-radius: 5px;
-        flex: 1;
-        text-align: center;
-
-        
-    }
-
-
-    .add-button {
-        background-color: #4CAF50;
-        color: white;
-    }
-
-    .save-button {
-        background-color: #FFA500;
-        color: white;
-    }
-
-    .add-button:hover {
-        background-color: #45a049;
-    }
-
-    .save-button:hover {
-        background-color: #ff8c00;
-    } */
-
-
-
-    /* .indicators {
-        text-align: center;
-        margin-top: 10px;
-    }
-
-    .indicator {
-        display: inline-block;
-        width: 15px;
-        height: 15px;
-        margin: 0 5px;
-        background-color: #bbb;
-        border-radius: 50%;
-        cursor: pointer;
-    }
-
-    .indicator.active {
-        background-color: #717171;
-    } */
-
 
     .offer-list {
         display: flex;
@@ -458,34 +381,16 @@ body, html {
         line-height: 1.6;
     }
 
-    /* input[type="number"] {
-        width: 70px; 
-        text-align: center; 
-        padding: 5px;
-        font-size: 14px;
-        border: 1px solid #ccc;
-    }
-
-    .quantity-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        margin-top: 20px;
-       
-    } */
-
     
-    /* Modal Styles */
 .modal {
-    display: none; /* Hidden by default */
+    display: none;
     position: fixed;
     z-index: 9999;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    background-color: rgba(0, 0, 0, 0.5); 
     overflow: auto;
     padding-top: 60px;
 }
@@ -591,88 +496,10 @@ body, html {
     color: red;
 }
 
-/* .button-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 20px;
-    width: 100%;
-    gap: 15px;
-} */
-
-/* .quantity-wrapper {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-.quantity-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    margin-bottom: 15px;
-}
-
-.quantity-container label {
-    font-size: 14px;
-    font-weight: 500;
-    color: #333;
-} */
-
-/* input[type="number"] {
-    width: 70px;
-    text-align: center;
-    padding: 5px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.button-row {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 400px;
-    gap: 10px;
-} */
-
 .form-left,
 .form-right {
     flex: 1;
 }
-
-/* .add-button,
-.save-button {
-    width: 100%;
-    padding: 10px 0;
-    font-size: 1em;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    text-align: center;
-  
-    opacity: 0.9;
-    transition: background-color 0.3s ease-in-out, opacity 0.3s ease-in-out;
-}
-
-.add-button {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.save-button {
-    background-color: #FFA500;
-    color: white;
-}
-
-.add-button:hover {
-    background-color: #45a049;
-}
-
-.save-button:hover {
-    background-color: #ff8c00;
-} */
 
 .category-buttons .category-btn {
     background: linear-gradient(135deg, #08f, #04c);
@@ -691,41 +518,6 @@ body, html {
 .category-buttons .category-btn:hover {
     background-color: #434190;
 }
-
-/* .modern-add-btn,
-.modern-save-btn {
-    font-size: 15px;
-    font-weight: 600;
-    padding: 10px 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-/* Add to Cart Style */
-/* .modern-add-btn {
-    background-color: #28a745;
-    color: white;
-}
-
-.modern-add-btn:hover {
-    background-color: #218838;
-} */
-
-/* Save to Wishlist Style */
-/* .modern-save-btn {
-    background-color: #007bff;
-    color: white;
-}
-
-.modern-save-btn:hover {
-    background-color: #0069d9;
-}  */
 
 
 .button-container {
@@ -786,4 +578,14 @@ body, html {
     margin: 15px 0;
     background: #fff;
 }
+
+.rating-stars .star {
+    font-size: 16px;
+    color: #ccc; /* Gray for empty stars */
+}
+
+.rating-stars .star.filled {
+    color: gold; /* Yellow stars */
+}
+
 

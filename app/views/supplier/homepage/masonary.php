@@ -24,9 +24,20 @@
             </form>
         </div>
     </div>
-    
+
+    <section class="categories">
+        <h1>Explore Popular Categories</h1>
+        <div class="category-buttons">
+            <a href="<?php echo URLROOT; ?>/StorePageController/cleaning" class="category-btn">🧹 Cleaning</a>
+            <a href="<?php echo URLROOT; ?>/StorePageController/electricity" class="category-btn">💡 Electrical</a>
+            <a href="<?php echo URLROOT; ?>/StorePageController/painting" class="category-btn">🎨 Painting</a>
+            <a href="<?php echo URLROOT; ?>/StorePageController/carpentry" class="category-btn">🪚 Carpentry</a>
+            <a href="<?php echo URLROOT; ?>/StorePageController/masonary" class="category-btn">🧱 Masonry</a>
+        </div>
+    </section>
+
     <section class="box">
-    <h1>Masonary...</h1>
+        <h1>Masonary...</h1>
 
         <section class="fetch-items">
             <?php if (!empty($data['items'])): ?>
@@ -35,50 +46,60 @@
                         <img src="data:image/jpeg;base64,<?php echo base64_encode($item->image_path); ?>"
                             alt="<?php echo htmlspecialchars($item->item_name); ?>">
                         <h3><?php echo htmlspecialchars($item->item_name); ?></h3>
-                        <p>Supplier: <?php echo htmlspecialchars($item->supplier_name); ?></p>
+
+                       
+                        <p class="rating-stars">
+                            <?php
+                            for ($i = 1; $i <= 5; $i++) {
+                                if ($i <= round($item->average_rating)) {
+                                    echo '<span class="star filled">★</span>';
+                                } else {
+                                    echo '<span class="star">☆</span>';
+                                }
+                            }
+                            ?>
+                            (<?php echo number_format($item->average_rating, 1); ?>/5)
+                        </p>
+
+
                         <p>Rs. <?php echo htmlspecialchars($item->selling_price); ?></p>
 
                         <button class="more-btn" onclick="openModal(<?php echo $item->item_id; ?>)">More Details</button>
 
-
-
+                      
                         <div class="button-container">
-                            <div class="quantity-wrapper">
-                                <form action="<?php echo URLROOT; ?>/StorePageController/addToCart" method="POST"
-                                    class="form-left">
-                                    <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
-                                    <input type="hidden" id="available_quantity_<?php echo $item->item_id; ?>"
-                                        value="<?php echo $item->available_quantity; ?>">
+                            <form action="<?php echo URLROOT; ?>/StorePageController/addToCart" method="POST"
+                                class="form-left same-row-form">
+                                <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
+                                <input type="hidden" id="available_quantity_<?php echo $item->item_id; ?>"
+                                    value="<?php echo $item->available_quantity; ?>">
 
-                                    <div class="quantity-container">
-                                        <label for="quantity_<?php echo $item->item_id; ?>">Quantity:</label>
-                                        <input type="number" id="quantity_<?php echo $item->item_id; ?>" name="quantity"
-                                            value="1" min="1" max="<?php echo $item->available_quantity; ?>"
-                                            onchange="checkQuantity(<?php echo $item->item_id; ?>)">
-                                    </div>
+                                <div class="quantity-container">
+                                    <label for="quantity_<?php echo $item->item_id; ?>">Qty:</label>
+                                    <input type="number" id="quantity_<?php echo $item->item_id; ?>" name="quantity" value="1"
+                                        min="1" max="<?php echo $item->available_quantity; ?>"
+                                        onchange="checkQuantity(<?php echo $item->item_id; ?>)">
+                                </div>
 
-                                    <button type="submit" class="add-button">Add</button>
-                                </form>
-                            </div>
+                                <button type="submit" class="modern-btn add-btn">
+                                    🛒 Add
+                                </button>
+                            </form>
 
-                            <div class="button-row">
-                                <!-- Save button form only -->
-                                <form action="<?php echo URLROOT; ?>/StorePageController/addToWishlist" method="POST"
-                                    class="form-right">
-                                    <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
-                                    <button type="submit" class="save-button">Save</button>
-                                </form>
-                            </div>
+                            <form action="<?php echo URLROOT; ?>/StorePageController/addToWishlist" method="POST"
+                                class="form-right same-row-form">
+                                <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
+                                <button type="submit" class="modern-btn save-btn">
+                                    💙 Save
+                                </button>
+                            </form>
                         </div>
-
-
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
                 <p>No items available.</p>
             <?php endif; ?>
         </section>
-
 
         <?php foreach ($data['items'] as $item): ?>
             <div id="modal_<?php echo $item->item_id; ?>" class="modal">
@@ -87,13 +108,22 @@
                     <h2><?php echo htmlspecialchars($item->item_name); ?></h2>
                     <p><?php echo nl2br(htmlspecialchars($item->description)); ?></p>
 
-                    <p>Rating:
+                   
+                    <p><strong>Supplier:</strong> <?php echo htmlspecialchars($item->supplier_name); ?></p>
+
+                    <p class="rating-stars">
                         <?php
                         for ($i = 1; $i <= 5; $i++) {
-                            echo ($i <= round($item->average_rating)) ? '★' : '☆';
+                            if ($i <= round($item->average_rating)) {
+                                echo '<span class="star filled">★</span>';
+                            } else {
+                                echo '<span class="star">☆</span>';
+                            }
                         }
-                        ?> (<?php echo number_format($item->average_rating, 1); ?>/5)
+                        ?>
+                        (<?php echo number_format($item->average_rating, 1); ?>/5)
                     </p>
+
 
                     <div class="comments">
                         <strong>Customer Reviews:</strong>
@@ -133,10 +163,6 @@
         <?php endforeach; ?>
     </section>
 
-    </div>
-
-
-
     <script>
         function openModal(id) {
             const modals = document.querySelectorAll('.modal');
@@ -156,11 +182,7 @@
                 }
             });
         });
-    </script>
 
-
-
-    <script>
         function checkQuantity(itemId) {
             const quantityInput = document.getElementById('quantity_' + itemId);
             const maxQuantity = parseInt(document.getElementById('available_quantity_' + itemId).value, 10);
@@ -171,10 +193,8 @@
                 quantityInput.value = maxQuantity;
             }
         }
-
     </script>
 
-    <!-- save button popup messsage javascript -->
     <?php if (isset($_SESSION['wishlist_msg'])): ?>
         <script>
             alert("<?php echo $_SESSION['wishlist_msg']; ?>");

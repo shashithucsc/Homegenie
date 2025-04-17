@@ -67,12 +67,12 @@ class StorePageController extends Controller
         $this->view('supplier/homepage/painting', ['items' => $items]);
     }
 
-    public function cleaning()
-    {
-        $carpentryModel = $this->model('StorePagesModel');
-        $items = $carpentryModel->getCleaningItems();
-        $this->view('supplier/homepage/cleaning', ['items' => $items]);
-    }
+  public function cleaning(){
+    $cleaningModel = $this->model('StorePagesModel');
+    $itmes = $cleaningModel->getCleaningItems();
+    $this->view('supplier/homepage/cleaning',['items'=>$itmes]);
+   
+  }
 
     public function wishlist()
     {
@@ -83,7 +83,7 @@ class StorePageController extends Controller
         $user_id = $_SESSION['user_id'];
 
         $wishList = $this->model(model: 'StorePagesModel');
-        $items = $wishList->getSavedItem($user_id); // Pass user_id
+        $items = $wishList->getSavedItem($user_id); 
 
 
         $this->view('supplier/homepage/wishList', ['items' => $items]);

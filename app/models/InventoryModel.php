@@ -29,12 +29,14 @@ class InventoryModel {
     }
     
 
-    public function updateItemPrice($data) {
-        $this->db->query("UPDATE inventory SET selling_price = :price WHERE item_id = :item_id");
+    public function updateItemDetails($data) {
+        $this->db->query("UPDATE inventory SET selling_price = :price, quantity = :quantity WHERE item_id = :item_id");
         $this->db->bind(':price', $data['price']);
+        $this->db->bind(':quantity', $data['quantity']);
         $this->db->bind(':item_id', $data['item_id']);
         return $this->db->execute();
     }
+    
 
     public function deleteItem($itemId) {
         $this->db->query("DELETE FROM inventory WHERE item_id = :item_id");

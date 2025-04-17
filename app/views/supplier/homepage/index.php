@@ -35,9 +35,6 @@
                 <p>Celebrate this Christmas with HomeGenie! Enjoy exclusive discounts on essential home services and
                     products.</p>
 
-
-
-
             </div>
         </div>
 
@@ -81,7 +78,7 @@
                                 alt="<?php echo htmlspecialchars($item->item_name); ?>">
                             <h3><?php echo htmlspecialchars($item->item_name); ?></h3>
 
-                            <!-- Show ratings here -->
+                           
                             <p class="rating-stars">
                                 <?php
                                 for ($i = 1; $i <= 5; $i++) {
@@ -142,7 +139,7 @@
                         <h2><?php echo htmlspecialchars($item->item_name); ?></h2>
                         <p><?php echo nl2br(htmlspecialchars($item->description)); ?></p>
 
-                        <!-- Supplier name shown inside modal -->
+                        
                         <p><strong>Supplier:</strong> <?php echo htmlspecialchars($item->supplier_name); ?></p>
 
                         <p class="rating-stars">

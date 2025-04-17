@@ -28,7 +28,7 @@ body {
     min-height: 100vh;
 }
 
-/* Header Styles */
+
 .header9 {
     display: flex;
     align-items: center;
@@ -100,7 +100,7 @@ body {
     border: 2px solid var(--primary-color);
 }
 
-/* Inventory List Styles */
+
 .inventory-list {
     background: var(--card-bg);
     border-radius: 10px;
@@ -160,7 +160,7 @@ tr:hover {
     font-size: 0.9em;
 }
 
-/* Ensure buttons are positioned correctly and have the correct z-index */
+
 .action-btn {
     position: relative;
     z-index: 1;
@@ -170,6 +170,7 @@ tr:hover {
     cursor: pointer;
     transition: all 0.2s ease;
     margin: 0 5px;
+    text-decoration: none;
 }
 
 .update-btn {
@@ -340,4 +341,8 @@ main {
 /* Quick Actions */
 .quick-actions {
     display: grid;
+}
+
+.form-group {
+    margin-bottom: 15px;
 }

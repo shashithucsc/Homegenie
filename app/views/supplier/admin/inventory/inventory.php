@@ -63,13 +63,19 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                                     <td><span class="category-tag"><?php echo $item->category; ?></span></td>
                                     <td><?php echo date('M d, Y', strtotime($item->added_date)); ?></td>
                                     <td>
-                                        <a href="#" class="action-link update-btn" data-id="<?php echo $item->item_id; ?>" style="margin-right: 10px;">
-                                            <i class="fas fa-edit"></i> Update
-                                        </a>
+                                    <button 
+    class="action-btn update-btn" 
+    data-id="<?php echo $item->item_id; ?>"
+    data-price="<?php echo $item->selling_price; ?>"
+    data-quantity="<?php echo $item->quantity; ?>"
+    style="margin-right: 10px;"
+>
+    <i class="fas fa-edit"></i> Update
+</button>
 
-                                        <a href="#" class="action-link remove-btn" data-id="<?php echo $item->item_id; ?>">
+                                        <button class="action-btn remove-btn" data-id="<?php echo $item->item_id; ?>">
                                             <i class="fas fa-trash"></i> Delete
-                                        </a>
+                                        </button>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -92,20 +98,29 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                             <span class="close-modal">&times;</span>
                         </div>
                         <form id="updateForm" action="<?php echo URLROOT; ?>/InventoryController/update" method="POST">
-                            <input type="hidden" name="item_id" id="updateItemId">
-                            <div class="form-group">
-                                <label for="updatePrice">New Price (LKR)</label>
-                                <input type="number" name="price" id="updatePrice" step="0.01" required>
-                            </div>
-                            <div class="modal-actions">
-                                <button type="submit" class="confirm-btn">
-                                    <i class="fas fa-check"></i> Confirm
-                                </button>
-                                <button type="button" class="cancel-btn">
-                                    <i class="fas fa-times"></i> Cancel
-                                </button>
-                            </div>
-                        </form>
+    <input type="hidden" name="item_id" id="updateItemId">
+
+    <div class="form-group" style="margin-bottom: 15px;">
+        <label for="updateQuantity">New Quantity</label>
+        <input type="number" name="quantity" id="updateQuantity" min="0" required>
+    </div>
+
+    <div class="form-group">
+        <label for="updatePrice">New Price (LKR)</label>
+        <input type="number" name="price" id="updatePrice" step="0.01" required>
+    </div>
+
+    <div class="modal-actions">
+        <button type="submit" class="confirm-btn">
+            <i class="fas fa-check"></i> Confirm
+        </button>
+        <button type="button" class="cancel-btn">
+            <i class="fas fa-times"></i> Cancel
+        </button>
+    </div>
+</form>
+
+
                     </div>
                 </div>
 
@@ -213,11 +228,13 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 
             // Update Modal
             document.querySelectorAll('.update-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.getElementById('updateItemId').value = btn.dataset.id;
-                    openModal(modals.update);
-                });
-            });
+    btn.addEventListener('click', () => {
+        document.getElementById('updateItemId').value = btn.dataset.id;
+        document.getElementById('updatePrice').value = btn.dataset.price;
+        document.getElementById('updateQuantity').value = btn.dataset.quantity;
+        openModal(modals.update);
+    });
+});
 
             // Delete Modal
             document.querySelectorAll('.remove-btn').forEach(btn => {

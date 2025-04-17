@@ -60,15 +60,16 @@ class InventoryController extends Controller {
             $data = [
                 'item_id' => trim($_POST['item_id']),
                 'price' => trim($_POST['price']),
+                'quantity' => trim($_POST['quantity'])
             ];
     
-            // Validate the price
-            if ($data['price'] <= 0) {
-                die('Error: Price must be greater than zero.');
+            // Validate inputs
+            if ($data['price'] <= 0 || $data['quantity'] < 0) {
+                die('Error: Invalid price or quantity.');
             }
     
-            // Update item price
-            if ($this->inventoryModel->updateItemPrice($data)) {
+            // Update item
+            if ($this->inventoryModel->updateItemDetails($data)) {
                 header('Location: ' . URLROOT . '/InventoryController');
             } else {
                 die('Something went wrong.');
@@ -77,6 +78,7 @@ class InventoryController extends Controller {
             header('Location: ' . URLROOT . '/InventoryController');
         }
     }
+    
 
 
 

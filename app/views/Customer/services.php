@@ -110,8 +110,7 @@
                                 <span class="rating-number">4.8</span>
                             </div>
                             <p><?php echo htmlspecialchars($provider->description ?? ''); ?></p>
-                            <a
-                                href="<?php echo URLROOT; ?>/SupplierController/profile/<?php echo htmlspecialchars($provider->id ?? ''); ?>">
+                            <a href="<?php echo URLROOT; ?>/CustomerController/SPProfile/<?php echo htmlspecialchars($provider->user_id ?? ''); ?>">
                                 <div class="contact-btn">
                                     More Info <i class='bx bx-right-arrow-alt'></i>
                                 </div>

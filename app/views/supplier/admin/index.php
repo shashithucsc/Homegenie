@@ -109,8 +109,8 @@ require_once APPROOT . '/views/supplier/admin/sidebar.php';
         </div>
 
         <div class="buttons">
-            <button class= "btn" href="<?php echo URLROOT; ?>/SupplierController/storeWithdraw">Withdraw Money</buttona>
-            <button class ="btn" href="<?php echo URLROOT; ?>/SupplierController/SalesReport">Sales Reports</>
+            <a class="btn" href="<?php echo URLROOT; ?>/SupplierController/storeWithdraw">Withdraw Money</a>
+            <a class="btn" href="<?php echo URLROOT; ?>/SupplierController/SalesReport">Sales Reports</a>
         </div>
        
     </div>

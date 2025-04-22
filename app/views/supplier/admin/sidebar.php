@@ -55,9 +55,9 @@
                             </a>
                         </li>
                         <li class="nav-link">
-                            <a href="<?php echo URLROOT; ?>/SupplierController/quotations" class="nav-link">
+                            <a href="<?php echo URLROOT; ?>/SupplierController/saleReport" class="nav-link">
                                 <i class='bx bx-message-rounded-dots'></i>
-                                <span class="text nav-text">Quotations</span>
+                                <span class="text nav-text">Sales</span>
                             </a>
                         </li>
                         <li class="nav-link">

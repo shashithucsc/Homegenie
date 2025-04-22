@@ -1,5 +1,25 @@
 
-.reports-container {
+:root {
+    --primary-color: #2a3f9d;
+    --secondary-color: #4a5fc1;
+    --background-color: #f8f9ff;
+    --text-color: #2d3748;
+    --accent-color: #e2e8f0;
+    --hover-color: #1a2c6b;
+    --white-color: #ffffff;
+    --success-color: #38a169;
+    --border-radius: 12px;
+    --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+  
+  body {
+    font-family: poppins;
+    background-color: var(--background-color);
+    line-height: 1.6;
+    color: var(--text-color);
+  }
+
+  .reports-container {
     width: 80%;
     margin: 0 auto;
     padding: 20px;
@@ -40,7 +60,7 @@
 }
 
 .reports-table th {
-    background: linear-gradient(135deg, #08f, #04c);
+    background: var(--primary-color);
     color: white;
     font-weight: 600;
 }

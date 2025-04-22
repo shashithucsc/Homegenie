@@ -162,9 +162,7 @@ public function completedOrders()
     
     
 
-    public function quotations() {
-        $this->view('supplier/admin/Quotations/Quotations');
-    }
+  
 
     public function ratings() {
         $this->view('supplier/admin/Ratings/Ratings');

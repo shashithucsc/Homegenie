@@ -35,22 +35,45 @@ class QuotationSVPModel
     return $this->db->resultset();
   }
 
-  public function getAllQuotationslist()
-  {
-    // Modify the query to fetch all required details from the quotations table
+public function getAllQuotationslist($service_provider_id)
+{
+    // Updated query with WHERE clause and parameter placeholder
     $query = "
         SELECT q.quotation_id, q.appointment_id, q.service_provider_id, q.quotation_details, q.price, q.status, q.created_at, q.updated_at
         FROM quotations q
+        WHERE q.service_provider_id = :service_provider_id
     ";
 
-    // Execute the query
+    // Prepare and bind
+    $this->db->query($query);
+    $this->db->bind(':service_provider_id', $service_provider_id);
+
+    // Execute and return results
+    return $this->db->resultSet();
+}
+
+
+  
+
+  public function getAllAppointmentsById($service_provider_id)
+{
+    $query = "
+            SELECT a.appointment_id, a.customer_id, a.service_category, a.appointment_date, a.appointment_time, a.location, a.status
+            FROM appointments a
+            WHERE a.status = 'Approved' AND a.service_provider_id = :service_provider_id";  // Filter by service_provider_id
+
+    // Prepare the query
     $this->db->query($query);
 
-    // Fetch the result set
+    // Bind the parameter
+    $this->db->bind(':service_provider_id', $service_provider_id);
+
+    // Execute the query
     return $this->db->resultset();
-  }
+}
 
 
+  
 
   public function getAppointmentById($appointment_id)
   {

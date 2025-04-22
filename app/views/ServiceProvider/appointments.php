@@ -1,9 +1,9 @@
 <?php
 require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,19 +11,110 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/SVP/SVP_appointments.css">
 </head>
-
 <body>
     <div class="container">
+        <!-- Tab Buttons -->
         <div class="tabs">
-            <button class="tab-btn active" data-tab="pending">Pending Appointments</button>
-            <button class="tab-btn" data-tab="approved">Approved Appointments</button>
+            <button class="tab-btn active" data-tab="pending-tab">Pending Appointments</button>
+            <button class="tab-btn" data-tab="approved-tab">Approved Appointments</button>
         </div>
 
-        <div id="pending-appointments" class="tab-content active">
-            <div class="appointments-grid"></div>
+        <!-- Filter Section -->
+        <style>
+            .filters-container {
+                display: flex;
+                gap: 1.5rem;
+                padding: 1.5rem;
+                background: #f8f9fa;
+                border-radius: 12px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+                margin-bottom: 2rem;
+            }
+            .search-bar {
+                flex: 1;
+                position: relative;
+            }
+            .search-bar input {
+                width: 100%;
+                padding: 12px 16px 12px 48px;
+                border: 2px solid #e9ecef;
+                border-radius: 8px;
+                font-size: 1rem;
+                background: white url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="%239299a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>') no-repeat 16px center;
+                background-size: 20px;
+            }
+            .search-bar input:focus {
+                outline: none;
+                border-color: #4dabf7;
+                box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.15);
+            }
+            .district-filter {
+                position: relative;
+                min-width: 200px;
+            }
+            .district-filter select {
+                width: 100%;
+                padding: 12px 16px;
+                border: 2px solid #e9ecef;
+                border-radius: 8px;
+                font-size: 1rem;
+                appearance: none;
+                background: white url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="%239299a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>') no-repeat right 16px center;
+                background-size: 16px;
+            }
+            @media (max-width: 768px) {
+                .filters-container {
+                    flex-direction: column;
+                }
+            }
+        </style>
+
+        <!-- Pending Appointments -->
+        <div id="pending-tab" class="tab-content active">
+            <div class="filters-container">
+                <div class="search-bar">
+                    <input type="text" id="search-input" placeholder="Search by description or location...">
+                </div>
+                <div class="district-filter">
+                    <select id="district-select">
+                        <option value="">All Districts</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="appointments-grid" id="pending-appointments-grid">
+                <?php foreach ($data['pendingAppointments'] as $appointment): ?>
+                    <div class="appointment-card"
+                         id="appointment-<?= $appointment->appointment_id ?>"
+                         data-description="<?= strtolower($appointment->description) ?>"
+                         data-location="<?= strtolower($appointment->location) ?>">
+                        <div class="card-header">
+                            <span class="service-category"><?= $appointment->service_category ?></span>
+                            <span class="appointment-id">ID: <?= $appointment->appointment_id ?></span>
+                        </div>
+                        <div class="card-content">
+                            <div class="info-row">
+                                <span><?= $appointment->appointment_date ?></span>
+                                <span><?= $appointment->appointment_time ?></span>
+                            </div>
+                            <div class="info-row">
+                                <span><?= $appointment->location ?></span>
+                            </div>
+                            <div class="info-row">
+                                <span><?= $appointment->description ?></span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn btn-primary" onclick="approveAppointment(<?= $appointment->appointment_id ?>)">Approve</button>
+                                <button class="btn btn-outline" onclick="cancelAppointment(<?= $appointment->appointment_id ?>)">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         </div>
 
-        <div id="approved-appointments" class="tab-content">
+        <!-- Approved Appointments -->
+        <div id="approved-tab" class="tab-content">
             <div class="table-container">
                 <table>
                     <thead>
@@ -34,223 +125,135 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                             <th>Approved Date</th>
                         </tr>
                     </thead>
-                    <tbody id="approved-table-body"></tbody>
+                    <tbody>
+                        <?php foreach ($data['approvedAppointments'] as $appointment): ?>
+                            <tr>
+                                <td><?= $appointment->appointment_id ?></td>
+                                <td><?= $appointment->customer_id ?></td>
+                                <td><?= $appointment->appointment_date ?></td>
+                                <td><?= $appointment->updated_at ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
                 </table>
             </div>
         </div>
     </div>
 
+    <!-- Confirm Modal -->
+    <div id="confirm-modal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(0, 0, 0, 0.4); z-index: 10000; align-items: center; justify-content: center;">
+        <div style="background: white; padding: 20px 30px; border-radius: 10px; text-align: center; font-family: Inter, sans-serif;">
+            <p id="confirm-message">Are you sure?</p>
+            <button onclick="handleConfirm(true)" style="background-color: #28a745; color: white; padding: 8px 16px; border: none; border-radius: 5px; margin-right: 10px;">Yes</button>
+            <button onclick="handleConfirm(false)" style="background-color: #dc3545; color: white; padding: 8px 16px; border: none; border-radius: 5px;">No</button>
+        </div>
+    </div>
+
     <script>
-        // Data
-        const pendingAppointments = [
-            {
-                id: 10,
-                customerId: 2,
-                customerName: "Vineth Perera",
-                serviceCategory: "Plumbing",
-                description: "Unclog the bathroom drain",
-                date: "2024-12-04",
-                time: "11:30:00",
-                location: "27 Lake Drive, Matara",
-                status: "pending"
-            },
-            {
-                id: 11,
-                customerId: 4,
-                customerName: "Janith Silva",
-                serviceCategory: "Electrical",
-                description: "Fix power socket",
-                date: "2024-12-05",
-                time: "14:00:00",
-                location: "120 Beach Road, Galle",
-                status: "pending"
-            },
-            {
-                id: 12,
-                customerId: 5,
-                customerName: "Nimal Perera",
-                serviceCategory: "Carpentry",
-                description: "Fix door",
-                date: "2024-12-06",
-                time: "09:00:00",
-                location: "45 Hill Street, Colombo",
-                status: "pending"
-            },
-            {
-                id: 13,
-                customerId: 6,
-                customerName: "Saman Kumara",
-                serviceCategory: "Painting",
-                description: "Paint living room",
-                date: "2024-12-07",
-                time: "10:00:00",
-                location: "78 Flower Road, Kandy",
-                status: "pending"
-            },
-            {
-                id: 14,
-                customerId: 7,
-                customerName: "Ruwan Fernando",
-                serviceCategory: "Cleaning",
-                description: "Clean windows",
-                date: "2024-12-08",
-                time: "13:00:00",
-                location: "90 Park Avenue, Negombo",
-                status: "pending"
-            }
-        ];
+        // Tabs
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
-        const approvedAppointments = [
-            {
-                id: 3,
-                customerId: 1,
-                customerName: "Kasun Fernando",
-                appointmentDate: "2024-12-02 09:00:00",
-                approvedDate: "2024-11-28"
-            },
-            {
-                id: 7,
-                customerId: 3,
-                customerName: "Nimasha Dilrukshi",
-                appointmentDate: "2024-12-03 15:00:00",
-                approvedDate: "2024-11-29"
-            },
-            {
-                id: 10,
-                customerId: 4,
-                customerName: "Amila Perera",
-                appointmentDate: "2024-12-04 11:00:00",
-                approvedDate: "2024-11-30"
-            },
-            {
-                id: 13,
-                customerId: 5,
-                customerName: "Ruwan Silva",
-                appointmentDate: "2024-12-05 14:00:00",
-                approvedDate: "2024-12-01"
-            },
-            {
-                id: 17,
-                customerId: 6,
-                customerName: "Chathura Jayasinghe",
-                appointmentDate: "2024-12-06 10:00:00",
-                approvedDate: "2024-12-02"
-            }
-        ];
-
-        // Application Logic
-        document.addEventListener('DOMContentLoaded', () => {
-            // Tab switching functionality
-            const tabs = document.querySelectorAll('.tab-btn');
-            const tabContents = document.querySelectorAll('.tab-content');
-
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tabContents.forEach(c => c.classList.remove('active'));
-                    tab.classList.add('active');
-                    document.getElementById(`${tab.dataset.tab}-appointments`).classList.add('active');
-                });
-            });
-
-            // Render pending appointments
-            const appointmentsGrid = document.querySelector('.appointments-grid');
-
-            pendingAppointments.forEach(appointment => {
-                const card = document.createElement('div');
-                card.className = 'appointment-card';
-                card.innerHTML = `
-                    <div class="card-header">
-                        <span class="service-category">${appointment.serviceCategory}</span>
-                        <span class="appointment-id">ID: ${appointment.id}</span>
-                    </div>
-                    <div class="card-content">
-                        <div class="info-row">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
-                            <span>${appointment.customerName}</span>
-                            <span style="color: var(--text-secondary)">#${appointment.customerId}</span>
-                        </div>
-                        <div class="info-row">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
-                                <line x1="16" x2="16" y1="2" y2="6"></line>
-                                <line x1="8" x2="8" y1="2" y2="6"></line>
-                                <line x1="3" x2="21" y1="10" y2="10"></line>
-                            </svg>
-                            <span>${appointment.date}</span>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            <span>${appointment.time}</span>
-                        </div>
-                        <div class="info-row">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
-                                <circle cx="12" cy="10" r="3"></circle>
-                            </svg>
-                            <span style="color: var(--text-secondary)">${appointment.location}</span>
-                        </div>
-                        <div class="info-row">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
-                                <polyline points="14 2 14 8 20 8"></polyline>
-                            </svg>
-                            <span style="color: var(--text-secondary)">${appointment.description}</span>
-                        </div>
-                        <div class="card-actions">
-                            <button class="btn btn-primary" onclick="approveAppointment(${appointment.id})">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                                </svg>
-                                Approve
-                            </button>
-                            <button class="btn btn-outline" onclick="cancelAppointment(${appointment.id})">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <line x1="15" x2="9" y1="9" y2="15"></line>
-                                    <line x1="9" x2="15" y1="9" y2="15"></line>
-                                </svg>
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                `;
-                appointmentsGrid.appendChild(card);
-            });
-
-            // Render approved appointments
-            const approvedTableBody = document.getElementById('approved-table-body');
-
-            approvedAppointments.forEach(appointment => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${appointment.id}</td>
-                    <td>${appointment.customerName}</td>
-                    <td>${appointment.appointmentDate}</td>
-                    <td>${appointment.approvedDate}</td>
-                `;
-                approvedTableBody.appendChild(row);
+                button.classList.add('active');
+                document.getElementById(button.dataset.tab).classList.add('active');
             });
         });
 
+        // Approve / Cancel Handlers
         function approveAppointment(id) {
-            alert(`Approving appointment ${id}`);
-            // Add your approval logic here
+            customConfirm('Are you sure you want to approve this appointment?', confirmed => {
+                if (confirmed) {
+                    fetch('<?php echo URLROOT; ?>/ServiceProviderController/approveAppointment', {
+                        method: 'POST',
+                        body: new URLSearchParams({ id })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) showToast('Appointment approved!');
+                        else showToast('Error approving appointment', 'error');
+                        setTimeout(() => location.reload(), 300);
+                    });
+                }
+            });
         }
 
         function cancelAppointment(id) {
-            alert(`Canceling appointment ${id}`);
-            // Add your cancellation logic here
+            customConfirm('Are you sure you want to cancel this appointment?', confirmed => {
+                if (confirmed) {
+                    fetch('<?php echo URLROOT; ?>/ServiceProviderController/cancelAppointment', {
+                        method: 'POST',
+                        body: new URLSearchParams({ id })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) showToast('Appointment canceled!');
+                        else showToast('Error canceling appointment', 'error');
+                        setTimeout(() => location.reload(), 300);
+                    });
+                }
+            });
         }
+
+        // Custom Confirm Modal Logic
+        let confirmCallback = null;
+        function customConfirm(message, callback) {
+            document.getElementById('confirm-message').textContent = message;
+            document.getElementById('confirm-modal').style.display = 'flex';
+            confirmCallback = callback;
+        }
+
+        function handleConfirm(result) {
+            document.getElementById('confirm-modal').style.display = 'none';
+            if (confirmCallback) confirmCallback(result);
+            confirmCallback = null;
+        }
+
+        // Toast (implement your own or add a placeholder)
+        function showToast(msg, type = 'success') {
+            alert(msg); // Placeholder
+        }
+
+        // Populate Districts
+        const districts = [
+            'Ampara', 'Anuradhapura', 'Badulla', 'Batticaloa', 'Colombo',
+            'Galle', 'Gampaha', 'Hambantota', 'Jaffna', 'Kalutara',
+            'Kandy', 'Kegalle', 'Kilinochchi', 'Kurunegala', 'Mannar',
+            'Matale', 'Matara', 'Monaragala', 'Mullaitivu', 'Nuwara Eliya',
+            'Polonnaruwa', 'Puttalam', 'Ratnapura', 'Trincomalee', 'Vavuniya'
+        ];
+        const districtSelect = document.getElementById('district-select');
+        districts.forEach(d => {
+            const option = document.createElement('option');
+            option.value = d.toLowerCase();
+            option.textContent = d;
+            districtSelect.appendChild(option);
+        });
+
+        // Filtering Logic
+        function filterAppointments() {
+            const term = document.getElementById('search-input').value.toLowerCase();
+            const district = districtSelect.value.toLowerCase();
+
+            document.querySelectorAll('#pending-appointments-grid .appointment-card').forEach(card => {
+                const desc = card.dataset.description;
+                const loc = card.dataset.location;
+
+                const matchesSearch = !term || desc.includes(term) || loc.includes(term);
+                const matchesDistrict = !district || loc.includes(district);
+
+                card.style.display = (matchesSearch && matchesDistrict) ? 'block' : 'none';
+            });
+        }
+
+        document.getElementById('search-input').addEventListener('input', filterAppointments);
+        document.getElementById('district-select').addEventListener('change', filterAppointments);
     </script>
 </body>
-
 </html>
+
 
 <?php
 require_once APPROOT . '/views/ServiceProvider/footer_svp.php';

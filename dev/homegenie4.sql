@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 22, 2025 at 07:58 AM
+-- Generation Time: Apr 22, 2025 at 05:54 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -105,24 +105,31 @@ CREATE TABLE `appointments` (
 --
 
 INSERT INTO `appointments` (`appointment_id`, `customer_id`, `service_provider_id`, `service_category`, `description`, `appointment_date`, `appointment_time`, `location`, `status`, `created_at`, `updated_at`) VALUES
-(1, 1, 2, 'Plumbing', 'Fix a leaking sink in the kitchen', '2024-11-25', '10:00:00', '123 Maple Street', 'Approved', '2024-11-24 06:35:26', '2025-04-20 13:56:22'),
-(9, 1, 2, 'Electrical', 'Repair a malfunctioning power socket', '2024-12-03', '09:00:00', '15 Colombo Road, Galle', 'Approved', '2024-11-24 07:17:54', '2025-04-20 15:24:37'),
-(10, 2, 2, 'Plumbing', 'Unclog the bathroom drain', '2024-12-04', '11:30:00', '27 Lake Drive, Galle', 'Approved', '2024-11-24 07:17:54', '2025-04-21 04:46:46'),
+(1, 1, 2, 'Plumbing', 'Fix a leaking sink in the kitchen', '2024-11-25', '10:00:00', '123 Maple Street', 'Pending', '2024-11-24 06:35:26', '2024-11-24 06:35:26'),
+(9, 1, 2, 'Electrical', 'Repair a malfunctioning power socket', '2024-12-03', '09:00:00', '15 Colombo Road, Galle', 'Pending', '2024-11-24 07:17:54', '2024-11-24 07:17:54'),
+(10, 2, 200001, 'Plumbing', 'Unclog the bathroom drain', '2024-12-04', '11:30:00', '27 Lake Drive, Galle', 'Approved', '2024-11-24 07:17:54', '2025-02-11 16:40:16'),
+(11, 3, 4, 'Carpentry', 'Fix creaky wooden floorboards', '2024-12-05', '14:00:00', '45 Church Street, Galle', 'Pending', '2024-11-24 07:17:54', '2024-11-24 07:17:54'),
 (12, 4, 1, 'Gardening', 'Plant new flower beds in the front yard', '2024-12-06', '16:00:00', '78 Sea View Road, Colombo', 'Pending', '2024-11-24 07:17:54', '2024-11-24 07:17:54'),
-(13, 5, 2, 'Cleaning', 'Clean and organize storage room', '2024-12-07', '10:00:00', '12 Main Street, Matara', 'Pending', '2024-11-24 07:17:54', '2025-04-21 05:04:37'),
+(13, 5, 2, 'Cleaning', 'Clean and organize storage room', '2024-12-07', '10:00:00', '12 Main Street, Matara', 'Pending', '2024-11-24 07:17:54', '2024-11-24 07:17:54'),
 (14, 1, 200001, 'Painting', 'Paint exterior walls of house', '2024-12-08', '09:30:00', '9 Galle Road, Colombo', 'Pending', '2024-11-24 07:17:54', '2024-11-30 11:03:34'),
+(15, 2, 4, 'Pest Control', 'Fumigation for termites in garage', '2024-12-09', '13:00:00', '34 Temple Road, Galle', 'Pending', '2024-11-24 07:17:54', '2024-11-24 07:17:54'),
 (16, 3, 1, 'Plumbing', 'Install a new water heater', '2024-12-10', '15:30:00', '56 Station Road, Matara', 'Pending', '2024-11-24 07:17:54', '2024-11-24 07:17:54'),
-(17, 4, 2, 'Carpentry', 'Build custom shelves for the living room', '2024-12-11', '08:30:00', '67 Paradise Lane, Colombo', 'Cancelled', '2024-11-24 07:17:54', '2025-04-20 15:21:02'),
-(18, 5, 2, 'Gardening', 'Remove weeds and apply fertilizer', '2024-12-12', '10:30:00', '89 Lighthouse Street, Galle', 'Approved', '2024-11-24 07:17:54', '2025-04-21 04:38:41'),
+(17, 4, 2, 'Carpentry', 'Build custom shelves for the living room', '2024-12-11', '08:30:00', '67 Paradise Lane, Colombo', 'Pending', '2024-11-24 07:17:54', '2024-11-24 07:17:54'),
+(18, 5, 200001, 'Gardening', 'Remove weeds and apply fertilizer', '2024-12-12', '10:30:00', '89 Lighthouse Street, Galle', 'Approved', '2024-11-24 07:17:54', '2024-11-30 11:03:40'),
+(19, 1, 4, 'Cleaning', 'Deep clean the kitchen and bathroom', '2024-12-13', '12:00:00', '23 Ocean View, Matara', 'Pending', '2024-11-24 07:17:54', '2024-11-24 07:17:54'),
 (20, 2, 1, 'Painting', 'Touch up paint on interior walls', '2024-12-14', '14:30:00', '45 Marine Drive, Colombo', 'Pending', '2024-11-24 07:17:54', '2024-11-24 07:17:54'),
-(21, 3, 2, 'Electrical', 'Install new outdoor lighting', '2024-12-15', '09:00:00', '67 Palm Grove, Galle', 'Approved', '2024-11-24 07:17:54', '2025-04-20 15:21:30'),
+(21, 3, 2, 'Electrical', 'Install new outdoor lighting', '2024-12-15', '09:00:00', '67 Palm Grove, Galle', 'Pending', '2024-11-24 07:17:54', '2024-11-24 07:17:54'),
 (26, 3, 200001, 'Electrical', 'Replace broken ceiling light fixture', '2024-12-20', '14:30:00', '45 City Lane, Colombo', 'Pending', '2024-11-24 07:17:54', '2024-11-30 11:03:47'),
+(27, 4, 4, 'Carpentry', 'Repair broken dining table', '2024-12-21', '11:30:00', '78 Hillside Road, Galle', 'Pending', '2024-11-24 07:17:54', '2024-11-24 07:17:54'),
 (28, 5, 1, 'Painting', 'Paint fence around the house', '2024-12-22', '13:00:00', '23 Mountain View, Matara', 'Pending', '2024-11-24 07:17:54', '2024-11-24 07:17:54'),
 (29, 2, 1, 'Gardening', 'Trim the trees and tidy the backyard', '2024-12-23', '10:00:00', '12 Royal Road, Colombo', 'Pending', '2024-11-24 08:17:25', '2024-11-24 08:17:25'),
-(30, 3, 2, 'Cleaning', 'Wash and clean all windows of the house', '2024-12-24', '13:00:00', '88 Riverbank, Galle', 'Pending', '2024-11-24 08:17:25', '2025-04-20 14:07:14'),
+(30, 3, 2, 'Cleaning', 'Wash and clean all windows of the house', '2024-12-24', '13:00:00', '88 Riverbank, Galle', 'Pending', '2024-11-24 08:17:25', '2024-11-24 08:17:25'),
 (31, 4, 200001, 'Pest Control', 'Exterminate rats in the attic', '2024-12-25', '15:00:00', '20 Mountain Lane, Matara', 'Pending', '2024-11-24 08:17:25', '2024-11-30 11:03:58'),
-(33, 1, 2, 'Electrical', 'Install a new exhaust fan in the kitchen', '2024-12-27', '08:30:00', '67 City Center, Colombo', 'Approved', '2024-11-24 08:17:25', '2025-04-22 05:53:20'),
-(34, 2, 200001, 'Carpentry', 'Fix the broken window frame', '2024-12-28', '14:00:00', '25 Beach Road, Matara', 'Pending', '2024-11-24 08:17:25', '2025-04-20 14:48:06'),
+(32, 5, 4, 'Plumbing', 'Install a new sink in the bathroom', '2024-12-26', '11:00:00', '5 Coconut Grove, Galle', 'Pending', '2024-11-24 08:17:25', '2024-11-24 08:17:25'),
+(33, 1, 2, 'Electrical', 'Install a new exhaust fan in the kitchen', '2024-12-27', '08:30:00', '67 City Center, Colombo', 'Pending', '2024-11-24 08:17:25', '2024-11-24 08:17:25'),
+(34, 2, 200001, 'Carpentry', 'Fix the broken window frame', '2024-12-28', '14:00:00', '25 Beach Road, Matara', 'Approved', '2024-11-24 08:17:25', '2024-11-30 11:04:01'),
+(35, 3, 4, 'Gardening', 'Mow the lawn and trim the hedges', '2024-12-29', '16:30:00', '90 Ocean Drive, Colombo', 'Pending', '2024-11-24 08:17:25', '2024-11-24 08:17:25'),
+(36, 6, 200001, 'Electrical', 'Install a new ceiling fan in the living room', '2025-02-20', '10:00:00', '101 Sunset Blvd, Colombo', 'Approved', '2025-02-12 13:32:22', '2025-02-12 13:32:22'),
 (37, 7, 200001, 'Cleaning', 'Deep clean the carpets and upholstery', '2025-02-22', '14:00:00', '22 Green Park, Galle', 'Approved', '2025-02-12 13:32:22', '2025-02-12 13:32:22');
 
 -- --------------------------------------------------------
@@ -344,9 +351,8 @@ CREATE TABLE `quotations` (
 --
 
 INSERT INTO `quotations` (`quotation_id`, `appointment_id`, `service_provider_id`, `quotation_details`, `price`, `status`, `created_at`, `updated_at`) VALUES
-(7, 10, 2, 'ggg', 800.00, 'Pending', '2024-11-29 18:11:25', '2025-04-21 05:08:01'),
-(23, 18, 2, 'this is second quotation - 200+700', 900.00, 'Pending', '2025-02-12 13:35:41', '2025-04-21 04:45:13'),
-(26, 1, 2, 'vfvfs', 333.00, 'Pending', '2025-04-20 18:57:43', '2025-04-20 18:57:43');
+(7, 10, 200001, 'ggg', 600.00, 'Pending', '2024-11-29 18:11:25', '2025-02-12 10:58:36'),
+(23, 18, 200001, 'this is second quotation - 200+700', 900.00, 'Pending', '2025-02-12 13:35:41', '2025-02-12 13:35:41');
 
 -- --------------------------------------------------------
 
@@ -752,7 +758,7 @@ ALTER TABLE `orders`
 -- AUTO_INCREMENT for table `quotations`
 --
 ALTER TABLE `quotations`
-  MODIFY `quotation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `quotation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `sales`

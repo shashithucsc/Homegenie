@@ -212,7 +212,7 @@ public function completedOrders()
         $loggedUserId = $_SESSION['user_id'] ?? null;
 
         if (!$loggedUserId) {
-            header('Location: /login');
+            header('Location: /HomeController/login');
             exit;
         }
 
@@ -229,6 +229,24 @@ public function completedOrders()
         ];
 
         $this->view('supplier/admin/inventory/reports', $data);
+    }
+
+    public function saleReport(){
+        $loggedUserId = $_SESSION['user_id'] ?? null;
+
+        if(!$loggedUserId){
+            header('Location: /HomeController/login');
+            exit;
+        }
+
+        $salesReport = $this->SupplierModel->getSalesReport($loggedUserId);
+        
+        $data = [
+            'salesReport' => $salesReport
+        ];
+        $this->view('supplier/admin/salesReport', $data);
+
+
     }
 
     public function profile() {

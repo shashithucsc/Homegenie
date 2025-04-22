@@ -18,11 +18,11 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null; ?>
     <div class="button1-group" style="text-align: center; margin-top: 30px;margin-bottom: 20px;">
       <button class="btn1" onclick="showAppointments()"
         style="color: white; background: linear-gradient(135deg, #2563eb, #1e40af); padding: 12px 30px; font-size: 16px; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">
-        Approved Appointments
+        Quote Appointments
       </button>
       <button class="btn1" onclick="showQuotations()"
         style="color: #1e40af; background-color: white; padding: 12px 30px; font-size: 16px; border: 2px solid #1e40af; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; margin-left: 15px;">
-        View All Quotations
+        Created Quotations
       </button>
     </div>
 

@@ -4,17 +4,54 @@ class ServiceProviderController extends Controller
 
     private $QuotationSVPModel;
     private $ProfileSVPModel;
+    private $AppointmentSVPModel;
+
 
     public function __construct()
     {
         $this->QuotationSVPModel = $this->model('QuotationSVPModel');
         // Load the ProfileSVPModel
         $this->ProfileSVPModel = $this->model('ProfileSVPModel');
+
+        $this->AppointmentSVPModel = $this->model('AppointmentSVPModel');
     }
 
     public function index()
     {
-        $this->view('ServiceProvider/appointments');
+        // Assuming the user is logged in and their ID is stored in the session
+        $service_provider_id = $_SESSION['user_id'];
+
+        // Fetch the appointments from the model
+        $pendingAppointments = $this->AppointmentSVPModel->getPendingAppointments($service_provider_id);
+        $approvedAppointments = $this->AppointmentSVPModel->getApprovedAppointments($service_provider_id);
+
+        // Pass the appointments to the view
+        $this->view('ServiceProvider/appointments', [
+            'pendingAppointments' => $pendingAppointments,
+            'approvedAppointments' => $approvedAppointments
+        ]);
+    }
+
+    // Method to approve an appointment
+    public function approveAppointment()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
+            $appointmentId = $_POST['id'];
+
+            $result = $this->AppointmentSVPModel->approveAppointment($appointmentId);
+            echo json_encode($result);  // Send back success/failure response
+        }
+    }
+
+    // Method to cancel an appointment
+    public function cancelAppointment()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
+            $appointmentId = $_POST['id'];
+
+            $result = $this->AppointmentSVPModel->cancelAppointment($appointmentId);
+            echo json_encode($result);  // Send back success/failure response
+        }
     }
 
     public function support()
@@ -25,9 +62,11 @@ class ServiceProviderController extends Controller
 
     public function quotation()
     {
+
+         $service_provider_id = $_SESSION['user_id'];
         // Fetch all quotations and appointments
         $results1 = $this->QuotationSVPModel->getAllQuotations();
-        $results = $this->QuotationSVPModel->getAllAppointments();
+        $results = $this->QuotationSVPModel->getAllAppointmentsById($service_provider_id);
 
         // Extract the appointment_ids that already have a quotation
         $quotation_appointment_ids = array_map(function ($quote) {
@@ -53,7 +92,8 @@ class ServiceProviderController extends Controller
 
     public function SubmittedQuotations()
     {
-        $results = $this->QuotationSVPModel->getAllQuotationslist();
+        $service_provider_id = $_SESSION['user_id'];
+        $results = $this->QuotationSVPModel->getAllQuotationslist($service_provider_id);
         $this->view('ServiceProvider/SubmittedQuotations', data: $results);
 
     }
@@ -133,8 +173,10 @@ class ServiceProviderController extends Controller
 
     public function profile()
     {
+
+        $service_provider_id = $_SESSION['user_id'];
         // Fetch profile details
-        $results2 = $this->ProfileSVPModel->getProfileDetails();
+        $results2 = $this->ProfileSVPModel->getProfileDetails($service_provider_id);
 
         if (!$results2) {
             die("Error: No data returned from model.");
@@ -143,6 +185,33 @@ class ServiceProviderController extends Controller
         // Pass data to the view
         $this->view('ServiceProvider/profile', ['row' => $results2]);
     }
+
+
+
+    public function updateProfileFields()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $service_provider_id = $_SESSION['user_id'];
+
+        $expertise = trim($_POST['expertise']);
+        $service_areas = trim($_POST['service_areas']);
+        $working_hours = trim($_POST['working_hours']);
+
+        $data = [
+            'service_provider_id' => $service_provider_id,
+            'expertise' => $expertise,
+            'service_areas' => $service_areas,
+            'working_hours' => $working_hours
+        ];
+
+        if ($this->ProfileSVPModel->updateProfileFields($data)) {
+            header('Location: ' . URLROOT . '/ServiceProviderController/profile');
+            exit();
+        } else {
+            die("Failed to update profile fields.");
+        }
+    }
+}
 
 
 }

@@ -62,6 +62,13 @@ require_once APPROOT . '/views/supplier/admin/sidebar.php';
             <div class="progress" style="width: <?php echo isset($data['totalSales']) ? ($data['totalSales'] / 1000) * 100 : 0; ?>%"></div>
         </div>
     </div>
+
+    <div class="summary-box" title="Top selling category">
+        <h3>Your Earnings</h3>
+        <p class="amount">
+            <?php echo isset($data['yourEarnings']) ? htmlspecialchars($data['yourEarnings'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?>
+        </p>
+    </div>
     
     <div class="summary-box" title="Total number of customers">
         <h3>Total Customers</h3>
@@ -77,12 +84,7 @@ require_once APPROOT . '/views/supplier/admin/sidebar.php';
         </p>
     </div>
     
-    <div class="summary-box" title="Top selling category">
-        <h3>Top Category</h3>
-        <p class="amount">
-            <?php echo isset($data['topCategory']) ? htmlspecialchars($data['topCategory'], ENT_QUOTES, 'UTF-8') : 'N/A'; ?>
-        </p>
-    </div>
+   
     
     <div class="summary-box" title="Most popular product">
         <h3>Top Product</h3>
@@ -110,7 +112,7 @@ require_once APPROOT . '/views/supplier/admin/sidebar.php';
         </div>
 
         <div class="buttons">
-            <button class="btn">Quotations</button>
+            <b class="btn" href ="<?php echo URLROOT; ?>/SupplierController/storeWithdraw">Withdraw Money</>
             <button class="btn">Sales Reports</button>
         </div>
     </div>

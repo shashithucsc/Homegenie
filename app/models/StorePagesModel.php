@@ -14,118 +14,211 @@ class StorePagesModel {
             SELECT 
                 i.item_id,
                 i.item_name,
-                i.quantity,
+                i.quantity AS available_quantity,
                 i.selling_price,
                 i.category,
                 i.image_path,
-                u.first_name AS supplier_name
+                i.description,
+                u.first_name AS supplier_name,
+                u.user_id AS supplier_id,
+                (
+                    SELECT AVG(rating) 
+                    FROM item_reviews 
+                    WHERE item_id = i.item_id
+                ) AS average_rating
             FROM 
                 inventory i
             JOIN 
                 users u ON i.user_id = u.user_id
             WHERE 
                 i.category = 'Plumbing'";
+    
         $this->db->query($query);
-        $results = $this->db->resultset();
+        $results = $this->db->resultSet();
+    
+        
+        foreach ($results as &$item) {
+            $item->comments = $this->getReviewsByItemId($item->item_id);
+        }
+    
         return $results;
     }
+    
     
 
     public function getCarpentryItems() {
-        $this->db->query("SELECT 
+        $query = "
+            SELECT 
                 i.item_id,
                 i.item_name,
-                i.quantity,
+                i.quantity AS available_quantity,
                 i.selling_price,
                 i.category,
                 i.image_path,
-                u.first_name AS supplier_name
+                i.description,
+                u.first_name AS supplier_name,
+                u.user_id AS supplier_id,
+                (
+                    SELECT AVG(rating) 
+                    FROM item_reviews 
+                    WHERE item_id = i.item_id
+                ) AS average_rating
             FROM 
                 inventory i
             JOIN 
                 users u ON i.user_id = u.user_id
             WHERE 
-                i.category = 'Carpentry'");
-        $results = $this->db->resultset();
+                i.category = 'Carpentary'";
+    
+        $this->db->query($query);
+        $results = $this->db->resultSet();
+    
+        
+        foreach ($results as &$item) {
+            $item->comments = $this->getReviewsByItemId($item->item_id);
+        }
+    
         return $results;
-
     }
     public function getCleaningItems() {
-        $this->db->query("SELECT 
+        $query = "
+            SELECT 
                 i.item_id,
                 i.item_name,
-                i.quantity,
+                i.quantity AS available_quantity,
                 i.selling_price,
                 i.category,
                 i.image_path,
-                u.first_name AS supplier_name
+                i.description,
+                u.first_name AS supplier_name,
+                u.user_id AS supplier_id,
+                (
+                    SELECT AVG(rating) 
+                    FROM item_reviews 
+                    WHERE item_id = i.item_id
+                ) AS average_rating
             FROM 
                 inventory i
             JOIN 
                 users u ON i.user_id = u.user_id
             WHERE 
-                i.category = 'Cleaning'");
-        $results = $this->db->resultset();
+                i.category = 'Cleaning'";
+    
+        $this->db->query($query);
+        $results = $this->db->resultSet();
+    
+        
+        foreach ($results as &$item) {
+            $item->comments = $this->getReviewsByItemId($item->item_id);
+        }
+    
         return $results;
-
     } 
     
     public function getElectricityItems() {
-        $this->db->query("SELECT 
+        $query = "
+            SELECT 
                 i.item_id,
                 i.item_name,
-                i.quantity,
+                i.quantity AS available_quantity,
                 i.selling_price,
                 i.category,
                 i.image_path,
-                u.first_name AS supplier_name
+                i.description,
+                u.first_name AS supplier_name,
+                u.user_id AS supplier_id,
+                (
+                    SELECT AVG(rating) 
+                    FROM item_reviews 
+                    WHERE item_id = i.item_id
+                ) AS average_rating
             FROM 
                 inventory i
             JOIN 
                 users u ON i.user_id = u.user_id
             WHERE 
-                i.category = 'Electricity'");
-        $results = $this->db->resultset();
+                i.category = 'Electricity'";
+    
+        $this->db->query($query);
+        $results = $this->db->resultSet();
+    
+        
+        foreach ($results as &$item) {
+            $item->comments = $this->getReviewsByItemId($item->item_id);
+        }
+    
         return $results;
 
     }
 
     public function getMasonaryItems() {
-        $this->db->query("SELECT 
+        $query = "
+            SELECT 
                 i.item_id,
                 i.item_name,
-                i.quantity,
+                i.quantity AS available_quantity,
                 i.selling_price,
                 i.category,
                 i.image_path,
-                u.first_name AS supplier_name
+                i.description,
+                u.first_name AS supplier_name,
+                u.user_id AS supplier_id,
+                (
+                    SELECT AVG(rating) 
+                    FROM item_reviews 
+                    WHERE item_id = i.item_id
+                ) AS average_rating
             FROM 
                 inventory i
             JOIN 
                 users u ON i.user_id = u.user_id
             WHERE 
-                i.category = 'Masonary'");
-        $results = $this->db->resultset();
+                i.category = 'Masonary'";
+    
+        $this->db->query($query);
+        $results = $this->db->resultSet();
+    
+        
+        foreach ($results as &$item) {
+            $item->comments = $this->getReviewsByItemId($item->item_id);
+        }
+    
         return $results;
 
     }
 
     public function getPaintingItems() {
-        $this->db->query("SELECT 
+        $query = "
+            SELECT 
                 i.item_id,
                 i.item_name,
-                i.quantity,
+                i.quantity AS available_quantity,
                 i.selling_price,
                 i.category,
                 i.image_path,
-                u.first_name AS supplier_name
+                i.description,
+                u.first_name AS supplier_name,
+                u.user_id AS supplier_id,
+                (
+                    SELECT AVG(rating) 
+                    FROM item_reviews 
+                    WHERE item_id = i.item_id
+                ) AS average_rating
             FROM 
                 inventory i
             JOIN 
                 users u ON i.user_id = u.user_id
             WHERE 
-                i.category = 'Painting'");
-        $results = $this->db->resultset();
+                i.category = 'Painting'";
+    
+        $this->db->query($query);
+        $results = $this->db->resultSet();
+    
+        
+        foreach ($results as &$item) {
+            $item->comments = $this->getReviewsByItemId($item->item_id);
+        }
+    
         return $results;
 
     }
@@ -170,24 +263,61 @@ class StorePagesModel {
         $this->db->bind(':id', $id);
         return $this->db->execute();
     }
-
-    public function saveItem($item_id, $user_id, $image_path, $item_name, $selling_price) {
-        //also add images_path to the database
-
-        $this->db->query('INSERT INTO saved_items (user_id, item_id, image_path, item_name, selling_price) VALUES (:user_id, :item_id, :image_path, :item_name, :selling_price)');
+    public function saveItem($user_id, $item_id)
+    {
+        // First, check if item already exists in wishlist
+        $this->db->query('SELECT * FROM saved_items WHERE user_id = :user_id AND item_id = :item_id');
         $this->db->bind(':user_id', $user_id);
         $this->db->bind(':item_id', $item_id);
-        $this->db->bind(':image_path', $image_path);
-        $this->db->bind(':item_name', $item_name);
-        $this->db->bind(':selling_price', $selling_price);
+        $this->db->execute();
+    
+        if ($this->db->rowCount() > 0) {
+            return 'exists';
+        }
+    
+        // If not exists, insert the item
+        $this->db->query('INSERT INTO saved_items (user_id, item_id) VALUES (:user_id, :item_id)');
+        $this->db->bind(':user_id', $user_id);
+        $this->db->bind(':item_id', $item_id);
+    
+        if ($this->db->execute()) {
+            return 'saved';
+        } else {
+            return false;
+        }
+    }
+    
+
+    public function removeSavedItem($user_id, $item_id) {
+        $this->db->query('DELETE FROM saved_items WHERE item_id = :item_id AND user_id = :user_id');
+        $this->db->bind(':item_id', $item_id);
+        $this->db->bind(':user_id', $user_id);
         return $this->db->execute();
     }
     
     public function getSavedItem($user_id) {
-        $this->db->query('SELECT * FROM saved_items WHERE user_id = :user_id');
+        $this->db->query('
+            SELECT 
+                saved_items.*, 
+                inventory.item_name, 
+                inventory.selling_price, 
+                inventory.image_path, 
+                users.first_name AS supplier_name 
+            FROM saved_items
+            JOIN inventory ON saved_items.item_id = inventory.item_id
+            JOIN users ON inventory.user_id = users.user_id
+            WHERE saved_items.user_id = :user_id
+        ');
         $this->db->bind(':user_id', $user_id);
         return $this->db->resultSet();
     }
+
+    public function getMyorders($customer_id){
+        $this->db->query("SELECT * FROM sales_orders WHERE customer_id = :customer_id ORDER BY created_at DESC");
+        $this->db->bind(':customer_id', $customer_id);
+        return $this->db->resultSet();
+    }
+    
     
 
     public function searchItems($searchQuery) {
@@ -199,6 +329,35 @@ class StorePagesModel {
         $this->db->bind(':searchQuery', '%' . $searchQuery . '%');
         return $this->db->resultSet();
     }
+
+
+    public function insertReview($item_id, $user_id, $rating, $comment)
+{
+    $sql = "INSERT INTO item_reviews (item_id, user_id, rating, comment) VALUES (:item_id, :user_id, :rating, :comment)";
+    $this->db->query($sql);
+    $this->db->bind(':item_id', $item_id);
+    $this->db->bind(':user_id', $user_id);
+    $this->db->bind(':rating', $rating);
+    $this->db->bind(':comment', $comment);
+    return $this->db->execute();
+}
+
+public function getReviewsByItemId($item_id)
+{
+    $sql = "SELECT r.*, u.first_name FROM item_reviews r JOIN users u ON r.user_id = u.user_id WHERE item_id = :item_id ORDER BY r.created_at DESC";
+    $this->db->query($sql);
+    $this->db->bind(':item_id', $item_id);
+    return $this->db->resultSet();
+}
+
+public function getAverageRating($item_id)
+{
+    $sql = "SELECT AVG(rating) as average_rating FROM item_reviews WHERE item_id = :item_id";
+    $this->db->query($sql);
+    $this->db->bind(':item_id', $item_id);
+    return $this->db->single()->average_rating ?? 0;
+}
+
     
 
     

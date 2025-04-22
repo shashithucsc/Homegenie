@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - HomeGenie Store</title>
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/style-about.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/supplierAbout.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/navbar.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/footer.css">
 </head>

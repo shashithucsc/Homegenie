@@ -53,7 +53,7 @@ input[type="file"] {
 
 button.submit-btn {
     padding: 10px;
-    background-color: #026773;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: white;
     border: none;
     border-radius: 4px;
@@ -62,7 +62,7 @@ button.submit-btn {
 
 .bck-btn {
     padding: 10px;
-    background-color: #026773;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: white;
     border: none;
     border-radius: 4px;

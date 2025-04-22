@@ -271,5 +271,27 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
             });
         });
     </script>
+
+<!-- this javascript use for implement search bar work -->
+<script>
+function searchInventory() {
+    const input = document.querySelector('.search-box');
+    const filter = input.value.toLowerCase();
+    const rows = document.querySelectorAll('.inventory-list table tbody tr');
+
+    rows.forEach(row => {
+        const itemName = row.querySelector('td:nth-child(1)');
+        if (!itemName) return; // skip if no itemName (e.g., "No items" row)
+
+        const text = itemName.textContent.toLowerCase();
+        if (text.includes(filter)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+</script>
+
 </body>
 </html>

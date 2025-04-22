@@ -84,7 +84,7 @@
 
                             <!-- Province Selection -->
                             <div class="summary-item">
-                                <label for="province">Select Province</label>
+                                <label for="province">Your Province</label>
                                 <select id="province" name="province" onchange="updateDeliveryFee()">
                                     <option value="" disabled selected>Select province</option>
                                     <option value="Western">Western</option>
@@ -111,12 +111,15 @@
                                 </span>
                             </div>
                         </div>
-                        <a href="<?php echo URLROOT; ?>/StorePageController/checkout" class="checkout-btn">
-                            <i class="fas fa-credit-card mr-2"></i> Proceed to Checkout
-                        </a>
+                        <a href="<?php echo URLROOT; ?>/StorePageController/checkout?grand_total=<?php echo $data['total']; ?>" class="checkout-btn">
+    <i class="fas fa-credit-card mr-2"></i> Proceed to Checkout
+</a>
+
                         <a href="<?php echo URLROOT; ?>/StorePageController/index" class="continue-shopping">
                             <i class="fas fa-arrow-left mr-2"></i> Continue Shopping
                         </a>
+
+                        
 
                     </div>
 
@@ -136,33 +139,47 @@
         </div>
     </main>
 
+    <?php
+    $supplierIds = [];
+    foreach ($data['cartItems'] as $item) {
+        $supplierIds[$item->supplier_id] = true;
+    }
+    $numSuppliers = count($supplierIds);
+?>
+<script>
+    const numSuppliers = <?php echo isset($data['numSuppliers']) ? (int)$data['numSuppliers'] : 1; ?>;
+</script>
 
-    <script>
-        const deliveryRates = {
-            "Western": 200,
-            "Central": 250,
-            "Southern": 2500,
-            "Northern": 350,
-            "Eastern": 300,
-            "North Western": 340,
-            "North Central": 28,
-            "Uva": 250,
-            "Sabaragamuwa": 240
-        };
 
-        function updateDeliveryFee() {
-            const province = document.getElementById('province').value;
-            const deliveryFee = deliveryRates[province] || 0;
 
-            const subtotalText = document.getElementById('subtotal').innerText.replace('Rs. ', '');
-            const subtotal = parseFloat(subtotalText) || 0;
+<script>
+    const deliveryRates = {
+        "Western": 200,
+        "Central": 250,
+        "Southern": 220,
+        "Northern": 350,
+        "Eastern": 300,
+        "North Western": 340,
+        "North Central": 280,
+        "Uva": 250,
+        "Sabaragamuwa": 240
+    };
 
-            const grandTotal = subtotal + deliveryFee;
+    function updateDeliveryFee() {
+        const province = document.getElementById('province').value;
+        const ratePerSupplier = deliveryRates[province] || 0;
+        const deliveryFee = ratePerSupplier * numSuppliers;
 
-            document.getElementById('delivery-fee').innerText = `Rs. ${deliveryFee}`;
-            document.getElementById('grand-total').innerText = `Rs. ${grandTotal}`;
-        }
-    </script>
+        const subtotalText = document.getElementById('subtotal').innerText.replace('Rs. ', '');
+        const subtotal = parseFloat(subtotalText) || 0;
+
+        const grandTotal = subtotal + deliveryFee;
+
+        document.getElementById('delivery-fee').innerText = `Rs. ${deliveryFee}`;
+        document.getElementById('grand-total').innerText = `Rs. ${grandTotal}`;
+    }
+</script>
+
 
 
     <?php require_once APPROOT . '/views/footer.php'; ?>

@@ -39,19 +39,13 @@ class SupplierModel {
         return $results;
     }
 
-    public function getTopCategory($userId) {
-        $this->db->query("SELECT i.category, SUM(si.quantity) AS total_sold
-                          FROM sales_items si
-                          JOIN inventory i ON si.item_id = i.item_id
-                          JOIN sales_orders so ON si.sale_id = so.id
-                          WHERE so.supplier_id = :user_id
-                          AND si.status = 'Accepted'
-                          AND so.status = 'Accepted'
-                          GROUP BY i.category
-                          ORDER BY total_sold DESC
-                          LIMIT 1");
+    public function getYourEarnings($userId) {
+        $this->db->query("SELECT ROUND(SUM(total_amount) * 0.9, 2) AS yourEarnings 
+                          FROM sales_orders
+                          WHERE supplier_id = :user_id 
+                          AND status = 'Accepted'");
         $this->db->bind(':user_id', $userId); 
-        $results = $this->db->resultSet();
+        $results = $this->db->single();
         return $results;
     }
     

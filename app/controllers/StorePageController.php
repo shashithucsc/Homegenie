@@ -232,107 +232,133 @@ class StorePageController extends Controller
 
 
     public function viewCart()
-    {
-        $customerId = $_SESSION['user_id'];
+{
+    $customerId = $_SESSION['user_id'];
+    $cartItems = $this->cartModel->getCartItemsByUserId($customerId);
+    $total = 0;
+    $supplierIds = [];
 
-        $cartItems = $this->cartModel->getCartItemsByUserId($customerId);
-        $total = 0;
-
-        foreach ($cartItems as $item) {
-            $total += $item->quantity * $item->selling_price;
-        }
-
-        $this->view('supplier/homepage/cart', [
-            'cartItems' => $cartItems,
-            'total' => $total
-        ]);
+    foreach ($cartItems as $item) {
+        $total += $item->quantity * $item->selling_price;
+        $supplierIds[$item->supplier_id] = true;
     }
+
+    $numSuppliers = count($supplierIds); // <-- Add this line
+
+    $this->view('supplier/homepage/cart', [
+        'cartItems' => $cartItems,
+        'total' => $total,
+        'numSuppliers' => $numSuppliers // <-- Pass it to view
+    ]);
+}
+
 
 
     public function checkout()
     {
-        $customerId = $_SESSION['user_id']; // Assuming user_id is set in session
-        $cartItems = $this->cartModel->getCartItemsByUserId($customerId);
-
-        $totalItems = 0;
-        $subtotal = 0;
-
-        foreach ($cartItems as $item) {
-            $totalItems += $item->quantity;
-            $subtotal += $item->quantity * $item->selling_price;
-        }
-
-        $this->view('supplier/homepage/V_checkOutpage', [
-            'total_items' => $totalItems,
-            'subtotal' => $subtotal
-        ]);
-    }
-
-
-    public function confirmOrder()
-    {
         if (!isset($_SESSION['user_id'])) {
-            die('Error: User not logged in.');
+            die("User not logged in.");
         }
-
-        $customerId = $_SESSION['user_id'];
-
-        // Fetch cart items for the user
-        $cartItems = $this->cartModel->getCartItemsByUserId($customerId);
-
+    
+        $userId = $_SESSION['user_id'];
+        $cartItems = $this->cartModel->getCartItemsByUserId($userId);
+    
         if (empty($cartItems)) {
             $this->showPopup("Your cart is empty.", URLROOT . "/StorePageController/viewCart");
             return;
         }
+    
+        $totalItems = 0;
+        $subtotal = 0;
+        $supplierIds = [];
+    
+        foreach ($cartItems as $item) {
+            $totalItems += $item->quantity;
+            $subtotal += $item->quantity * $item->selling_price;
+            $supplierIds[$item->supplier_id] = true; // use supplier_id as key to ensure uniqueness
+        }
+    
+        $deliveryPerSupplier = 100;
+        $numSuppliers = count($supplierIds);
+        $deliveryFee = $deliveryPerSupplier * $numSuppliers;
+        $grandTotal = $subtotal + $deliveryFee;
+    
+        $this->view('supplier/homepage/V_checkOutpage', [
+            'total_items' => $totalItems,
+            'subtotal' => $subtotal,
+            'delivery_fee' => $deliveryFee,
+            'num_suppliers' => $numSuppliers,
+            'grand_total' => $grandTotal
+        ]);
+    }
+    
 
+
+    public function confirmOrder()
+{
+    if (!isset($_SESSION['user_id'])) {
+        die('Error: User not logged in.');
+    }
+
+    $customerId = $_SESSION['user_id'];
+    $cartItems = $this->cartModel->getCartItemsByUserId($customerId);
+
+    if (empty($cartItems)) {
+        $this->showPopup("Your cart is empty.", URLROOT . "/StorePageController/viewCart");
+        return;
+    }
+
+    $paymentMethod = $_POST['payment_method'] ?? null;
+    $deliveryAddress = $_POST['delivery_address'] ?? null;
+
+    if (!$paymentMethod || !$deliveryAddress) {
+        $this->showPopup("Missing payment method or delivery address.", URLROOT . "/StorePageController/viewCart");
+        return;
+    }
+
+    // Group items by supplier
+    $supplierOrders = [];
+
+    foreach ($cartItems as $item) {
+        $supplierId = $item->supplier_id;
+
+        if (!$this->cartModel->isSupplierValid($supplierId)) {
+            $this->showPopup("Error: Invalid supplier for item ID {$item->item_id}.", URLROOT . "/StorePageController/viewCart");
+            return;
+        }
+
+        $supplierOrders[$supplierId][] = $item;
+    }
+
+    // For each supplier, create a separate order
+    $deliveryFee = 100;
+    foreach ($supplierOrders as $supplierId => $items) {
         $totalAmount = 0;
 
-        foreach ($cartItems as $item) {
+        foreach ($items as $item) {
             $totalAmount += $item->quantity * $item->selling_price;
         }
 
-        // Validate payment and delivery details
-        $paymentMethod = $_POST['payment_method'] ?? null;
-        $deliveryAddress = $_POST['delivery_address'] ?? null;
+        $grandTotal = $totalAmount + $deliveryFee;
 
-        if (!$paymentMethod || !$deliveryAddress) {
-            $this->showPopup("Missing payment method or delivery address.", URLROOT . "/StorePageController/viewCart");
-            return;
-        }
-
-        // Extract supplier ID (assumes all items belong to the same supplier)
-        $supplierId = $cartItems[0]->supplier_id ?? null;
-
-        if (!$supplierId) {
-            $this->showPopup("Error: Supplier not found for items in the cart.", URLROOT . "/StorePageController/viewCart");
-            return;
-        }
-
-        // Ensure the supplier exists
-        if (!$this->cartModel->isSupplierValid($supplierId)) {
-            $this->showPopup("Error: Invalid supplier.", URLROOT . "/StorePageController/viewCart");
-            return;
-        }
-
-        // Create the order
-        $saleId = $this->cartModel->createOrder($customerId, $totalAmount, $paymentMethod, $deliveryAddress, $supplierId);
+        // Create order per supplier
+        $saleId = $this->cartModel->createOrder($customerId, $grandTotal, $paymentMethod, $deliveryAddress, $supplierId);
 
         if ($saleId) {
-            // Add each item to the sales_items table
-            foreach ($cartItems as $item) {
+            foreach ($items as $item) {
                 $this->cartModel->addOrderItem($saleId, $item->item_id, $item->quantity, $item->selling_price, $supplierId);
             }
-
-            // Clear the cart
-            $this->cartModel->clearCart($customerId);
-
-            // Success popup
-            $this->showPopup("Purchase successful! Thank you for your order.", URLROOT . "/StorePageController/index");
         } else {
-            // Failure popup
-            $this->showPopup("Order creation failed. Please try again.", URLROOT . "/StorePageController/viewCart");
+            $this->showPopup("Order failed for supplier ID $supplierId.", URLROOT . "/StorePageController/viewCart");
+            return;
         }
     }
+
+    // Clear cart only after all orders are successful
+    $this->cartModel->clearCart($customerId);
+    $this->showPopup("Order placed successfully with multiple suppliers.", URLROOT . "/StorePageController/index");
+}
+
 
     public function myOrders()
     {

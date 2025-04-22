@@ -67,22 +67,51 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 
               <!-- Editable Fields -->
               <p>Details:
-                <span
-                  id="details-text-<?php echo $item->quotation_id; ?>"><?php echo htmlspecialchars($item->quotation_details); ?></span>
+                <span id="details-text-<?php echo $item->quotation_id; ?>">
+                  <?php echo htmlspecialchars($item->quotation_details); ?>
+                </span>
                 <textarea id="details-input-<?php echo $item->quotation_id; ?>"
-                  style="display:none;"><?php echo htmlspecialchars($item->quotation_details); ?></textarea>
+                  style="
+      display:none;
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 15px;
+      border: 1px solid #d0d0d0;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      resize: vertical;
+      transition: all 0.3s ease;
+      outline: none;
+    "
+                  onfocus="this.style.borderColor='#4A90E2'; this.style.boxShadow='0 0 0 3px rgba(74,144,226,0.3)'"
+                  onblur="this.style.borderColor='#d0d0d0'; this.style.boxShadow='0 2px 6px rgba(0, 0, 0, 0.05)'"><?php echo htmlspecialchars($item->quotation_details); ?></textarea>
               </p>
 
               <p>Price:
-                <span
-                  id="price-text-<?php echo $item->quotation_id; ?>"><?php echo htmlspecialchars($item->price); ?></span>
+                <span id="price-text-<?php echo $item->quotation_id; ?>">
+                  <?php echo htmlspecialchars($item->price); ?>
+                </span>
                 <input type="number" id="price-input-<?php echo $item->quotation_id; ?>"
-                  value="<?php echo htmlspecialchars($item->price); ?>" style="display:none;">
+                  value="<?php echo htmlspecialchars($item->price); ?>"
+                  style="
+      display:none;
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 15px;
+      border: 1px solid #d0d0d0;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      outline: none;
+    "
+                  onfocus="this.style.borderColor='#4A90E2'; this.style.boxShadow='0 0 0 3px rgba(74,144,226,0.3)'"
+                  onblur="this.style.borderColor='#d0d0d0'; this.style.boxShadow='0 2px 6px rgba(0, 0, 0, 0.05)'">
               </p>
 
-              <p>Status: <span
-                  id="status-text-<?php echo $item->quotation_id; ?>"><?php echo htmlspecialchars($item->status); ?></span>
-              </p>
+
+
               <p>Date Created: <span
                   id="created-at-text-<?php echo $item->quotation_id; ?>"><?php echo htmlspecialchars($item->created_at); ?></span>
               </p>
@@ -130,20 +159,34 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
     }
 
     function deleteQuotation(id) {
-      if (confirm("Are you sure you want to delete this quotation?")) {
-        fetch('<?php echo URLROOT; ?>/ServiceProviderController/deleteQuotation/' + id, {
-          method: 'POST'
-        })
-          .then(response => response.text())
-          .then(data => {
-            window.location.href = '<?php echo URLROOT; ?>/ServiceProviderController/SubmittedQuotations?message=Quotation deleted successfully';
-          })
-          .catch(error => {
-            console.error("Error deleting quotation:", error);
-            window.location.href = '<?php echo URLROOT; ?>/ServiceProviderController/SubmittedQuotations?error=Failed to delete quotation';
-          });
-      }
-    }
+  // Show the confirmation modal
+  document.getElementById('confirmModal').style.display = 'flex';
+
+  // Add event listener to confirm button
+  document.getElementById('confirmDeleteBtn').onclick = function() {
+    fetch('<?php echo URLROOT; ?>/ServiceProviderController/deleteQuotation/' + id, {
+        method: 'POST'
+      })
+      .then(response => response.text())
+      .then(data => {
+        window.location.href = '<?php echo URLROOT; ?>/ServiceProviderController/SubmittedQuotations?message=Quotation deleted successfully';
+      })
+      .catch(error => {
+        console.error("Error deleting quotation:", error);
+        window.location.href = '<?php echo URLROOT; ?>/ServiceProviderController/SubmittedQuotations?error=Failed to delete quotation';
+      });
+
+    // Close the modal after deletion
+    document.getElementById('confirmModal').style.display = 'none';
+  };
+
+  // Add event listener to cancel button
+  document.getElementById('cancelDeleteBtn').onclick = function() {
+    // Close the modal without deleting
+    document.getElementById('confirmModal').style.display = 'none';
+  };
+}
+
 
     function editQuotation(id) {
       // Hide text and show input fields
@@ -156,6 +199,7 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
       document.querySelector(`#card-${id} .update-btn`).style.display = "none";
       document.querySelector(`#card-${id} .save-btn`).style.display = "inline-block";
       document.querySelector(`#card-${id} .cancel-btn`).style.display = "inline-block";
+
     }
 
     function cancelEdit(id) {
@@ -177,12 +221,12 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 
       // Send AJAX request to update data
       fetch('<?php echo URLROOT; ?>/ServiceProviderController/updateQuotation/' + id, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `quotation_details=${encodeURIComponent(newDetails)}&price=${encodeURIComponent(newPrice)}`
-      })
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: `quotation_details=${encodeURIComponent(newDetails)}&price=${encodeURIComponent(newPrice)}`
+        })
         .then(response => response.json())
         .then(data => {
           if (data.success) {
@@ -215,7 +259,6 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
       // Get the details of the selected quotation
       let details = document.getElementById(`details-text-${id}`).textContent;
       let price = document.getElementById(`price-text-${id}`).textContent;
-      let status = document.getElementById(`status-text-${id}`).textContent;
       let dateCreated = document.getElementById(`created-at-text-${id}`).textContent;
       let lastUpdate = document.getElementById(`updated-at-text-${id}`).textContent;
 
@@ -232,7 +275,6 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
             <p><strong style="color: #333;">Quotation ID:</strong> <span style="color: #555;">${id}</span></p>
             <p><strong style="color: #333;">Details:</strong> <span style="color: #555;">${details}</span></p>
             <p><strong style="color: #333;">Price:</strong> <span style="color: #555; font-weight: bold;">${price}</span></p>
-            <p><strong style="color: #333;">Status:</strong> <span style="color: #555;">${status}</span></p>
             <p><strong style="color: #333;">Date Created:</strong> <span style="color: #555;">${dateCreated}</span></p>
             <p><strong style="color: #333;">Last Update:</strong> <span style="color: #555;">${lastUpdate}</span></p>
         </div>
@@ -252,6 +294,19 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
       printWindow.print(); // Print the content
     }
   </script>
+
+  <!-- Confirmation Popup Modal -->
+<div id="confirmModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000; justify-content: center; align-items: center;">
+  <div style="background-color: white; padding: 20px; border-radius: 10px; max-width: 400px; margin: auto; text-align: center;">
+    <h3 style="color: #1e40af; font-size: 24px;">Are you sure?</h3>
+    <p style="color: #555; font-size: 16px;">Do you want to delete this quotation?</p>
+    <div style="margin-top: 20px;">
+      <button id="confirmDeleteBtn" style="background-color: red; color: white; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer; margin-right: 10px;">Yes, Delete</button>
+      <button id="cancelDeleteBtn" style="background-color: gray; color: white; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer;">Cancel</button>
+    </div>
+  </div>
+</div>
+
 </body>
 
 </html>

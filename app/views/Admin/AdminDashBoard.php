@@ -1,21 +1,14 @@
-<?php
-$user_name = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest'; 
-$profile_pic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'default.png'; 
-$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
-?>
+<!--  -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="<?php echo URLROOT; ?>/css/AdminDashBoard.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/AdminDashboard.css">
-
-    <title>Dashboard</title>
-
+    <title>Admin Dashboard</title>
 </head>
-
 
 <body>
     <?php require_once APPROOT . '/views/Admin/AdminSideBar.php'; ?>
@@ -25,7 +18,7 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                 <span class="text">Welcome, </span>
                 <!-- <span class="name">Admin</span> -->
                 <?php
-                echo "<span class='name'>$user_name</span>";
+                echo "<span class='name'>{$data['adminName']}</span>";
                 ?>
             </div>
             <div class="time" id="clock">
@@ -38,15 +31,15 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                     Users
                 </div>
                 <div class="field">
-                    <span class="count">10</span>
+                    <span class="count"><?php echo $data['userCounts']['customers']; ?></span>
                     <span class="description">Customers</span>
                 </div>
                 <div class="field">
-                    <span class="count">10</span>
+                    <span class="count"><?php echo $data['userCounts']['serviceProviders']; ?></span>
                     <span class="description">Service Providers</span>
                 </div>
                 <div class="field">
-                    <span class="count">10</span>
+                    <span class="count"><?php echo $data['userCounts']['suppliers']; ?></span>
                     <span class="description">Suppliers</span>
                 </div>
             </div>
@@ -56,13 +49,13 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                     Pending Verification
                 </div>
                 <div class="field">
-                    <span class="count">10</span>
+                    <span class="count"><?php echo $data['pendingVerifications']['serviceProviders']; ?></span>
                     <span class="description">Service Providers</span>
                 </div>
-                <div class="field">
-                    <span class="count">10</span>
+                <!-- <div class="field">
+                    <span class="count"><?php echo $data['pendingVerifications']['suppliers']; ?></span>
                     <span class="description">Suppliers</span>
-                </div>
+                </div> -->
             </div>
 
             <div class="dash-card">
@@ -70,7 +63,7 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                     Issues
                 </div>
                 <div class="field">
-                    <span class="count">10</span>
+                    <span class="count"><?php echo $data['pendingIssues']; ?></span>
                     <span class="description">Pending Verification</span>
                 </div>
             </div>
@@ -80,11 +73,11 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                     Orders
                 </div>
                 <div class="field">
-                    <span class="count">10</span>
+                    <span class="count"><?php echo $data['orderCounts']['pastWeek']; ?></span>
                     <span class="description">Past Week</span>
                 </div>
                 <div class="field">
-                    <span class="count">10</span>
+                    <span class="count"><?php echo $data['orderCounts']['all']; ?></span>
                     <span class="description">All</span>
                 </div>
             </div>
@@ -103,9 +96,13 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
             <canvas id="revenueChart"></canvas>
         </div>
     </section>
-    <script src="../../js/clock.js"></script>
+    <script src="<?php echo URLROOT; ?>/public/js/clock.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        // Convert PHP arrays to JSON for JavaScript use
+        const userGrowthData = <?php echo json_encode($data['userGrowthData']); ?>;
+        const revenueData = <?php echo json_encode($data['revenueData']); ?>;
+        
         const ctx1 = document.getElementById('userGrowthChart').getContext('2d');
         const userGrowthChart = new Chart(ctx1, {
             type: 'line',
@@ -113,7 +110,7 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                 labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
                 datasets: [{
                     label: 'User Growth',
-                    data: [10, 20, 30, 40, 50, 60, 70],
+                    data: userGrowthData,
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                     borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1
@@ -136,7 +133,7 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                 labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
                 datasets: [{
                     label: 'Revenue',
-                    data: [5000, 10000, 15000, 20000, 25000, 30000, 35000],
+                    data: revenueData,
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 1

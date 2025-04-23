@@ -97,4 +97,82 @@ class UserModel {
             return false;
         }
     }
+
+    public function getAllUsers() {
+        $this->db->query("SELECT users.user_id, users.first_name, users.last_name, users.address, 
+                           users.email, users.contact_number, users.role
+                           FROM users
+                           WHERE users.role != 'admin'");
+        
+        return $this->db->resultSet();
+    }
+
+    public function getUserCounts() {
+        // Get counts of different user types based on role column
+        return [
+            'customers' => $this->countUsersByRole('customer'),
+            'serviceProviders' => $this->countUsersByRole('service_provider'),
+            'suppliers' => $this->countUsersByRole('supplier'),
+        ];
+    }
+
+    public function getPendingVerifications() {
+        // Count service providers that need verification
+        $this->db->query("SELECT COUNT(*) as count FROM service_providers WHERE verified = 0");
+        $serviceProviderCount = $this->db->single()->count;
+        
+        return [
+            'serviceProviders' => $serviceProviderCount,
+        ];
+    }
+
+    private function countUsersByRole($role) {
+        $this->db->query("SELECT COUNT(*) as count FROM users WHERE role = :role");
+        $this->db->bind(':role', $role);
+        return $this->db->single()->count;
+    }
+
+    public function getUserGrowthData() {
+        // Get monthly user registrations for the past 7 months
+        $this->db->query("SELECT 
+                            MONTH(created_at) as month, 
+                            COUNT(*) as count 
+                          FROM users 
+                          WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 7 MONTH)
+                          GROUP BY MONTH(created_at)
+                          ORDER BY month ASC");
+        
+        $results = $this->db->resultSet();
+        
+        // Format data for the chart
+        $months = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+        $data = array_fill(0, 7, 0); // Initialize with zeros
+        
+        foreach($results as $row) {
+            $monthIndex = (intval($row->month) - 1) % 7; // Adjust month to 0-based index
+            $data[$monthIndex] = $row->count;
+        }
+        
+        return $data;
+    }
+
+    public function deleteUser($userId) {
+        $this->db->query("DELETE FROM users WHERE user_id = :user_id");
+        $this->db->bind(':user_id', $userId);
+        return $this->db->execute();
+    }
+    
+    public function searchUsers($searchTerm) {
+        $this->db->query("SELECT users.user_id, users.first_name, users.last_name, users.address, 
+                          users.email, users.contact_number, users.role
+                          FROM users
+                          WHERE users.role != 'admin' AND 
+                          (users.first_name LIKE :search OR 
+                           users.last_name LIKE :search OR 
+                           users.email LIKE :search OR 
+                           users.contact_number LIKE :search)");
+        
+        $this->db->bind(':search', '%' . $searchTerm . '%');
+        return $this->db->resultSet();
+    }
 }

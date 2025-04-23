@@ -266,15 +266,15 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
                                 </div>
                                 <div class="field">
                                     <span class="edit-btn" 
-                                          onclick="openEditModal(
-                                              <?php echo $appointment->id; ?>, 
-                                              '<?php echo $appointment->date; ?>', 
-                                              '<?php echo $appointment->time; ?>', 
-                                              '<?php echo addslashes(htmlspecialchars($appointment->notes)); ?>')">
+                                        onclick="openEditModal(
+                                            <?php echo $appointment->appointment_id; ?>, 
+                                            '<?php echo $appointment->appointment_date; ?>', 
+                                            '<?php echo $appointment->appointment_time; ?>', 
+                                            '<?php echo addslashes(htmlspecialchars($appointment->description)); ?>')">
                                         <i class='bx bx-edit-alt'></i>
                                     </span>
                                     <span class="delete-btn" 
-                                          onclick="deleteAppointment(<?php echo $appointment->id; ?>)">
+                                        onclick="deleteAppointment(<?php echo $appointment->appointment_id; ?>)">
                                         <i class='bx bx-trash'></i>
                                     </span>
                                 </div>
@@ -284,66 +284,37 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
                 </div>
                 <?php endif; ?>
             </section>
-
+        </div>
     </section>
 
-    <!-- Add this section to your profile view -->
-
-<!-- Add this modal for editing appointments -->
-<div id="editModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeEditModal()">&times;</span>
-        <h2>Edit Appointment</h2>
-        <form id="editForm" method="POST" action="<?php echo URLROOT; ?>/CustomerController/editAppointment">
-            <input type="hidden" name="id" id="editId">
-            <div class="field time-field">
-                <div class="input-field">
-                    <input type="date" name="date" id="editDate" required>
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditModal()">&times;</span>
+            <h2>Edit Appointment</h2>
+            <form id="editForm" method="POST" action="<?php echo URLROOT; ?>/CustomerController/editAppointment">
+                <input type="hidden" name="id" id="editId">
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="editDate">Date:</label>
+                    <input type="date" class="form-control" name="date" id="editDate" required style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ddd;">
                 </div>
-            </div>
-            <div class="field time-field">
-                <div class="input-field">
-                    <input type="time" name="time" id="editTime" required>
+                
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="editTime">Time:</label>
+                    <input type="time" class="form-control" name="time" id="editTime" required style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ddd;">
                 </div>
-            </div>
-            <div class="field textare-field">
-                <div class="input-field">
-                    <textarea name="notes" id="editNotes" required></textarea>
+                
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="editNotes">Notes:</label>
+                    <textarea class="form-control" name="notes" id="editNotes" rows="4" style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ddd;"></textarea>
                 </div>
-            </div>
-            <div class="input-field button">
-                <button type="submit" class="btn-submit">Save Changes</button>
-            </div>
-        </form>
+                
+                <div class="form-group" style="text-align: right;">
+                    <button type="button" onclick="closeEditModal()" style="padding: 8px 15px; margin-right: 10px; border-radius: 5px; border: none; background: #6c757d; color: white;">Cancel</button>
+                    <button type="submit" style="padding: 8px 15px; border-radius: 5px; border: none; background: #2563eb; color: white;">Save Changes</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
-
-<!-- Add this JavaScript for the modal functionality -->
-<script>
-    function openEditModal(id, date, time, notes) {
-        document.getElementById('editId').value = id;
-        document.getElementById('editDate').value = date;
-        document.getElementById('editTime').value = time;
-        document.getElementById('editNotes').value = notes;
-        document.getElementById('editModal').style.display = "block";
-    }
-
-    function closeEditModal() {
-        document.getElementById('editModal').style.display = "none";
-    }
-
-    function deleteAppointment(id) {
-        if (confirm('Are you sure you want to delete this appointment?')) {
-            window.location.href = '<?php echo URLROOT; ?>/CustomerController/deleteAppointment/' + id;
-        }
-    }
-
-    window.onclick = function(event) {
-        if (event.target == document.getElementById('editModal')) {
-            closeEditModal();
-        }
-    }
-</script>
 
     <footer>
         <div class="footer-content">
@@ -394,7 +365,7 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
             document.getElementById('editId').value = id;
             document.getElementById('editDate').value = date;
             document.getElementById('editTime').value = time;
-            document.getElementById('editNotes').value = notes;
+            document.getElementById('editNotes').value = notes.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
             document.getElementById('editModal').style.display = "block";
         }
 
@@ -408,15 +379,13 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
             }
         }
 
+        // Close modal when clicking outside of it
         window.onclick = function(event) {
             if (event.target == document.getElementById('editModal')) {
                 closeEditModal();
             }
         }
     </script>
-
-    <script src="../../js/script-index.js"></script>
-    <script src="../../js/services.js"></script>
-
+    <script src="<?php echo URLROOT; ?>/public/js/script-index.js"></script>
 </body>
 </html>

@@ -112,6 +112,80 @@ class CustomerController extends Controller {
             redirect('CustomerController/services');
         }
     }
+    // Add these new methods to your existing CustomerController class
+
+public function editAppointment() {
+    if($_SERVER['REQUEST_METHOD'] == 'POST') {
+        // Sanitize POST data
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        
+        // Check if user is logged in
+        if(!isset($_SESSION['user_id'])) {
+            redirect('Users/login');
+            exit;
+        }
+        
+        $data = [
+            'id' => $_POST['id'],
+            'date' => $_POST['date'],
+            'time' => $_POST['time'],
+            'notes' => $_POST['notes'],
+            'customer_id' => $_SESSION['user_id']
+        ];
+        
+        // Get appointment to verify ownership
+        $appointment = $this->CustomerModel->getAppointmentById($data['id']);
+        
+        // Verify appointment exists and belongs to current user
+        if(!$appointment || $appointment->customer_id != $_SESSION['user_id']) {
+            flash('appointment_error', 'Unauthorized access or appointment not found', 'alert alert-danger');
+            redirect('CustomerController/profile');
+            exit;
+        }
+        
+        if($this->CustomerModel->updateAppointment($data)) {
+            flash('appointment_success', 'Appointment updated successfully!');
+        } else {
+            flash('appointment_error', 'Failed to update appointment', 'alert alert-danger');
+        }
+        
+        redirect('CustomerController/profile');
+    } else {
+        redirect('CustomerController/profile');
+    }
+}
+
+public function deleteAppointment($id = null) {
+    // Check if ID is provided
+    if($id == null) {
+        redirect('CustomerController/profile');
+        exit;
+    }
+    
+    // Check if user is logged in
+    if(!isset($_SESSION['user_id'])) {
+        redirect('Users/login');
+        exit;
+    }
+    
+    // Get appointment to verify ownership
+    $appointment = $this->CustomerModel->getAppointmentById($id);
+    
+    // Verify appointment exists and belongs to current user
+    if(!$appointment || $appointment->customer_id != $_SESSION['user_id']) {
+        flash('appointment_error', 'Unauthorized access or appointment not found', 'alert alert-danger');
+        redirect('CustomerController/profile');
+        exit;
+    }
+    
+    if($this->CustomerModel->deleteAppointment($id, $_SESSION['user_id'])) {
+        flash('appointment_success', 'Appointment deleted successfully!');
+    } else {
+        flash('appointment_error', 'Failed to delete appointment', 'alert alert-danger');
+    }
+    
+    redirect('CustomerController/profile');
+}
 }
 
 ?>

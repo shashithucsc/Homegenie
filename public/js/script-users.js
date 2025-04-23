@@ -49,9 +49,3 @@ function sortTable(column, sort_asc) {
     })
         .map(sorted_row => document.querySelector('tbody').appendChild(sorted_row));
 }
-
-function confirmDelete(id) {
-    if (confirm("Are you sure you want to delete this user?")) {
-        window.location.href = "users_delete.php?id=" + id;
-    }
-}

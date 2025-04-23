@@ -63,11 +63,15 @@ require_once APPROOT . '/views/Admin/AdminSideBar.php';
                                     <td><?php echo $user->email; ?></td>
                                     <td><?php echo $user->contact_number; ?></td>
                                     <td><?php echo ucfirst($user->role); ?></td>
+                                    <!-- Inside the table row for each user -->
                                     <td>
                                         <div class='faq-btn delete'>
-                                            <button class='delete' onclick='confirmDelete(<?php echo $user->user_id; ?>)'>
-                                                <i class='bx bx-user-minus icon'></i>
-                                            </button>
+                                            <form action="<?php echo URLROOT; ?>/admin/deleteUser" method="POST">
+                                                <input type="hidden" name="user_id" value="<?= $user->user_id; ?>">
+                                                <button type="submit" class='delete' onclick="return confirm('Are you sure you want to delete this user?');">
+                                                    <i class='bx bx-user-minus icon'></i>
+                                                </button>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>

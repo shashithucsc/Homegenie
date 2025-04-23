@@ -504,7 +504,7 @@ body, html {
 .category-buttons .category-btn {
     background: linear-gradient(135deg, #08f, #04c);
     color: white;
-    padding: 10px 16px;
+    padding: 15px 80px;
     margin: 8px;
     border: none;
     border-radius: 25px;
@@ -554,7 +554,19 @@ body, html {
     color: #000;
 }
 
-.modern-btn {
+.modern-btn-save {
+    padding: 6px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 136, 255, 0.4);
+    background: rgba(255, 255, 255, 0.15);
+    color: #007BFF;
+    font-weight: bold;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: 0.3s ease;
+}
+
+.modern-btn-add {
     padding: 6px 12px;
     border-radius: 12px;
     border: 1px solid rgba(0, 136, 255, 0.4);
@@ -587,5 +599,6 @@ body, html {
 .rating-stars .star.filled {
     color: gold; /* Yellow stars */
 }
+
 
 

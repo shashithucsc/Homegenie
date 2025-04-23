@@ -4,45 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout - HomeGenie Store</title>
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/supplierCart.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/supplierCheckoutPage.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/navbar.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/footer.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .payment-options {
-            display: flex;
-            gap: 20px;
-            margin: 15px 0;
-        }
-
-        .payment-options label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-
-        .checkout .button {
-            padding: 10px 20px;
-            background-color: #004085;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-
-        .checkout .button:hover {
-            background-color: #002f5f;
-        }
-
-        textarea {
-            width: 100%;
-            padding: 10px;
-            resize: vertical;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-        }
-    </style>
+    
 </head>
 
 <body>
@@ -64,25 +30,23 @@
         <div class="checkout-section">
             <h2>Delivery Address</h2>
             <form id="checkoutForm" action="<?php echo URLROOT; ?>/StorePageController/confirmOrder" method="POST">
-                <textarea name="delivery_address" rows="4" placeholder="Enter your delivery address here..." required></textarea>
-                
-                <!-- Hidden Grand Total -->
-                <input type="hidden" name="grand_total" value="<?php echo $data['grand_total']; ?>">
+    <textarea name="delivery_address" rows="4" placeholder="Enter your delivery address here..." required></textarea>
 
-                <!-- Payment Options -->
-                <div class="payment-options">
-                    <label>
-                        <input type="radio" name="payment_method" value="cod" required>
-                        <i class="fas fa-money-bill-wave"></i> Cash on Delivery
-                    </label>
-                    <label>
-                        <input type="radio" name="payment_method" value="card">
-                        <i class="fas fa-credit-card"></i> Card Payment
-                    </label>
-                </div>
+    <input type="hidden" name="grand_total" value="<?php echo $data['grand_total']; ?>">
 
-                <button type="submit" class="button">Confirm Order</button>
-            </form>
+    <div class="payment-options">
+        <label>
+            <input type="radio" name="payment_method" value="cod" required>
+            <i class="fas fa-money-bill-wave"></i> Cash on Delivery
+        </label>
+        <label>
+            <input type="radio" name="payment_method" value="card">
+            <i class="fas fa-credit-card"></i> Card Payment
+        </label>
+    </div>
+
+    <button type="submit" class="confirm-button">Confirm Order</button>
+</form>
 
             <div class="checkout" style="margin-top: 20px;">
                 <a href="<?php echo URLROOT; ?>/StorePageController/index" class="button">
@@ -94,13 +58,23 @@
 </main>
 
 <script>
-    document.getElementById('checkoutForm').addEventListener('submit', function (e) {
-        const selected = document.querySelector('input[name="payment_method"]:checked');
-        if (selected && selected.value === "card") {
-            e.preventDefault();
-            window.location.href = "<?php echo URLROOT; ?>/StorePageController/cardPayment";
-        }
-    });
+document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+    const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
+
+    if (selectedMethod === 'card') {
+        e.preventDefault(); // Stop normal form submission
+
+        // Redirect to card payment page, passing data via URL or session
+        const grandTotal = document.querySelector('input[name="grand_total"]').value;
+        const deliveryAddress = document.querySelector('textarea[name="delivery_address"]').value;
+
+        // Optionally store data in session or URL params
+        const encodedAddress = encodeURIComponent(deliveryAddress);
+        window.location.href = `<?php echo URLROOT; ?>/StorePageController/cardPaymentPage?total=${grandTotal}&address=${encodedAddress}`;
+    }
+
+    // If COD is selected, let form submit normally
+});
 </script>
 
 <?php require_once APPROOT . '/views/footer.php'; ?>

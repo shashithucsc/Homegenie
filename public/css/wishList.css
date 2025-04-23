@@ -68,6 +68,8 @@ body, html {
     justify-content: flex-start;
 }
 
+
+
 .item {
     background-color: #fff;
     border: 1px solid var(--border-color);
@@ -109,7 +111,9 @@ body, html {
     margin-top: 15px;
 }
 
-.remove-button {
+
+
+.modern-btn-remove{
     background-color: var(--danger-color);
     color: #fff;
     border: none;
@@ -120,6 +124,7 @@ body, html {
     transition: all 0.3s ease;
     width: 100%;
     text-align: center;
+    margin-top: 10px;
 }
 
 .remove-button:hover {

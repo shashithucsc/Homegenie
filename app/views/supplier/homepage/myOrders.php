@@ -54,7 +54,7 @@
                 $badgeClass .= 'status-accepted';
                 break;
             default:
-                $badgeClass = ''; // fallback
+                $badgeClass = ''; 
         }
     ?>
     <span class="<?php echo $badgeClass; ?>"><?php echo htmlspecialchars($order->status); ?></span>

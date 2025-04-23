@@ -81,15 +81,15 @@
                                         onchange="checkQuantity(<?php echo $item->item_id; ?>)">
                                 </div>
 
-                                <button type="submit" class="modern-btn add-btn">
-                                    🛒 Add
+                                <button type="submit" class="modern-btn-add">
+                                    🛒&nbsp;Add
                                 </button>
                             </form>
 
                             <form action="<?php echo URLROOT; ?>/StorePageController/addToWishlist" method="POST"
                                 class="form-right same-row-form">
                                 <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
-                                <button type="submit" class="modern-btn save-btn">
+                                <button type="submit" class="modern-btn-save">
                                     💙 Save
                                 </button>
                             </form>

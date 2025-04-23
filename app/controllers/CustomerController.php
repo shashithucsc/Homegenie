@@ -32,20 +32,25 @@ class CustomerController extends Controller {
 
     public function profile(){
         $loggedUserId = $_SESSION['user_id'] ?? null;
-
+    
         if (!$loggedUserId) {
             // Handle unauthorized access or redirect to login
-            header('Location: /login');
+            redirect('Users/login');
             exit;
         }
+        
         $customer = $this->CustomerModel->getCustomer($loggedUserId);
         if (!$customer) {
             die('Customer not found.');
         }
-    
+        
+        // Get customer appointments
+        $appointments = $this->CustomerModel->getCustomerAppointments($loggedUserId);
+        
         // Prepare data for the view
         $data = [
             'customer' => $customer,
+            'appointments' => $appointments
         ];
         $this->view('Customer/cu_profile', $data);
     }
@@ -81,33 +86,32 @@ class CustomerController extends Controller {
     
     // Handle appointment creation
     public function createAppointment(){
-        if($_SERVER['REQUEST_METHOD'] == 'POST'){
-            // Sanitize POST data
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-            
-            $data = [
-                'sp_id' => $_POST['sp_id'],
-                'date' => $_POST['date'],
-                'time' => $_POST['time'],
-                'address' => $_POST['address'],
-                'notes' => $_POST['msg'],
-                'cu_id' => $_SESSION['user_id'],
-                'created_time' => date('Y-m-d H:i:s')
-            ];
-            
-            if($this->CustomerModel->createAppointment($data)){
-                flash('appointment_success', 'Appointment created successfully!');
-            } else {
-                flash('appointment_error', 'Failed to create appointment', 'alert alert-danger');
-            }
-            
-            // Redirect back to the service provider's profile
-            redirect('CustomerController/SPProfile/' . $data['sp_id']);
+    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        // Sanitize POST data
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        
+        $data = [
+            'sp_id' => $_POST['sp_id'],
+            'date' => $_POST['date'],
+            'time' => $_POST['time'],
+            'address' => $_POST['address'],
+            'notes' => $_POST['msg'],
+            'cu_id' => $_SESSION['user_id'],
+            'created_time' => date('Y-m-d H:i:s')
+        ];
+        
+        if($this->CustomerModel->createAppointment($data)){
+            flash('appointment_success', 'Appointment created successfully!');
         } else {
+            flash('appointment_error', 'Failed to create appointment', 'alert alert-danger');
+        }
+        
+        // Redirect back to the service provider's profile
+        redirect('CustomerController/SPProfile/' . $data['sp_id']);
+    } else {
             redirect('CustomerController/services');
         }
     }
-   
 }
 
 ?>

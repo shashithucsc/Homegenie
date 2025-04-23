@@ -183,94 +183,6 @@ $spImagePath = URLROOT . '/public/register/uploads/' . $provider->profile_image;
             text-decoration: none;
             cursor: pointer;
         }
-        .container {
-            max-width: 800px;
-            margin: 2rem auto;
-            margin-top: 100px;
-            padding: 2rem;
-            background: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-        
-        h2 {
-            color: #2563eb;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: #4b5563;
-        }
-        
-        input, select, textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #d1d5db;
-            border-radius: 5px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-        
-        input:focus, select:focus, textarea:focus {
-            border-color: #2563eb;
-            outline: none;
-        }
-        .btn-submit {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 1rem;
-            transition: background 0.3s;
-        }
-        
-        .btn-submit:hover {
-            background: #1e40af;
-        }
-        
-        .provider-info {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background: #f3f4f6;
-            border-radius: 5px;
-        }
-        .provider-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            overflow: hidden;
-            margin-right: 1rem;
-        }
-        
-        .provider-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .provider-name {
-            font-weight: 600;
-            color: #1f2937;
-        }
-        
-        .provider-expertise {
-            color: #6b7280;
-            font-size: 0.875rem;
-        }
-
     </style>
 </head>
 
@@ -356,45 +268,33 @@ $spImagePath = URLROOT . '/public/register/uploads/' . $provider->profile_image;
         <div class="modal-content">
             <span class="close" onclick="closeAppointmentModal()">&times;</span>
             <h2>Make an Appointment</h2>
-            <form action="<?php echo URLROOT; ?>/CustomerController/createAppointment" method="POST">
-            <?php if (!$provider): ?>
-            <div class="form-group">
-                <label for="service_provider">Service Provider</label>
-                <select id="service_provider" name="sp_id" required>
-                    <option value="">Select a Service Provider</option>
-                    <?php foreach($data['serviceProviders'] as $sp): ?>
-                    <option value="<?php echo $sp->user_id; ?>">
-                        <?php echo htmlspecialchars($sp->first_name . ' ' . $sp->last_name . ' (' . $sp->expertise . ')'); ?>
-                    </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <?php else: ?>
-            <input type="hidden" name="sp_id" value="<?php echo $provider->user_id; ?>">
-            <?php endif; ?>
-            
-            <div class="form-group">
-                <label for="date">Date</label>
-                <input type="date" id="date" name="date" required min="<?php echo date('Y-m-d'); ?>">
-            </div>
-            <div class="form-group">
-                <label for="time">Time</label>
-                <input type="time" id="time" name="time" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="address">Your Address</label>
-                <input type="text" id="address" name="address" required placeholder="Enter your complete address">
-            </div>
-            
-            <div class="form-group">
-                <label for="msg">Additional Notes</label>
-                <textarea id="msg" name="msg" rows="4" placeholder="Describe any specific requirements or details about your service needs"></textarea>
-            </div>
-            
-            <button type="submit" class="btn-submit">Schedule Appointment</button>
-        </form>
-              
+            <form action="<?php echo URLROOT; ?>/CustomerController/createAppointment" method="POST" autocomplete="off">
+                <input type="hidden" name="sp_id" value="<?php echo $provider->user_id; ?>">
+                <div class="field time-field">
+                    <div class="input-field">
+                        <input type="date" id="date" placeholder="Date" name="date" required>
+                    </div>
+                </div>
+                <div class="field time-field">
+                    <div class="input-field">
+                        <input type="time" id="time" placeholder="Time" name="time" required>
+                    </div>
+                </div>
+                <div class="field address-field">
+                    <div class="input-field">
+                        <input type="text" id="address" placeholder="No: Lane, City" name="address" required>
+                    </div>
+                </div>
+                <div class="field textare-field">
+                    <div class="input-field">
+                        <textarea id="msg" placeholder="Additional note" name="msg" required></textarea>
+                    </div>
+                </div>
+                <br>
+                <div class="input-field button">
+                    <input type="submit" value="Make Appointment">
+                </div>
+            </form>
         </div>
     </div>
 

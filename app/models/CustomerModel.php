@@ -33,7 +33,7 @@ class CustomerModel {
     }
     
     public function createAppointment($data) {
-        $this->db->query("INSERT INTO appointment (cu_id, sp_id, date, time, cu_address, notes, created_time) 
+        $this->db->query("INSERT INTO appointments (customer_id, service_provider_id, appointment_date, appointment_time, location, description, created_at) 
                          VALUES (:cu_id, :sp_id, :date, :time, :address, :notes, :created_time)");
         
         // Bind values
@@ -47,6 +47,26 @@ class CustomerModel {
         
         // Execute
         return $this->db->execute();
+    }
+    public function getCustomerAppointments($userId) {
+        $sql = "SELECT 
+                a.appointment_id, 
+                a.appointment_date, 
+                a.appointment_time, 
+                a.description, 
+                a.status,
+                a.location,
+                a.service_provider_id,
+                u.first_name AS sp_first_name, 
+                u.last_name AS sp_last_name
+                FROM appointments a
+                INNER JOIN users u ON a.service_provider_id = u.user_id
+                WHERE a.customer_id = :user_id
+                ORDER BY a.created_at DESC";
+        
+        $this->db->query($sql);
+        $this->db->bind(':user_id', $userId);
+        return $this->db->resultSet();
     }
 }
 ?>

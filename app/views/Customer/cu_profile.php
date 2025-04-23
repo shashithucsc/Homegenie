@@ -238,36 +238,112 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
                     </div>
                 </div>
             </section>
+            <section class="profile-section">
+                <h2>Appointments History</h2>
+                <?php if(empty($data['appointments'])): ?>
+                    <p>You don't have any appointments yet.</p>
+                <?php else: ?>
+                <div class="info-grid">
+                    <?php foreach ($data['appointments'] as $appointment): ?>
+                        <div class="info-item">
+                            <i class='bx bx-task'></i>
+                            <div>
+                                <div class="field">
+                                    <label>Service Provider:</label>
+                                    <span><?php echo htmlspecialchars($appointment->sp_first_name . ' ' . $appointment->sp_last_name); ?></span>
+                                </div>
+                                <div class="field">
+                                    <label>Date:</label>
+                                    <span><?php echo htmlspecialchars($appointment->appointment_date); ?></span>
+                                </div>
+                                <div class="field">
+                                    <label>Time:</label>
+                                    <span><?php echo htmlspecialchars($appointment->appointment_time); ?></span>
+                                </div>
+                                <div class="field">
+                                    <label>Notes:</label><br>
+                                    <span><?php echo htmlspecialchars($appointment->description); ?></span>
+                                </div>
+                                <div class="field">
+                                    <span class="edit-btn" 
+                                          onclick="openEditModal(
+                                              <?php echo $appointment->id; ?>, 
+                                              '<?php echo $appointment->date; ?>', 
+                                              '<?php echo $appointment->time; ?>', 
+                                              '<?php echo addslashes(htmlspecialchars($appointment->notes)); ?>')">
+                                        <i class='bx bx-edit-alt'></i>
+                                    </span>
+                                    <span class="delete-btn" 
+                                          onclick="deleteAppointment(<?php echo $appointment->id; ?>)">
+                                        <i class='bx bx-trash'></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
+            </section>
 
     </section>
 
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeEditModal()">&times;</span>
-            <h2>Edit Appointment</h2>
-            <form id="editForm" method="POST" action="edit_appointment.php">
-                <input type="hidden" name="id" id="editId">
-                <div class="field time-field">
-                    <div class="input-field">
-                        <input type="date" name="date" id="editDate" required>
-                    </div>
+    <!-- Add this section to your profile view -->
+
+<!-- Add this modal for editing appointments -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeEditModal()">&times;</span>
+        <h2>Edit Appointment</h2>
+        <form id="editForm" method="POST" action="<?php echo URLROOT; ?>/CustomerController/editAppointment">
+            <input type="hidden" name="id" id="editId">
+            <div class="field time-field">
+                <div class="input-field">
+                    <input type="date" name="date" id="editDate" required>
                 </div>
-                <div class="field time-field">
-                    <div class="input-field">
-                        <input type="time" name="time" id="editTime" required>
-                    </div>
+            </div>
+            <div class="field time-field">
+                <div class="input-field">
+                    <input type="time" name="time" id="editTime" required>
                 </div>
-                <div class="field textare-field">
-                    <div class="input-field">
-                        <textarea name="notes" id="editNotes" required></textarea>
-                    </div>
+            </div>
+            <div class="field textare-field">
+                <div class="input-field">
+                    <textarea name="notes" id="editNotes" required></textarea>
                 </div>
-                <div class="input-field button">
-                    <button type="submit">Save Changes</button>
-                </div>
-            </form>
-        </div>
+            </div>
+            <div class="input-field button">
+                <button type="submit" class="btn-submit">Save Changes</button>
+            </div>
+        </form>
     </div>
+</div>
+
+<!-- Add this JavaScript for the modal functionality -->
+<script>
+    function openEditModal(id, date, time, notes) {
+        document.getElementById('editId').value = id;
+        document.getElementById('editDate').value = date;
+        document.getElementById('editTime').value = time;
+        document.getElementById('editNotes').value = notes;
+        document.getElementById('editModal').style.display = "block";
+    }
+
+    function closeEditModal() {
+        document.getElementById('editModal').style.display = "none";
+    }
+
+    function deleteAppointment(id) {
+        if (confirm('Are you sure you want to delete this appointment?')) {
+            window.location.href = '<?php echo URLROOT; ?>/CustomerController/deleteAppointment/' + id;
+        }
+    }
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('editModal')) {
+            closeEditModal();
+        }
+    }
+</script>
 
     <footer>
         <div class="footer-content">
@@ -328,19 +404,19 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
 
         function deleteAppointment(id) {
             if (confirm('Are you sure you want to delete this appointment?')) {
-                window.location.href = 'delete_appointment.php?id=' + id;
+                window.location.href = '<?php echo URLROOT; ?>/CustomerController/deleteAppointment/' + id;
             }
         }
 
-        window.onclick = function (event) {
+        window.onclick = function(event) {
             if (event.target == document.getElementById('editModal')) {
                 closeEditModal();
             }
         }
     </script>
+
     <script src="../../js/script-index.js"></script>
     <script src="../../js/services.js"></script>
 
 </body>
-
 </html>

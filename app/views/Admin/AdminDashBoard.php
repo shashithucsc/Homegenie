@@ -96,7 +96,7 @@
             <canvas id="revenueChart"></canvas>
         </div>
     </section>
-    <script src="../../js/clock.js"></script>
+    <script src="<?php echo URLROOT; ?>/public/js/clock.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Convert PHP arrays to JSON for JavaScript use

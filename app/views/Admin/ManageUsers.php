@@ -54,34 +54,34 @@ require_once APPROOT . '/views/Admin/AdminSideBar.php';
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- <php
-                        if ($result->rowCount() > 0) {
-                            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                                echo "<tr>";
-                                echo "<td>" . $row["id"] . "</td>";
-                                echo "<td>" . $row["first_name"] . " " . $row["last_name"] . "</td>";
-                                echo "<td>" . $row["address"] . "</td>";
-                                echo "<td>" . $row["email"] . "</td>";
-                                echo "<td>" . $row["contact_number"] . "</td>";
-                                echo "<td>" . $row["account_type"] . "</td>";
-                                echo "<td>";
-                                echo "<div class='faq-btn delete'>";
-                                echo "<button class='delete' onclick='confirmDelete(" . $row['id'] . ")'><i class='bx bx-user-minus icon'></i></button>";
-                                echo "</div>";
-                                echo "</td>";
-                                echo "</tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='7'>No data found</td></tr>";
-                        }
-                        ?> -->
+                    <?php if(isset($data['users']) && count($data['users']) > 0) : ?>
+                            <?php foreach($data['users'] as $user) : ?>
+                                <tr>
+                                    <td><?php echo $user->user_id; ?></td>
+                                    <td><?php echo $user->first_name . ' ' . $user->last_name; ?></td>
+                                    <td><?php echo $user->address; ?></td>
+                                    <td><?php echo $user->email; ?></td>
+                                    <td><?php echo $user->contact_number; ?></td>
+                                    <td><?php echo ucfirst($user->role); ?></td>
+                                    <td>
+                                        <div class='faq-btn delete'>
+                                            <button class='delete' onclick='confirmDelete(<?php echo $user->user_id; ?>)'>
+                                                <i class='bx bx-user-minus icon'></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else : ?>
+                            <tr><td colspan='7'>No data found</td></tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </section>
         </div>
     </section>
-    <script src="../../js/clock.js"></script>
-    <script src="../../js/script-users.js"></script>
+    <script src="<?php echo URLROOT; ?>/public/js/clock.js"></script>
+    <script src="<?php echo URLROOT; ?>/public/js/script-users.js"></script>
 </body>
 
 </html>

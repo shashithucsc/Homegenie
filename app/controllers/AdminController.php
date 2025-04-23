@@ -35,8 +35,64 @@ Class AdminController extends Controller{
     }
 
     public function manageUsers(){
-        $this->view('Admin/ManageUsers');   
+        // Check if admin is logged in
+        if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+            redirect('users/login');
+            exit;
+        }
+        
+        // Get all users
+        $users = $this->userModel->getAllUsers();
+        
+        $data = [
+            'users' => $users
+        ];
+        $this->view('Admin/ManageUsers', $data);   
     } 
+
+    public function searchUsers() {
+        // Check if admin is logged in
+        if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+            redirect('users/login');
+            exit;
+        }
+        
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $searchTerm = trim($_POST['search']);
+            
+            $users = $this->userModel->searchUsers($searchTerm);
+            
+            $data = [
+                'users' => $users
+            ];
+            
+            $this->view('Admin/ManageUsers', $data);
+        } else {
+            redirect('admin/manageUsers');
+        }
+    }
+    
+    public function deleteUser($id) {
+        // Check if admin is logged in
+        if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+            redirect('users/login');
+            exit;
+        }
+        
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Delete the user
+            if ($this->userModel->deleteUser($id)) {
+                flash('user_message', 'User deleted successfully');
+                redirect('admin/manageUsers');
+            } else {
+                flash('user_message', 'Something went wrong when deleting the user', 'alert alert-danger');
+                redirect('admin/manageUsers');
+            }
+        } else {
+            redirect('admin/manageUsers');
+        }
+    }
 
     public function verifyUsers(){
         $this->view('Admin/verifyUsers');   

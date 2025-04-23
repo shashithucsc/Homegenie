@@ -1,5 +1,5 @@
 <nav>
-    <a href="cu_home.php" class="nav-brand">Home<span>Genie</span></a>
+    <a href="<?php echo URLROOT; ?>/CustomerController" class="nav-brand">Home<span>Genie</span></a>
     <div class="nav-links">
         <a href="<?php echo URLROOT; ?>/CustomerController">Home</a>
         <a href="<?php echo URLROOT; ?>/CustomerController/services">Services</a>

@@ -156,23 +156,10 @@ class UserModel {
         return $data;
     }
 
-    public function deleteUser($userId) {
-        $this->db->query("DELETE FROM users WHERE user_id = :user_id");
-        $this->db->bind(':user_id', $userId);
+    public function deleteUser($id) {
+        // Delete user from the users table
+        $this->db->query('DELETE FROM users WHERE user_id = :user_id');
+        $this->db->bind(':user_id', $id);
         return $this->db->execute();
-    }
-    
-    public function searchUsers($searchTerm) {
-        $this->db->query("SELECT users.user_id, users.first_name, users.last_name, users.address, 
-                          users.email, users.contact_number, users.role
-                          FROM users
-                          WHERE users.role != 'admin' AND 
-                          (users.first_name LIKE :search OR 
-                           users.last_name LIKE :search OR 
-                           users.email LIKE :search OR 
-                           users.contact_number LIKE :search)");
-        
-        $this->db->bind(':search', '%' . $searchTerm . '%');
-        return $this->db->resultSet();
     }
 }

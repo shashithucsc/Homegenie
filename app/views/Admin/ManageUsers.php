@@ -66,7 +66,7 @@ require_once APPROOT . '/views/Admin/AdminSideBar.php';
                                     <!-- Inside the table row for each user -->
                                     <td>
                                         <div class='faq-btn delete'>
-                                            <form action="<?php echo URLROOT; ?>/admin/deleteUser" method="POST">
+                                            <form action="<?php echo URLROOT; ?>/AdminController/deleteUser" method="POST">
                                                 <input type="hidden" name="user_id" value="<?= $user->user_id; ?>">
                                                 <button type="submit" class='delete' onclick="return confirm('Are you sure you want to delete this user?');">
                                                     <i class='bx bx-user-minus icon'></i>

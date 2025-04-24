@@ -1,49 +1,55 @@
 <?php
 class UserModel {
-    private $db;
+    public $db;
 
     public function __construct() {
         $this->db = new Database;
     }
 
-    // Register a new user based on role
-    public function register($data) {
+    public function registerUser($data) {
         $this->db->query('INSERT INTO users (first_name, last_name, contact_number, email, address, profile_image, password, role, agree_terms) VALUES (:first_name, :last_name, :contact_number, :email, :address, :profile_image, :password, :role, :agree_terms)');
-
+    
         // Bind common user data
         $this->db->bind(':first_name', $data['first_name']);
         $this->db->bind(':last_name', $data['last_name']);
         $this->db->bind(':contact_number', $data['contact_number']);
         $this->db->bind(':email', $data['email']);
         $this->db->bind(':address', $data['address']);
-        $this->db->bind(':profile_image', $data['profile_image']);
-        $this->db->bind(':password', password_hash($data['password'], PASSWORD_DEFAULT));
+        $this->db->bind(':profile_image', null); // Assuming profile image is optional and passed as null
+        $this->db->bind(':password', $data['password']);
         $this->db->bind(':role', $data['role']);
         $this->db->bind(':agree_terms', $data['agree_terms']);
-
+    
         if ($this->db->execute()) {
             $userId = $this->db->lastInsertId();
-
+    
             // Role-specific data
             switch ($data['role']) {
+                case 'customer':
+                    $this->registerCustomer($userId);
+                    break;
                 case 'supplier':
                     $this->registerSupplier($userId, $data);
                     break;
                 case 'service_provider':
                     $this->registerServiceProvider($userId, $data);
                     break;
-                case 'customer':
-                    $this->registerCustomer($userId);
-                    break;
             }
-            return true;
+            return $userId;
         } else {
             return false;
         }
     }
+    
+    public function registerCustomer($userId) {
+        $this->db->query('INSERT INTO customers (customer_id) VALUES (:customer_id)');
+        $this->db->bind(':customer_id', $userId);
+        $this->db->execute();
+    }
+    
 
     // Register supplier-specific data
-    private function registerSupplier($userId, $data) {
+    public function registerSupplier($userId, $data) {
         $this->db->query('INSERT INTO suppliers (supplier_id, expertise, description, service_areas) VALUES (:supplier_id, :expertise, :description, :service_areas)');
         $this->db->bind(':supplier_id', $userId);
         $this->db->bind(':expertise', $data['expertise']);
@@ -53,7 +59,7 @@ class UserModel {
     }
 
     // Register service provider-specific data
-    private function registerServiceProvider($userId, $data) {
+    public function registerServiceProvider($userId, $data) {
         $this->db->query('INSERT INTO service_providers (provider_id, expertise, description, work_photos, working_hours, service_areas, id_number, id_front, id_back) VALUES (:provider_id, :expertise, :description, :work_photos, :working_hours, :service_areas, :id_number, :id_front, :id_back)');
         $this->db->bind(':provider_id', $userId);
         $this->db->bind(':expertise', $data['expertise']);
@@ -67,12 +73,6 @@ class UserModel {
         $this->db->execute();
     }
 
-    // Register customer-specific data
-    private function registerCustomer($userId) {
-        $this->db->query('INSERT INTO customers (customer_id) VALUES (:customer_id)');
-        $this->db->bind(':customer_id', $userId);
-        $this->db->execute();
-    }
 
     // Check if email is already registered
     public function findUserByEmail($email) {
@@ -83,6 +83,16 @@ class UserModel {
 
         return $row ? true : false;
     }
+
+    public function isEmailTaken($email)
+{
+    $this->db->query('SELECT * FROM users WHERE email = :email');
+    $this->db->bind(':email', $email);
+
+    $row = $this->db->single();
+    return $row ? true : false;
+}
+
 
     // Login user
     public function login($email, $password) {
@@ -126,7 +136,7 @@ class UserModel {
         ];
     }
 
-    private function countUsersByRole($role) {
+    public function countUsersByRole($role) {
         $this->db->query("SELECT COUNT(*) as count FROM users WHERE role = :role");
         $this->db->bind(':role', $role);
         return $this->db->single()->count;

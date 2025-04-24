@@ -153,23 +153,23 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                     <div class="filter-group">
                         <label class="filter-label">Category</label>
                         <select id="category" class="modern-select">
-                            <option value="all">All Categories</option>
-                            <option>Cleaning</option>
-                            <option>Electricity</option>
-                            <option>Painting</option>
-                            <option>Masonary</option>
-                            <option>Carpentary</option>
-                            <option>Plumbing</option>
-                        </select>
+    <option value="all">All Categories</option>
+    <option value="Cleaning">Cleaning</option>
+    <option value="Electricity">Electricity</option>
+    <option value="Painting">Painting</option>
+    <option value="Masonary">Masonary</option>
+    <option value="Carpentary">Carpentary</option>
+    <option value="Plumbing">Plumbing</option>
+</select>
                     </div>
                     <div class="filter-group">
                         <label class="filter-label">Price Range</label>
                         <select id="price" class="modern-select">
-                            <option value="all">All Prices</option>
-                            <option>1000+</option>
-                            <option>500-999</option>
-                            <option>0-499</option>
-                        </select>
+    <option value="all">All Prices</option>
+    <option value="1000+">1000+</option>
+    <option value="5000+">5000+</option>
+    <option value="0-999">0-999</option>
+</select>
                     </div>
                 </div>
 
@@ -292,6 +292,54 @@ function searchInventory() {
     });
 }
 </script>
+
+<!-- filters javascript -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const categoryFilter = document.getElementById('category');
+    const priceFilter = document.getElementById('price');
+
+    categoryFilter.addEventListener('change', filterInventory);
+    priceFilter.addEventListener('change', filterInventory);
+});
+
+function filterInventory() {
+    const selectedCategory = document.getElementById('category').value;
+    const selectedPrice = document.getElementById('price').value;
+
+    const rows = document.querySelectorAll('.inventory-list table tbody tr');
+
+    rows.forEach(row => {
+        const categoryCell = row.querySelector('td:nth-child(5)');
+        const priceCell = row.querySelector('td:nth-child(4)');
+
+        if (!categoryCell || !priceCell) return;
+
+        const categoryText = categoryCell.textContent.trim();
+        const priceValue = parseFloat(priceCell.textContent.replace('Rs.', '').replace(',', ''));
+
+        let categoryMatch = selectedCategory === 'all' || categoryText === selectedCategory;
+
+        let priceMatch = false;
+        if (selectedPrice === 'all') {
+            priceMatch = true;
+        } else if (selectedPrice === '1000+') {
+            priceMatch = priceValue >= 1000;
+        } else if (selectedPrice >= '5000+') {
+            priceMatch = priceValue >= 500 && priceValue <= 999;
+        } else if (selectedPrice === '0-999') {
+            priceMatch = priceValue >= 0 && priceValue <= 499;
+        }
+
+        if (categoryMatch && priceMatch) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+</script>
+
 
 </body>
 </html>

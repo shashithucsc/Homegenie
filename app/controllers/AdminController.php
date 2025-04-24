@@ -14,7 +14,7 @@ Class AdminController extends Controller{
 
         if (!$loggedUserId) {
             // Handle unauthorized access or redirect to login
-            header('Location: /login');
+            header('Location: ' . URLROOT . '/LoginController');
             exit;
         }
 
@@ -37,7 +37,7 @@ Class AdminController extends Controller{
     public function manageUsers(){
         // Check if admin is logged in
         if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-            redirect('users/login');
+            header('Location: ' . URLROOT . '/LoginController');
             exit;
         }
         
@@ -48,49 +48,14 @@ Class AdminController extends Controller{
             'users' => $users
         ];
         $this->view('Admin/ManageUsers', $data);   
-    } 
-
-    public function searchUsers() {
-        // Check if admin is logged in
-        if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-            redirect('users/login');
-            exit;
-        }
-        
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-            $searchTerm = trim($_POST['search']);
-            
-            $users = $this->userModel->searchUsers($searchTerm);
-            
-            $data = [
-                'users' => $users
-            ];
-            
-            $this->view('Admin/ManageUsers', $data);
-        } else {
-            redirect('admin/manageUsers');
-        }
     }
-    
-    public function deleteUser($id) {
-        // Check if admin is logged in
-        if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-            redirect('users/login');
-            exit;
-        }
-        
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Delete the user
-            if ($this->userModel->deleteUser($id)) {
-                flash('user_message', 'User deleted successfully');
-                redirect('admin/manageUsers');
-            } else {
-                flash('user_message', 'Something went wrong when deleting the user', 'alert alert-danger');
-                redirect('admin/manageUsers');
-            }
-        } else {
-            redirect('admin/manageUsers');
+
+    public function deleteUser() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['user_id'];
+            $model = $this->model('UserModel');
+            $model->deleteUser($id);
+            header("Location: " . URLROOT . "/AdminController/manageUsers");
         }
     }
 
@@ -98,18 +63,110 @@ Class AdminController extends Controller{
         $this->view('Admin/verifyUsers');   
     }
 
-    public function viewIsuues(){
-        $this->view('Admin/ViewIssues');   
-    } 
+    public function issues() {
+        // Load issue model
+        $issueModel = $this->model('IssueModel');
+        
+        // Get all issues with user information
+        $issues = $issueModel->getIssues();
+        
+        $data = [
+            'issues' => $issues,
+            'adminName' => $_SESSION['user_name'] ?? 'Admin'
+        ];
+        
+        $this->view('Admin/ViewIssues', $data);
+    }
+
+    public function markIssueComplete() {
+        // Check if form was submitted
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Get issue ID from form
+            $id = $_POST['issue_id'];
+            
+            // Update issue status
+            $this->issueModel->markIssueComplete($id);
+        }
+        
+        // Redirect back to issues page
+        header("Location: " . URLROOT . "/AdminController/issues");
+        exit;
+    }
 
     public function viewOrders(){
         $this->view('Admin/viewOrders');   
     } 
     
     public function faq(){
-        $this->view('Admin/FAQ');   
+        // Initialize the FAQ model
+        $faqModel = $this->model('FAQModel');
+        
+        // Check if form was submitted to add a new FAQ
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Sanitize POST data
+            $data = [
+                'topic' => trim($_POST['topic']),
+                'content' => trim($_POST['content'])
+            ];
+            
+            // Add FAQ
+            if ($faqModel->addFAQ($data)) {
+                $_SESSION['success_msg'] = 'FAQ added successfully';
+            } else {
+                $_SESSION['error_msg'] = 'Something went wrong';
+            }
+            
+            // Redirect to prevent form resubmission
+            header('Location: ' . URLROOT . '/AdminController/faq');
+            exit;
+        }
+        
+        // Get all FAQs
+        $faqs = $faqModel->getAllFAQs();
+        
+        // Load view with data
+        $this->view('Admin/FAQ', ['faqs' => $faqs]);
     } 
-    
 
+    public function editFAQ() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Initialize the FAQ model
+            $faqModel = $this->model('FAQModel');
+            
+            // Sanitize POST data
+            $data = [
+                'id' => $_POST['id'],
+                'topic' => trim($_POST['topic']),
+                'content' => trim($_POST['content'])
+            ];
+            
+            // Update FAQ
+            if ($faqModel->updateFAQ($data)) {
+                $_SESSION['success_msg'] = 'FAQ updated successfully';
+            } else {
+                $_SESSION['error_msg'] = 'Something went wrong';
+            }
+            
+            // Redirect back to FAQ page
+            header('Location: ' . URLROOT . '/AdminController/faq');
+            exit;
+        }
+    }
+
+    public function deleteFAQ($id) {
+        // Initialize the FAQ model
+        $faqModel = $this->model('FAQModel');
+        
+        // Delete FAQ
+        if ($faqModel->deleteFAQ($id)) {
+            $_SESSION['success_msg'] = 'FAQ deleted successfully';
+        } else {
+            $_SESSION['error_msg'] = 'Something went wrong';
+        }
+        
+        // Redirect back to FAQ page
+        header('Location: ' . URLROOT . '/AdminController/faq');
+        exit;
+    }
 }
 ?>

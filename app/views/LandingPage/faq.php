@@ -17,17 +17,7 @@ $num_rows = $stmt->rowCount();
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-<nav class="top-nav">
-        <a href="index.php" class="nav-brand">Home<span>Genie</span></a>
-        <div class="nav-links">
-            <a href="index.php">Home</a>
-            <a href="services.php">Services</a>
-            <a href="../../../supplier/HomeController.php">Store</a>
-            <a href="about.php">About</a>
-            <button onclick="document.location='../login/login.php'" class="login-btn">Login</button>
-        </div>
-    </nav>
-
+    <?php require_once APPROOT . '/views/LandingPage/navBar.php'; ?>
     <header>
         <h1>Frequently Asked Questions</h1>
     </header>

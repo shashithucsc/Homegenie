@@ -12,9 +12,31 @@
     --body-color: #E4E9F7;
     --sidebar-color: #026773;
     --primary-color: #3CA6A6;
-    --primary-color-light: #F6F5FF;
-    --toggle-color: #DDD;
-    --text-color: #F2E3D5;
+    --text-main: #00494F;
+    --text-color: #D9F2E5;
+    --text-alt: #F2E3D5;
+    --button-color: #40B7B7;
+    --button-hover: #169494;
+
+    --soft-blue: #D1DEF9;
+    --pale-lavender: #E1D8F2;
+    --dusty-blue: #B6C7D9;
+    --light-mint: #D9F2E5;
+
+    --teal-green: #018F8A;
+    --dark-navy: #00494F;
+    --charcoal: #3D5B5A;
+    --seaweed-green: #2D5F5C;
+
+    --light-teal: #65D4D4;
+    --turquoise: #40B7B7;
+    --mint-green: #A8E3D7;
+    --ocean-blue: #2F7C7C;
+
+    --soft-cream: #F7E4C1;
+    --light-peach: #F4C4A1;
+    --warm-sand: #E3D0B0;
+    --powder-pink: #F2C9D9;
 
     --tran-02: all 0.2s ease;
     --tran-03: all 0.3s ease;

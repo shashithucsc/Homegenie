@@ -68,5 +68,42 @@ class CustomerModel {
         $this->db->bind(':user_id', $userId);
         return $this->db->resultSet();
     }
+    // Add these new methods to your existing CustomerModel class
+
+public function updateAppointment($data) {
+    $this->db->query("UPDATE appointments SET 
+                      appointment_date = :date,
+                      appointment_time = :time,
+                      description = :notes,
+                      updated_at = NOW()
+                      WHERE appointment_id = :id AND customer_id = :customer_id");
+    
+    // Bind values
+    $this->db->bind(':date', $data['date']);
+    $this->db->bind(':time', $data['time']);
+    $this->db->bind(':notes', $data['notes']);
+    $this->db->bind(':id', $data['id']);
+    $this->db->bind(':customer_id', $data['customer_id']);
+    
+    // Execute
+    return $this->db->execute();
+}
+
+public function deleteAppointment($id, $customerId) {
+    $this->db->query("DELETE FROM appointments WHERE appointment_id = :id AND customer_id = :customer_id");
+    
+    // Bind values
+    $this->db->bind(':id', $id);
+    $this->db->bind(':customer_id', $customerId);
+    
+    // Execute
+    return $this->db->execute();
+}
+
+public function getAppointmentById($id) {
+    $this->db->query("SELECT * FROM appointments WHERE appointment_id = :id");
+    $this->db->bind(':id', $id);
+    return $this->db->single();
+}
 }
 ?>

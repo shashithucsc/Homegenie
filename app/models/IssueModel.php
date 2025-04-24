@@ -13,6 +13,15 @@ class IssueModel {
         return $this->db->resultSet();
     }
 
+    public function getIssueById($id) {
+        $this->db->query("SELECT issues.*, users.first_name, users.last_name, users.contact_number, users.email 
+                         FROM issues 
+                         JOIN users ON issues.user_id = users.user_id
+                         WHERE issues.id = :id");
+        $this->db->bind(':id', $id);
+        return $this->db->single();
+    }
+
     public function markIssueComplete($id) {
         $this->db->query("UPDATE issues SET status = 'completed' WHERE id = :id");
         $this->db->bind(':id', $id);

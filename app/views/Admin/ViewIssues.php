@@ -10,6 +10,23 @@
 
     <title>Manage Issues</title>
 
+    <style>
+        .reply-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border: 1px solid #d1d1d1;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .reply-button {
+            margin-top: 10px;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -49,7 +66,8 @@
                             <div class="issue-reply">
                                 <form action="<?php echo URLROOT; ?>/AdminController/markIssueComplete" method="POST">
                                     <input type="hidden" name="issue_id" value="<?php echo $issue->id; ?>">
-                                    <button type="submit" class="reply-button">Mark as Complete</button>
+                                    <textarea name="reply_message" class="reply-textarea" placeholder="Type your reply here..." required></textarea>
+                                    <button type="submit" class="reply-button">Mark as Complete & Send Reply</button>
                                 </form>
                             </div>
                         </div>

@@ -34,13 +34,7 @@ Class AdminController extends Controller{
         $this->view('Admin/AdminDashBoard', $data);
     }
 
-    public function manageUsers(){
-        // Check if admin is logged in
-        if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-            header('Location: ' . URLROOT . '/LoginController');
-            exit;
-        }
-        
+    public function manageUsers(){        
         // Get all users
         $users = $this->userModel->getAllUsers();
         
@@ -81,11 +75,46 @@ Class AdminController extends Controller{
     public function markIssueComplete() {
         // Check if form was submitted
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Get issue ID from form
+            // Get issue ID and reply message from form
             $id = $_POST['issue_id'];
+            $replyMessage = $_POST['reply_message'];
             
-            // Update issue status
-            $this->issueModel->markIssueComplete($id);
+            // Get issue details including user email
+            $issue = $this->issueModel->getIssueById($id);
+            
+            if ($issue) {
+                // Set up email variables
+                $to = $issue->email;
+                $subject = "Response to your reported issue - HomeGenie";
+                
+                // Email message
+                $message = "Dear " . $issue->first_name . ",<br><br>";
+                $message .= "Thank you for bringing this issue to our attention:<br><br>";
+                $message .= nl2br($replyMessage) . "<br><br>";
+                $message .= "Your issue has been marked as resolved. If you have any further questions, please feel free to contact us.<br><br>";
+                $message .= "Best regards,<br>HomeGenie Support Team";
+                
+                // Replace with your actual email
+                $email = "home.genie.team@gmail.com"; 
+                $password = "homegenie1234"; 
+                
+                // Set the email headers
+                $headers = "MIME-Version: 1.0" . "\r\n";
+                $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+                $headers .= "From: $email" . "\r\n";
+                
+                // For Gmail, you might need to configure your PHP to use SMTP
+                ini_set("SMTP", "smtp.gmail.com");
+                ini_set("smtp_port", "587");
+                ini_set("sendmail_from", $email);
+                ini_set("smtp_ssl", "tls");
+                
+                // Send the email
+                mail($to, $subject, $message, $headers);
+                
+                // Update issue status
+                $this->issueModel->markIssueComplete($id);
+            }
         }
         
         // Redirect back to issues page

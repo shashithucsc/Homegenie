@@ -73,8 +73,8 @@
             </section>
         </div>
     </section>
-    <script src="../../js/clock.js"></script>
-    <script src="../../js/script-users.js"></script>
+    <script src="<?php echo URLROOT; ?>/public/js/clock.js"></script>
+
 </body>
 
 </html>

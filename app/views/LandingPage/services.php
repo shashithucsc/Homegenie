@@ -12,17 +12,7 @@
 </head>
 
 <body>
-<nav class="top-nav">
-        <a href="<?php echo URLROOT; ?>/CustomerController" class="nav-brand">Home<span>Genie</span></a>
-        <div class="nav-links">
-            <a href="<?php echo URLROOT; ?>/HomeController">Home</a>
-            <a href="<?php echo URLROOT; ?>/ServiceProviderController">Services</a>
-            <a href="<?php echo URLROOT; ?>/StorePageController">Store</a>
-            <a href="<?php echo URLROOT; ?>/CustomerController/about">About</a>
-            <button onclick="document.location='<?php echo URLROOT; ?>/LoginController'" class="login-btn">Login</button>
-        </div>
-    </nav>
-
+    <?php require_once APPROOT . '/views/LandingPage/navBar.php'; ?>
     <div class="search-container">
         <div class="search-wrapper">
             <i class='bx bx-search search-icon'></i>

@@ -34,7 +34,7 @@
                         </a>
                     </li>
                     <li class="nav-link">
-                    <a href="<?php echo URLROOT; ?>/AdminController/viewIsuues" target="main" class="nav-link">
+                    <a href="<?php echo URLROOT; ?>/AdminController/Issues" target="main" class="nav-link">
                             <i class='bx bx-error icon'></i>
                             <span class="text nav-text">View Issues</span>
                         </a>

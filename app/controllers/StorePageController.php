@@ -24,19 +24,10 @@ class StorePageController extends Controller
     }
 
 
-    public function contact()
-    {
-        $this->view('supplier/homepage/contact');
-    }
-
+   
     public function aboutUs()
     {
         $this->view('supplier/homepage/about');
-    }
-
-    public function navbar()
-    {
-        $this->view('navbar/navbar');
     }
 
 
@@ -74,10 +65,32 @@ class StorePageController extends Controller
    
   }
 
+  public function myOrders()
+  {
+      if (!isset($_SESSION['user_id'])) {
+          header("Location: " . URLROOT . "/StorePageController/index");
+      }
+
+      $userId = $_SESSION['user_id'];
+      $orders = $this->StorePagesModel->getMyorders($userId);
+
+      $data = [
+          'orders' => $orders
+      ];
+
+      $this->view('supplier/homepage/myOrders', $data);
+  }
+
+
+
+
+
+//   Wishlist function
     public function wishlist()
     {
         if (!isset($_SESSION['user_id'])) {
-            die("User not logged in.");
+           redirect('LoginController/index');
+            return;
         }
 
         $user_id = $_SESSION['user_id'];
@@ -92,7 +105,8 @@ class StorePageController extends Controller
     public function removeFromWishlist()
     {
         if (!isset($_SESSION['user_id'])) {
-            die("User not logged in.");
+            header("Location: " . URLROOT . "/LoginController/index");
+            return;
         }
 
         if (!isset($_POST['item_id'])) {
@@ -115,7 +129,8 @@ class StorePageController extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (!isset($_SESSION['user_id'])) {
-                die("User not logged in.");
+                header("Location: " . URLROOT . "/LoginController/index");
+            return;
             }
 
             if (!isset($_POST['item_id'])) {
@@ -143,23 +158,47 @@ class StorePageController extends Controller
 
 
 
+
+
     //cart functions
+    public function viewCart()
+    {
+        $customerId = $_SESSION['user_id'];
+        $cartItems = $this->cartModel->getCartItemsByUserId($customerId);
+        $total = 0;
+        $supplierIds = [];
+    
+        foreach ($cartItems as $item) {
+            $total += $item->quantity * $item->selling_price;
+            $supplierIds[$item->supplier_id] = true;
+        }
+    
+        $numSuppliers = count($supplierIds); 
+    
+        $this->view('supplier/homepage/cart', [
+            'cartItems' => $cartItems,
+            'total' => $total,
+            'numSuppliers' => $numSuppliers 
+        ]);
+    }
+
     public function addToCart()
     {
         if (!isset($_SESSION['user_id'])) {
-            die('Error: User not logged in.');
+           header("Location: " . URLROOT . "/LoginController/index");
+            return;
         }
 
         $customerId = $_SESSION['user_id'];
         $itemId = $_POST['item_id'];
-        $quantity = isset($_POST['quantity']) ? (int) $_POST['quantity'] : 1; // Default to 1 if not set
+        $quantity = isset($_POST['quantity']) ? (int) $_POST['quantity'] : 1; // set default quantity 1
 
         if ($quantity <= 0) {
             $this->showPopup("Invalid quantity.", URLROOT . "/StorePagesController");
             return;
         }
 
-        // Get supplier_id based on the item_id (assuming each item has a supplier associated with it)
+       
         $supplierId = $this->cartModel->getSupplierIdByItemId($itemId);
 
         if (!$supplierId) {
@@ -173,7 +212,7 @@ class StorePageController extends Controller
             return;
         }
 
-        // Add item to cart and update inventory
+        // Add item to cart and update inventory level
         if ($this->cartModel->addItemToCart($customerId, $itemId, $quantity, $supplierId)) {
             $this->cartModel->updateInventoryLevel($itemId, $availableQuantity - $quantity);
             $this->showPopup("Item(s) added to cart successfully!", URLROOT . "/StorePageController/viewCart");
@@ -185,19 +224,20 @@ class StorePageController extends Controller
     public function removeItem($cartItemId)
     {
         if (!isset($_SESSION['user_id'])) {
-            die('Error: User not logged in.');
+            header("Location: " . URLROOT . "/LoginController/index");
+            return;
         }
 
-        // Get item details before removing
+        // Get item details before removing it
         $cartItem = $this->cartModel->getCartItemById($cartItemId);
         if ($cartItem) {
             $itemId = $cartItem->item_id;
             $quantity = $cartItem->quantity;
 
-            // Remove item from cart and update inventory
+            // Remove item from cart and update inventory level
             if ($this->cartModel->removeItemFromCart($cartItemId)) {
                 $availableQuantity = $this->cartModel->getAvailableQuantity($itemId);
-                $newQuantity = $availableQuantity + $quantity; // Restore the removed quantity
+                $newQuantity = $availableQuantity + $quantity; // Restore the removed quantity to inventory
                 $this->cartModel->updateInventoryLevel($itemId, $newQuantity);
                 $this->showPopup("Item removed from cart successfully!", URLROOT . "/StorePageController/viewCart");
             } else {
@@ -209,7 +249,8 @@ class StorePageController extends Controller
     public function updateItemQuantity()
     {
         if (!isset($_SESSION['user_id'])) {
-            die('Error: User not logged in.');
+            header("Location: " . URLROOT . "/StorePageController/viewCart");
+            return;
         }
 
         $cartItemId = $_POST['cart_item_id'];
@@ -231,33 +272,11 @@ class StorePageController extends Controller
     }
 
 
-    public function viewCart()
-{
-    $customerId = $_SESSION['user_id'];
-    $cartItems = $this->cartModel->getCartItemsByUserId($customerId);
-    $total = 0;
-    $supplierIds = [];
-
-    foreach ($cartItems as $item) {
-        $total += $item->quantity * $item->selling_price;
-        $supplierIds[$item->supplier_id] = true;
-    }
-
-    $numSuppliers = count($supplierIds); // <-- Add this line
-
-    $this->view('supplier/homepage/cart', [
-        'cartItems' => $cartItems,
-        'total' => $total,
-        'numSuppliers' => $numSuppliers // <-- Pass it to view
-    ]);
-}
-
-
-
     public function checkout()
     {
         if (!isset($_SESSION['user_id'])) {
-            die("User not logged in.");
+            header("Location: " . URLROOT . "/StorePageController/viewCart");
+            return;
         }
     
         $userId = $_SESSION['user_id'];
@@ -316,7 +335,7 @@ class StorePageController extends Controller
         return;
     }
 
-    // Group items by supplier
+    // Group items by supplier 
     $supplierOrders = [];
 
     foreach ($cartItems as $item) {
@@ -330,7 +349,7 @@ class StorePageController extends Controller
         $supplierOrders[$supplierId][] = $item;
     }
 
-    // For each supplier, create a separate order
+    // create a separate order for each supplier
     $deliveryFee = 100;
     foreach ($supplierOrders as $supplierId => $items) {
         $totalAmount = 0;
@@ -341,7 +360,7 @@ class StorePageController extends Controller
 
         $grandTotal = $totalAmount + $deliveryFee;
 
-        // Create order per supplier
+        
         $saleId = $this->cartModel->createOrder($customerId, $grandTotal, $paymentMethod, $deliveryAddress, $supplierId);
 
         if ($saleId) {
@@ -354,28 +373,12 @@ class StorePageController extends Controller
         }
     }
 
-    // Clear cart only after all orders are successful
     $this->cartModel->clearCart($customerId);
-    $this->showPopup("Order placed successfully with multiple suppliers.", URLROOT . "/StorePageController/index");
+    $this->showPopup("Order placed successfully !!.", URLROOT . "/StorePageController/index");
 }
 
 
-    public function myOrders()
-    {
-        if (!isset($_SESSION['user_id'])) {
-            header("Location: " . URLROOT . "/StorePageController/index");
-        }
-
-        $userId = $_SESSION['user_id'];
-        $orders = $this->StorePagesModel->getMyorders($userId);
-
-        $data = [
-            'orders' => $orders
-        ];
-
-        $this->view('supplier/homepage/myOrders', $data);
-    }
-
+   
 
     public function search()
     {
@@ -400,7 +403,7 @@ class StorePageController extends Controller
 {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $item_id = $_POST['item_id'];
-        $user_id = $_SESSION['user_id']; // assuming you use sessions
+        $user_id = $_SESSION['user_id'];
         $rating = $_POST['rating'];
         $comment = trim($_POST['comment']);
 
@@ -410,10 +413,10 @@ class StorePageController extends Controller
 }
 
 
-
+//popup messeage function
     private function showPopup($message, $redirectUrl)
     {
-        // Pass message and redirect URL to the view
+      
         $data = ['message' => $message, 'redirectUrl' => $redirectUrl];
         $this->view('supplier/homepage/cartElements/popup', $data);
     }

@@ -111,7 +111,7 @@
                                 </span>
                             </div>
                         </div>
-                        <a href="<?php echo URLROOT; ?>/StorePageController/checkout?grand_total=<?php echo $data['total']; ?>" class="checkout-btn">
+                        <a href="<?php echo URLROOT; ?>/StorePageController/checkout?grand_total=<?php echo $data['total']; ?>" class="checkout-btn" id="checkoutBtn">
     <i class="fas fa-credit-card mr-2"></i> Proceed to Checkout
 </a>
 
@@ -178,6 +178,17 @@
         document.getElementById('delivery-fee').innerText = `Rs. ${deliveryFee}`;
         document.getElementById('grand-total').innerText = `Rs. ${grandTotal}`;
     }
+</script>
+
+<!-- province selection section make required one -->
+<script>
+    document.getElementById('checkoutBtn').addEventListener('click', function (e) {
+        const province = document.getElementById('province').value;
+        if (!province) {
+            e.preventDefault(); // Prevent link navigation
+            alert("Please select your province before proceeding to checkout.");
+        }
+    });
 </script>
 
 

@@ -298,19 +298,40 @@ class StorePagesModel {
     public function getSavedItem($user_id) {
         $this->db->query('
             SELECT 
-                saved_items.*, 
-                inventory.item_name, 
-                inventory.selling_price, 
-                inventory.image_path, 
-                users.first_name AS supplier_name 
-            FROM saved_items
-            JOIN inventory ON saved_items.item_id = inventory.item_id
-            JOIN users ON inventory.user_id = users.user_id
-            WHERE saved_items.user_id = :user_id
+                i.item_id,
+                i.item_name,
+                i.quantity AS available_quantity,
+                i.selling_price,
+                i.category,
+                i.image_path,
+                i.description,
+                u.first_name AS supplier_name,
+                u.user_id AS supplier_id,
+                (
+                    SELECT AVG(rating) 
+                    FROM item_reviews 
+                    WHERE item_id = i.item_id
+                ) AS average_rating
+            FROM 
+                saved_items s
+            JOIN 
+                inventory i ON s.item_id = i.item_id
+            JOIN 
+                users u ON i.user_id = u.user_id
+            WHERE 
+                s.user_id = :user_id
         ');
         $this->db->bind(':user_id', $user_id);
-        return $this->db->resultSet();
+        $results = $this->db->resultSet();
+    
+        
+        foreach ($results as &$item) {
+            $item->comments = $this->getReviewsByItemId($item->item_id);
+        }
+    
+        return $results;
     }
+    
 
     public function getMyorders($customer_id){
         $this->db->query("SELECT * FROM sales_orders WHERE customer_id = :customer_id ORDER BY created_at DESC");
@@ -321,14 +342,43 @@ class StorePagesModel {
     
 
     public function searchItems($searchQuery) {
-        $this->db->query("SELECT i.*, u.first_name AS supplier_name 
-                          FROM inventory i
-                          LEFT JOIN users u ON i.user_id = u.user_id
-                          WHERE i.item_name LIKE :searchQuery 
-                          OR i.category LIKE :searchQuery");
+        $query = "
+            SELECT 
+                i.item_id,
+                i.item_name,
+                i.quantity AS available_quantity,
+                i.selling_price,
+                i.category,
+                i.image_path,
+                i.description,
+                u.first_name AS supplier_name,
+                u.user_id AS supplier_id,
+                (
+                    SELECT AVG(rating) 
+                    FROM item_reviews 
+                    WHERE item_id = i.item_id
+                ) AS average_rating
+            FROM 
+                inventory i
+            JOIN 
+                users u ON i.user_id = u.user_id
+            WHERE 
+                i.item_name LIKE :searchQuery 
+                OR i.category LIKE :searchQuery
+        ";
+    
+        $this->db->query($query);
         $this->db->bind(':searchQuery', '%' . $searchQuery . '%');
-        return $this->db->resultSet();
+        $results = $this->db->resultSet();
+    
+        // Attach comments to each item
+        foreach ($results as &$item) {
+            $item->comments = $this->getReviewsByItemId($item->item_id);
+        }
+    
+        return $results;
     }
+    
 
 
     public function insertReview($item_id, $user_id, $rating, $comment)

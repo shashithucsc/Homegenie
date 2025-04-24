@@ -7,8 +7,8 @@
             --border-color: #e0e0e0;
             --success-color: #28a745;
             --danger-color: #dc3545;
-            --pending-color: #fd7e14;      /* Pending */
-            --accepted-color: #007bff;     /* Accepted */
+            --pending-color: #fd7e14;      
+            --accepted-color: #007bff;     /
         }
         
         body, html {
@@ -255,11 +255,11 @@
         }
         
         .status-pending {
-            background-color: var(--pending-color);
+            background-color: #264ca4
         }
         
         .status-accepted {
-            background-color: var(--accepted-color);
+            background-color: #28a745
         }
         
         @media (max-width: 992px) {

@@ -112,15 +112,15 @@
                                             onchange="checkQuantity(<?php echo $item->item_id; ?>)">
                                     </div>
 
-                                    <button type="submit" class="modern-btn add-btn">
-                                        🛒 Add
+                                    <button type="submit" class="modern-btn-add">
+                                        🛒&nbsp;Add
                                     </button>
                                 </form>
 
                                 <form action="<?php echo URLROOT; ?>/StorePageController/addToWishlist" method="POST"
                                     class="form-right same-row-form">
                                     <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
-                                    <button type="submit" class="modern-btn save-btn">
+                                    <button type="submit" class="modern-btn-save">
                                         💙 Save
                                     </button>
                                 </form>
@@ -226,6 +226,25 @@
                 }
             }
         </script>
+
+
+
+
+<!-- logout button drop down -->
+<script>
+function toggleDropdown() {
+    const menu = document.getElementById("dropdownMenu");
+    menu.style.display = (menu.style.display === "block") ? "none" : "block";
+}
+
+// Optional: close dropdown when clicking outside
+window.onclick = function(event) {
+    const dropdown = document.getElementById("dropdownMenu");
+    if (!event.target.closest('.user-dropdown')) {
+        dropdown.style.display = "none";
+    }
+};
+</script>
 
         <?php if (isset($_SESSION['wishlist_msg'])): ?>
             <script>

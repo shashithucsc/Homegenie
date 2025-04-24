@@ -26,12 +26,11 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
             <button onclick="document.location='../login/login.php'" class="login-btn">Login</button>
         </div>
     </nav>
-    <!-- <section> -->
+
     <div class="main-container">
-        <!-- <div class="logo">Home<span>Genie</span></div> -->
         <h1>Register As Customer</h1>
-        <form class="register-form" action="" method="POST"
-            enctype="multipart/form-data">
+        <form class="register-form" action="<?php echo URLROOT . '/LoginController/registerUser'; ?>" method="POST" enctype="multipart/form-data">
+
             <!-- Personal Information -->
             <fieldset>
                 <legend>Personal Information</legend>
@@ -48,8 +47,7 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                 <div class="flex-row">
                     <div class="input-group">
                         <label for="contact-number">Contact Number</label>
-                        <input type="tel" id="contact-number" name="contact_number" pattern="[0-9]{10}"
-                            placeholder="07XXXXXXXX" required>
+                        <input type="tel" id="contact-number" name="contact_number" pattern="[0-9]{10}" placeholder="07XXXXXXXX" required>
                     </div>
                     <div class="input-group">
                         <label for="email">Email Address</label>
@@ -91,8 +89,7 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                 <div class="flex-row">
                     <div class="input-group">
                         <label>
-                            <input type="checkbox" name="agree_terms" required> I agree to the system rules, terms, and
-                            conditions.
+                            <input type="checkbox" name="agree_terms" required> I agree to the system rules, terms, and conditions.
                         </label>
                     </div>
                 </div>
@@ -101,7 +98,7 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
             <button type="submit" class="register-btn">Register</button>
         </form>
     </div>
-    <!-- </section> -->
+
     <script>
         document.querySelector('.register-form').addEventListener('submit', function (event) {
             const contactNumber = document.getElementById('contact-number').value;
@@ -131,7 +128,6 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
             }
         });
     </script>
-    <script src="register.js"></script>
 </body>
 
 </html>

@@ -42,6 +42,7 @@
 }
 
 .reply-button {
+    font-size: small;
     background-color: #007bff;
     color: white;
     padding: 10px 20px;

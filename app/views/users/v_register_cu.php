@@ -7,7 +7,7 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="<?php echo URLROOT?>/public/css/register.css" rel="stylesheet">
+    <link href="<?php echo URLROOT ?>/public/css/register.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <title>Register as Customer</title>
     <style>
@@ -29,12 +29,14 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
 
     <div class="main-container">
         <h1>Register As Customer</h1>
-        <form class="register-form" action="<?php echo URLROOT . '/LoginController/registerUser'; ?>" method="POST" enctype="multipart/form-data">
+        <form class="register-form" action="<?php echo URLROOT . '/LoginController/registerUser'; ?>" method="POST"
+            enctype="multipart/form-data">
 
             <!-- Personal Information -->
             <fieldset>
                 <legend>Personal Information</legend>
                 <div class="flex-row">
+                    <input type="hidden" name="role" id="role" value="customer">
                     <div class="input-group">
                         <label for="first-name">First Name</label>
                         <input type="text" id="first-name" name="first_name" required>
@@ -47,7 +49,8 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                 <div class="flex-row">
                     <div class="input-group">
                         <label for="contact-number">Contact Number</label>
-                        <input type="tel" id="contact-number" name="contact_number" pattern="[0-9]{10}" placeholder="07XXXXXXXX" required>
+                        <input type="tel" id="contact-number" name="contact_number" pattern="[0-9]{10}"
+                            placeholder="07XXXXXXXX" required>
                     </div>
                     <div class="input-group">
                         <label for="email">Email Address</label>
@@ -56,10 +59,61 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                 </div>
                 <div class="flex-row">
                     <div class="input-group">
-                        <label for="address">Home Address</label>
-                        <input type="text" id="address" name="address" required>
+                        <label for="province">Province</label>
+                        <select id="province" name="province" required>
+                            <option value="">-- Select Province --</option>
+                            <option value="Western">Western</option>
+                            <option value="Central">Central</option>
+                            <option value="Southern">Southern</option>
+                            <option value="Uva">Uva</option>
+                            <option value="Sabaragamuwa">Sabaragamuwa</option>
+                            <option value="North Western">North Western</option>
+                            <option value="North Central">North Central</option>
+                            <option value="Northern">Northern</option>
+                            <option value="Eastern">Eastern</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="district">District</label>
+                        <select id="district" name="district" required>
+                            <option value="">-- Select District --</option>
+                            <option value="Ampara">Ampara</option>
+                            <option value="Anuradhapura">Anuradhapura</option>
+                            <option value="Badulla">Badulla</option>
+                            <option value="Batticaloa">Batticaloa</option>
+                            <option value="Colombo">Colombo</option>
+                            <option value="Galle">Galle</option>
+                            <option value="Gampaha">Gampaha</option>
+                            <option value="Hambantota">Hambantota</option>
+                            <option value="Jaffna">Jaffna</option>
+                            <option value="Kalutara">Kalutara</option>
+                            <option value="Kandy">Kandy</option>
+                            <option value="Kegalle">Kegalle</option>
+                            <option value="Kilinochchi">Kilinochchi</option>
+                            <option value="Kurunegala">Kurunegala</option>
+                            <option value="Mannar">Mannar</option>
+                            <option value="Matale">Matale</option>
+                            <option value="Matara">Matara</option>
+                            <option value="Monaragala">Monaragala</option>
+                            <option value="Mullaitivu">Mullaitivu</option>
+                            <option value="Nuwara Eliya">Nuwara Eliya</option>
+                            <option value="Polonnaruwa">Polonnaruwa</option>
+                            <option value="Puttalam">Puttalam</option>
+                            <option value="Ratnapura">Ratnapura</option>
+                            <option value="Trincomalee">Trincomalee</option>
+                            <option value="Vavuniya">Vavuniya</option>
+                            <!-- Add more districts -->
+                        </select>
                     </div>
                 </div>
+
+                <div class="flex-row">
+                    <div class="input-group">
+                        <label for="street">Street</label>
+                        <input type="text" id="street" name="street" required>
+                    </div>
+                </div>
+
             </fieldset>
 
             <!-- Login Credentials -->
@@ -89,7 +143,8 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                 <div class="flex-row">
                     <div class="input-group">
                         <label>
-                            <input type="checkbox" name="agree_terms" required> I agree to the system rules, terms, and conditions.
+                            <input type="checkbox" name="agree_terms" required> I agree to the system rules, terms, and
+                            conditions.
                         </label>
                     </div>
                 </div>

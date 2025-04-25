@@ -13,7 +13,7 @@ class CustomerModel {
     }
 
     public function getCustomer($id) {
-        $sql = "SELECT u.user_id, u.first_name, u.last_name, u.contact_number, u.email, u.address, u.profile_image
+        $sql = "SELECT u.user_id, u.first_name, u.last_name, u.contact_number, u.email, u.profile_image
             FROM users u
             LEFT JOIN customers c ON u.user_id = c.customer_id
             WHERE u.user_id = :user_id";
@@ -65,20 +65,33 @@ class CustomerModel {
         // Execute
         return $this->db->execute();
     }
-    public function getCustomerAppointments($userId) {
+
+    public function getPendingAppointments($userId) {
         $sql = "SELECT 
-                a.appointment_id, 
-                a.appointment_date, 
-                a.appointment_time, 
-                a.description, 
-                a.status,
-                a.location,
-                a.service_provider_id,
+                a.*,
                 u.first_name AS sp_first_name, 
                 u.last_name AS sp_last_name
                 FROM appointments a
-                INNER JOIN users u ON a.service_provider_id = u.user_id
-                WHERE a.customer_id = :user_id
+                JOIN users u ON a.service_provider_id = u.user_id
+                WHERE a.customer_id = :user_id AND a.status = 'pending'
+                ORDER BY a.created_at DESC";
+        
+        $this->db->query($sql);
+        $this->db->bind(':user_id', $userId);
+        return $this->db->resultSet();
+    }
+    public function getApprovedAppointments($userId) {
+        $sql = "SELECT 
+                a.*,
+                u.first_name AS sp_first_name, 
+                u.last_name AS sp_last_name,
+                q.quotation_details,
+                q.work_hours,
+                q.cost
+                FROM appointments a
+                JOIN users u ON a.service_provider_id = u.user_id
+                LEFT JOIN quotations q ON a.appointment_id = q.appointment_id
+                WHERE a.customer_id = :user_id AND a.status = 'approved'
                 ORDER BY a.created_at DESC";
         
         $this->db->query($sql);
@@ -121,6 +134,29 @@ public function getAppointmentById($id) {
     $this->db->query("SELECT * FROM appointments WHERE appointment_id = :id");
     $this->db->bind(':id', $id);
     return $this->db->single();
+}
+
+public function getQuotationByAppointmentId($appointment_id) {
+    $this->db->query("SELECT * FROM quotations WHERE appointment_id = :appointment_id");
+    $this->db->bind(':appointment_id', $appointment_id);
+    return $this->db->single();
+}
+
+public function updateAppointmentStatus($appointment_id, $status) {
+    $this->db->query("UPDATE appointments SET status = :status, updated_at = NOW() WHERE appointment_id = :appointment_id");
+    $this->db->bind(':status', $status);
+    $this->db->bind(':appointment_id', $appointment_id);
+    return $this->db->execute();
+}
+
+public function createTransaction($appointment_id, $amount) {
+    $this->db->query("INSERT INTO transactions (appointment_id, amount) 
+                     VALUES (:appointment_id, :amount)");
+    
+    $this->db->bind(':appointment_id', $appointment_id);
+    $this->db->bind(':amount', $amount);
+    
+    return $this->db->execute();
 }
 }
 ?>

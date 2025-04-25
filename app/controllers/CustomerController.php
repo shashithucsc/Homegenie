@@ -26,6 +26,23 @@ class CustomerController extends Controller {
         $this->view('Customer/about');
     }
 
+    public function appointment(){
+        $loggedUserId = $_SESSION['user_id'] ?? null;
+
+        // Get customer appointments
+        $p_appointments = $this->CustomerModel->getPendingAppointments($loggedUserId);
+        $a_appointments = $this->CustomerModel->getApprovedAppointments($loggedUserId);
+        if (!$p_appointments || !$a_appointments) {
+            die('No appointments found.');
+        }
+        $data = [
+            'p_appointments' => $p_appointments,
+            'a_appointments' => $a_appointments
+        ];
+
+        $this->view('Customer/cu_appointment', $data);
+    }
+
     public function contact(){
         $this->view('Customer/contact');
     }
@@ -38,14 +55,11 @@ class CustomerController extends Controller {
             header('Location: ' . URLROOT . '/LoginController');
             exit;
         }
-        
+        $appointments = $this->CustomerModel->getPendingAppointments($loggedUserId);
         $customer = $this->CustomerModel->getCustomer($loggedUserId);
         if (!$customer) {
             die('Customer not found.');
         }
-        
-        // Get customer appointments
-        $appointments = $this->CustomerModel->getCustomerAppointments($loggedUserId);
         
         // Prepare data for the view
         $data = [
@@ -132,7 +146,7 @@ class CustomerController extends Controller {
             // Verify appointment exists and belongs to current user
             if(!$appointment || $appointment->customer_id != $_SESSION['user_id']) {
                 flash('appointment_error', 'Unauthorized access or appointment not found', 'alert alert-danger');
-                header('Location: ' . URLROOT . '/CustomerController/profile');
+                header('Location: ' . URLROOT . '/CustomerController/appointment');
                 exit;
             }
             
@@ -141,16 +155,16 @@ class CustomerController extends Controller {
             } else {
                 flash('appointment_error', 'Failed to update appointment', 'alert alert-danger');
             }
-            header('Location: ' . URLROOT . '/CustomerController/profile');
+            header('Location: ' . URLROOT . '/CustomerController/appointment');
         } else {
-            header('Location: ' . URLROOT . '/CustomerController/profile');
+            header('Location: ' . URLROOT . '/CustomerController/appointment');
         }
     }
 
     public function deleteAppointment($id = null) {
         // Check if ID is provided
         if($id == null) {
-            header('Location: ' . URLROOT . '/CustomerController/profile');
+            header('Location: ' . URLROOT . '/CustomerController/appointment');
             exit;
         }
         
@@ -160,7 +174,7 @@ class CustomerController extends Controller {
         // Verify appointment exists and belongs to current user
         if(!$appointment || $appointment->customer_id != $_SESSION['user_id']) {
             flash('appointment_error', 'Unauthorized access or appointment not found', 'alert alert-danger');
-            header('Location: ' . URLROOT . '/CustomerController/profile');
+            header('Location: ' . URLROOT . '/CustomerController/appointment');
             exit;
         }
         
@@ -169,7 +183,63 @@ class CustomerController extends Controller {
         } else {
             flash('appointment_error', 'Failed to delete appointment', 'alert alert-danger');
         }
-        header('Location: ' . URLROOT . '/CustomerController/profile');
+        header('Location: ' . URLROOT . '/CustomerController/appointment');
+    }
+
+    public function payment($appointment_id) {
+        // Get appointment details
+        $appointment = $this->CustomerModel->getAppointmentById($appointment_id);
+        
+        if(!$appointment || $appointment->customer_id != $_SESSION['user_id']) {
+            flash('payment_error', 'Unauthorized access or appointment not found', 'alert alert-danger');
+            header('Location: ' . URLROOT . '/CustomerController/appointment');
+            exit;
+        }
+
+        // Get quotation details
+        $quotation = $this->CustomerModel->getQuotationByAppointmentId($appointment_id);
+        
+        if(!$quotation) {
+            flash('payment_error', 'No quotation found for this appointment', 'alert alert-danger');
+            header('Location: ' . URLROOT . '/CustomerController/appointment');
+            exit;
+        }
+
+        $data = [
+            'appointment' => $appointment,
+            'quotation' => $quotation
+        ];
+
+        $this->view('Customer/payment', $data);
+    }
+
+    public function processPayment() {
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Sanitize POST data
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            
+            $data = [
+                'appointment_id' => $_POST['appointment_id'],
+                'amount' => $_POST['amount']
+            ];
+
+            // Create transaction record
+            if($this->CustomerModel->createTransaction($data['appointment_id'], $data['amount'])) {
+                // Update appointment status to completed
+                if($this->CustomerModel->updateAppointmentStatus($data['appointment_id'], 'completed')) {
+                    flash('payment_success', 'Payment processed successfully!');
+                    header('Location: ' . URLROOT . '/CustomerController/appointment');
+                    exit;
+                }
+            }
+            
+            flash('payment_error', 'Failed to process payment', 'alert alert-danger');
+            header('Location: ' . URLROOT . '/CustomerController/payment/' . $data['appointment_id']);
+            exit;
+        } else {
+            header('Location: ' . URLROOT . '/CustomerController/appointment');
+            exit;
+        }
     }
 }
 

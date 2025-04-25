@@ -3,6 +3,7 @@
     <div class="nav-links">
         <a href="<?php echo URLROOT; ?>/CustomerController">Home</a>
         <a href="<?php echo URLROOT; ?>/CustomerController/services">Services</a>
+        <a href="<?php echo URLROOT; ?>/CustomerController/appointment">Appointments</a>
         <a href="<?php echo URLROOT; ?>/StorePageController">Store</a>
         <a href="<?php echo URLROOT; ?>/CustomerController/about">About</a>
         <div class="profile-container">

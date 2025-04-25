@@ -498,7 +498,7 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                          data-description="<?= strtolower($appointment->description) ?>"
                          data-location="<?= strtolower($appointment->location) ?>">
                         <div class="card-header">
-                            <span class="service-category"><?= $appointment->service_category ?></span>
+                            <!-- <span class="service-category"><?= $appointment->service_category ?></span> -->
                             <span class="appointment-id">ID: <?= $appointment->appointment_id ?></span>
                         </div>
                         <div class="card-content">
@@ -552,13 +552,13 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                                     </div>
                                 </div>
                                 
-                                <div class="info-group">
+                                <!-- <div class="info-group">
                                     <i class="fas fa-tasks"></i>
                                     <div>
                                         <label>Service Category</label>
                                         <p><?php echo htmlspecialchars($appointment->service_category); ?></p>
                                     </div>
-                                </div>
+                                </div> -->
                                 
                                 <div class="info-group">
                                     <i class="fas fa-comment"></i>

@@ -93,7 +93,7 @@
         <section id="services" class="services-section">
             <div class="services-grid" id="servicesGrid">
                 <?php foreach ($data['serviceProviders'] as $provider): ?>
-                    <div class="service-card" id="<?php echo htmlspecialchars($provider->id ?? ''); ?>">
+                    <div class="service-card" id="<?php echo htmlspecialchars($provider->user_id ?? ''); ?>">
                         <img src="<?php echo URLROOT; ?>/public/register/uploads/<?php echo htmlspecialchars($provider->profile_image ?? 'default.jpg'); ?>"
                             alt="<?php echo htmlspecialchars(($provider->first_name ?? '') . ' ' . ($provider->last_name ?? '')); ?>"
                             class="service-image">
@@ -105,7 +105,7 @@
                                 <span class="rating-number">4.8</span>
                             </div>
                             <p><?php echo htmlspecialchars($provider->description ?? ''); ?></p>
-                            <a href="<?php echo URLROOT; ?>/SupplierController/profile/<?php echo htmlspecialchars($provider->id ?? ''); ?>">
+                            <a href="<?php echo URLROOT; ?>/HomeController/SPProfile/<?php echo htmlspecialchars($provider->user_id ?? ''); ?>">
                                 <div class="contact-btn">
                                     More Info <i class='bx bx-right-arrow-alt'></i>
                                 </div>

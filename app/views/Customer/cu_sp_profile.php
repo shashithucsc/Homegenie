@@ -413,6 +413,8 @@ $spImagePath = URLROOT . '/public/register/uploads/' . $provider->profile_image;
             }
         }
     </script>
+    <script src="<?php echo URLROOT; ?>/public/js/script-index.js"></script>
+
 </body>
 
 </html>

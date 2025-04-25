@@ -24,11 +24,11 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
       style="display: flex;margin-top: 30px; justify-content: center; gap: 20px; margin-bottom: 20px;">
       <button class="btn" onclick="showAppointments()"
         style="color: #1e40af; background-color: white; padding: 12px 30px; font-size: 16px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; border: 2px solid #1e40af;">
-        Approved Appointments
+        Quote Appointments
       </button>
       <button class="btn" onclick="showQuotations()"
         style="color: white; background: linear-gradient(135deg, #2563eb, #1e40af); padding: 12px 30px; border: none; font-size: 16px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">
-        View All Quotations
+        Created Quotations
       </button>
     </div>
 
@@ -48,94 +48,94 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
       .button-group button {
         transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
+
+      .quotation-list {
+        margin-top: 20px;
+        /* Added margin for better spacing */
+      }
     </style>
 
     <!-- Display Quotations -->
     <div class="quotation-list">
       <div class="quotations-container" style="justify-content: center;">
-        <?php if (!empty($data)): ?>
-          <?php foreach ($data as $item): ?>
+        <?php
+        $approvedShown = false; // Initialize the variable
+        if (!empty($data)): ?>
+
+          <?php
+          // Sort: Approved > Rejected > Pending
+          usort($data, function ($a, $b) {
+            $priority = ['Approved' => 1, 'Rejected' => 2, 'Pending' => 3];
+            return $priority[$a->status] <=> $priority[$b->status];
+          });
+          ?>
+
+
+          <?php
+          $currentGroup = null;
+          foreach ($data as $item):
+            if ($item->status !== $currentGroup) {
+              $currentGroup = $item->status;
+              // echo '<h2 style="margin-top: 20px;">' . htmlspecialchars($currentGroup) . ' Quotations</h2><br>';
+            }
+
+            // Set status highlight color
+            $statusColor = match ($item->status) {
+              'Approved' => 'green',
+              'Rejected' => 'red',
+              'Pending' => 'orange',
+              default => 'gray'
+            };
+          ?>
             <div class="card" id="card-<?php echo $item->quotation_id; ?>">
+
               <button class="btn" onclick="printQuotation(<?php echo $item->quotation_id; ?>)"
-                style="color: white; background-color:rgb(103, 134, 235); float: right; align-items: end;">
+                style="color: white; background-color:rgb(103, 134, 235); float: right;">
                 <i class="fas fa-print fa-1x"></i>
               </button>
 
               <h3>Quotation ID: <?php echo htmlspecialchars($item->quotation_id); ?></h3>
               <p>Appointment ID: <?php echo htmlspecialchars($item->appointment_id); ?></p>
-              <!-- <p>Service Provider ID: <?php echo htmlspecialchars($item->service_provider_id); ?></p> -->
 
-              <!-- Editable Fields -->
               <p>Details:
                 <span id="details-text-<?php echo $item->quotation_id; ?>">
                   <?php echo htmlspecialchars($item->quotation_details); ?>
                 </span>
-                <textarea id="details-input-<?php echo $item->quotation_id; ?>"
-                  style="
-      display:none;
-      width: 100%;
-      padding: 12px 16px;
-      font-size: 15px;
-      border: 1px solid #d0d0d0;
-      border-radius: 10px;
-      background-color: #f9f9f9;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-      resize: vertical;
-      transition: all 0.3s ease;
-      outline: none;
-    "
-                  onfocus="this.style.borderColor='#4A90E2'; this.style.boxShadow='0 0 0 3px rgba(74,144,226,0.3)'"
-                  onblur="this.style.borderColor='#d0d0d0'; this.style.boxShadow='0 2px 6px rgba(0, 0, 0, 0.05)'"><?php echo htmlspecialchars($item->quotation_details); ?></textarea>
+                <textarea id="details-input-<?php echo $item->quotation_id; ?>" style="display:none; /* your textarea styles */">
+      <?php echo htmlspecialchars($item->quotation_details); ?>
+    </textarea>
               </p>
 
               <p>Price:
                 <span id="price-text-<?php echo $item->quotation_id; ?>">
                   <?php echo htmlspecialchars($item->price); ?>
                 </span>
-                <input type="number" id="price-input-<?php echo $item->quotation_id; ?>"
-                  value="<?php echo htmlspecialchars($item->price); ?>"
-                  style="
-      display:none;
-      width: 100%;
-      padding: 12px 16px;
-      font-size: 15px;
-      border: 1px solid #d0d0d0;
-      border-radius: 10px;
-      background-color: #f9f9f9;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-      transition: all 0.3s ease;
-      outline: none;
-    "
-                  onfocus="this.style.borderColor='#4A90E2'; this.style.boxShadow='0 0 0 3px rgba(74,144,226,0.3)'"
-                  onblur="this.style.borderColor='#d0d0d0'; this.style.boxShadow='0 2px 6px rgba(0, 0, 0, 0.05)'">
+                <input type="number" id="price-input-<?php echo $item->quotation_id; ?>" value="<?php echo htmlspecialchars($item->price); ?>"
+                  style="display:none; /* your input styles */">
               </p>
 
-
-
-              <p>Date Created: <span
-                  id="created-at-text-<?php echo $item->quotation_id; ?>"><?php echo htmlspecialchars($item->created_at); ?></span>
-              </p>
-              <p>Last Update: <span
-                  id="updated-at-text-<?php echo $item->quotation_id; ?>"><?php echo htmlspecialchars($item->updated_at); ?></span>
+              <p>Status:
+                <span id="status-text-<?php echo $item->quotation_id; ?>" style="color: <?php echo $statusColor; ?>; font-weight: bold;">
+                  <?php echo htmlspecialchars($item->status); ?>
+                </span>
               </p>
 
-              <!-- Update Button -->
-              <button class="btn update-btn" style="color: white;"
-                onclick="editQuotation(<?php echo $item->quotation_id; ?>)"><i class="fas fa-edit"></i> Update</button>
+              <p>Date Created: <span id="created-at-text-<?php echo $item->quotation_id; ?>"><?php echo htmlspecialchars($item->created_at); ?></span></p>
+              <p>Last Update: <span id="updated-at-text-<?php echo $item->quotation_id; ?>"><?php echo htmlspecialchars($item->updated_at); ?></span></p>
 
-              <!-- Save & Cancel Buttons (Initially Hidden) -->
-              <button class="btn save-btn" onclick="saveQuotation(<?php echo $item->quotation_id; ?>)"
-                style="color: white; display:none;">Save</button>
-              <button class="btn cancel-btn" onclick="cancelEdit(<?php echo $item->quotation_id; ?>)"
-                style="color: white; display:none;">Cancel</button>
+              <button class="btn update-btn" style="color: white;" onclick="editQuotation(<?php echo $item->quotation_id; ?>)">
+                <i class="fas fa-edit"></i> Update
+              </button>
 
-              <!-- Delete Button -->
-              <button class="btn" onclick="deleteQuotation(<?php echo $item->quotation_id; ?>)"
-                style="color: white; background-color: red;">
+              <button class="btn save-btn" onclick="saveQuotation(<?php echo $item->quotation_id; ?>)" style="color: white; display:none;">Save</button>
+              <button class="btn cancel-btn" onclick="cancelEdit(<?php echo $item->quotation_id; ?>)" style="color: white; display:none;">Cancel</button>
+
+              <button class="btn" onclick="deleteQuotation(<?php echo $item->quotation_id; ?>)" style="color: white; background-color:rgb(244, 48, 48);">
                 <i class="fas fa-trash-alt"></i> Delete
               </button>
             </div>
           <?php endforeach; ?>
+
         <?php else: ?>
           <p>No quotations available.</p>
         <?php endif; ?>
@@ -159,33 +159,33 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
     }
 
     function deleteQuotation(id) {
-  // Show the confirmation modal
-  document.getElementById('confirmModal').style.display = 'flex';
+      // Show the confirmation modal
+      document.getElementById('confirmModal').style.display = 'flex';
 
-  // Add event listener to confirm button
-  document.getElementById('confirmDeleteBtn').onclick = function() {
-    fetch('<?php echo URLROOT; ?>/ServiceProviderController/deleteQuotation/' + id, {
-        method: 'POST'
-      })
-      .then(response => response.text())
-      .then(data => {
-        window.location.href = '<?php echo URLROOT; ?>/ServiceProviderController/SubmittedQuotations?message=Quotation deleted successfully';
-      })
-      .catch(error => {
-        console.error("Error deleting quotation:", error);
-        window.location.href = '<?php echo URLROOT; ?>/ServiceProviderController/SubmittedQuotations?error=Failed to delete quotation';
-      });
+      // Add event listener to confirm button
+      document.getElementById('confirmDeleteBtn').onclick = function() {
+        fetch('<?php echo URLROOT; ?>/ServiceProviderController/deleteQuotation/' + id, {
+            method: 'POST'
+          })
+          .then(response => response.text())
+          .then(data => {
+            window.location.href = '<?php echo URLROOT; ?>/ServiceProviderController/SubmittedQuotations?message=Quotation deleted successfully';
+          })
+          .catch(error => {
+            console.error("Error deleting quotation:", error);
+            window.location.href = '<?php echo URLROOT; ?>/ServiceProviderController/SubmittedQuotations?error=Failed to delete quotation';
+          });
 
-    // Close the modal after deletion
-    document.getElementById('confirmModal').style.display = 'none';
-  };
+        // Close the modal after deletion
+        document.getElementById('confirmModal').style.display = 'none';
+      };
 
-  // Add event listener to cancel button
-  document.getElementById('cancelDeleteBtn').onclick = function() {
-    // Close the modal without deleting
-    document.getElementById('confirmModal').style.display = 'none';
-  };
-}
+      // Add event listener to cancel button
+      document.getElementById('cancelDeleteBtn').onclick = function() {
+        // Close the modal without deleting
+        document.getElementById('confirmModal').style.display = 'none';
+      };
+    }
 
 
     function editQuotation(id) {
@@ -296,16 +296,16 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
   </script>
 
   <!-- Confirmation Popup Modal -->
-<div id="confirmModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000; justify-content: center; align-items: center;">
-  <div style="background-color: white; padding: 20px; border-radius: 10px; max-width: 400px; margin: auto; text-align: center;">
-    <h3 style="color: #1e40af; font-size: 24px;">Are you sure?</h3>
-    <p style="color: #555; font-size: 16px;">Do you want to delete this quotation?</p>
-    <div style="margin-top: 20px;">
-      <button id="confirmDeleteBtn" style="background-color: red; color: white; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer; margin-right: 10px;">Yes, Delete</button>
-      <button id="cancelDeleteBtn" style="background-color: gray; color: white; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer;">Cancel</button>
+  <div id="confirmModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background-color: white; padding: 20px; border-radius: 10px; max-width: 400px; margin: auto; text-align: center;">
+      <h3 style="color: #1e40af; font-size: 24px;">Are you sure?</h3>
+      <p style="color: #555; font-size: 16px;">Do you want to delete this quotation?</p>
+      <div style="margin-top: 20px;">
+        <button id="confirmDeleteBtn" style="background-color: red; color: white; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer; margin-right: 10px;">Yes, Delete</button>
+        <button id="cancelDeleteBtn" style="background-color: gray; color: white; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer;">Cancel</button>
+      </div>
     </div>
   </div>
-</div>
 
 </body>
 

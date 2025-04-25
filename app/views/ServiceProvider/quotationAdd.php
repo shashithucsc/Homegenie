@@ -34,19 +34,16 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
     </div>
 
     <script>
-      // JavaScript to get the appointment_id from the URL and display it
-      function getUrlParameter(name) {
-        var url = window.location.href;
-        var regex = new RegExp('[?&]' + name + '=([^&]*)', 'i');
-        var result = regex.exec(url);
-        return result ? result[1] : null;
-      }
-
       window.onload = function () {
-        var appointmentId = getUrlParameter('appointment_id');
+        // Debug: Log the session value
+        console.log("Session appointment ID:", <?php echo isset($_SESSION['pending_quotation_appointment_id']) ? json_encode($_SESSION['pending_quotation_appointment_id']) : 'null'; ?>);
+        
+        var appointmentId = <?php echo isset($_SESSION['pending_quotation_appointment_id']) ? json_encode($_SESSION['pending_quotation_appointment_id']) : 'null'; ?>;
         if (appointmentId) {
           document.getElementById('appointment_id').value = appointmentId; // Set hidden input
           document.getElementById('display-appointment-id').textContent = appointmentId; // Display appointment id
+        } else {
+          console.error("No appointment ID found in session");
         }
       };
     </script>

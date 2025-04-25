@@ -3,16 +3,14 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 ?>
-<div class="nav-container">
+<div class="nav-container" id="main-content">
     <nav class="navbar">
         <div class="logo">Home<span>Genie</span></div>
         <div class="nav-links">
             <a href="<?php echo URLROOT; ?>/ServiceProviderController/index"
-                class="nav-item <?= $current_page == 'appointments.php' ? 'active' : '' ?>"
-                id="appointments-link">Appointments</a>
+                class="nav-item <?= $current_page == 'appointments.php' ? 'active' : '' ?>" id="appointments-link">Appointments</a>
             <a href="<?php echo URLROOT; ?>/ServiceProviderController/quotation"
-                class="nav-item <?= $current_page == 'quotation.php' ? 'active' : '' ?>"
-                id="quotation-link">Quotation</a>
+                class="nav-item <?= $current_page == 'quotation.php' ? 'active' : '' ?>" id="quotation-link">Quotation</a>
             <a href="../../supplier/HomeController.php"
                 class="nav-item <?= $current_page == 'store.php' ? 'active' : '' ?>" id="store-link">Store</a>
             <a href="<?php echo URLROOT; ?>/ServiceProviderController/support"
@@ -24,13 +22,24 @@ if (session_status() == PHP_SESSION_NONE) {
             <img src="<?php echo isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : URLROOT . '/public/img/SVPpic/default_user.png'; ?>"
                 alt="User Profile" class="profile-pic">
             <span class="user-name"><?php echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest'; ?></span>
-            <button onclick="location.href='<?php echo URLROOT; ?>/users/login'" class="logout-btn"
-                style="color: white;">Logout</button>
+            <button onclick="showLogoutModal()" class="logout-btn">Logout</button>
         </div>
     </nav>
 </div>
 
+<!-- Logout Confirmation Modal -->
+<div id="logoutModal" class="modal-overlay">
+    <div class="modal-content">
+        <p>Are you sure you want to logout?</p>
+        <div class="modal-buttons">
+            <button onclick="confirmLogout()">Yes</button>
+            <button onclick="hideLogoutModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
 <style>
+    /* === COLORS AND BASE === */
     :root {
         --body-color: #ffffff;
         --main-color: #1e40af;
@@ -41,9 +50,7 @@ if (session_status() == PHP_SESSION_NONE) {
         --text-color: #ffffff;
         --black: #000;
         --hover-color: rgba(38, 99, 235, 0.1);
-        /* Light hover effect */
         --shadow-color: rgba(0, 0, 0, 0.1);
-        /* Shadow for navbar */
     }
 
     body {
@@ -65,15 +72,12 @@ if (session_status() == PHP_SESSION_NONE) {
         align-items: center;
         justify-content: space-between;
         padding: 15px 20px;
-        /* Increased padding for a more spacious feel */
     }
 
     .logo {
         font-size: 28px;
-        /* Slightly smaller logo size */
         font-weight: bold;
         color: var(--main-color);
-        transition: color 0.3s;
     }
 
     .logo span {
@@ -84,66 +88,47 @@ if (session_status() == PHP_SESSION_NONE) {
     .nav-links {
         display: flex;
         gap: 25px;
-        /* Increased gap for better spacing */
     }
 
     .nav-item {
         color: var(--main-color);
         text-decoration: none;
         font-size: 18px;
-        /* Slightly smaller font size */
         position: relative;
         padding: 10px 15px;
-        /* Increased padding */
         transition: background-color 0.3s, color 0.3s;
-        /* Smooth transition for hover effects */
         border-radius: 5px;
-        /* Rounded corners */
     }
 
     .nav-item.active {
         font-weight: 600;
         color: var(--light-green);
-        /* Change active link color */
     }
 
     .nav-item:hover {
         background-color: var(--hover-color);
-        /* Light background on hover */
         color: var(--light-green);
-        /* Change text color on hover */
         border-radius: 5px;
-        /* Rounded corners on hover */
     }
 
     .user-info {
         font-size: 18px;
-        /* Slightly smaller font size */
         font-weight: bold;
         display: flex;
         align-items: center;
         gap: 10px;
     }
 
-    .span {
-        padding-right: 10px;
-        color: var(--main-color);
-    }
-
     .profile-pic {
         width: 40px;
-        /* Slightly larger profile image */
         height: 40px;
         border-radius: 50%;
         object-fit: cover;
         border: 2px solid var(--main-color);
-        transition: border-color 0.3 s;
-        /* Smooth transition for border color */
     }
 
     .profile-pic:hover {
         border-color: var(--light-green);
-        /* Change border color on hover */
     }
 
     .logout-btn {
@@ -152,28 +137,78 @@ if (session_status() == PHP_SESSION_NONE) {
         border: none;
         padding: 8px 12px;
         border-radius: 20px;
-        color: var(--text-color);
+        color: white;
         cursor: pointer;
         transition: background-color 0.3s, transform 0.3s;
-        /* Smooth transition for hover effects */
     }
 
     .logout-btn:hover {
         background-color: var(--light-green);
-        /* Change background color on hover */
         transform: scale(1.05);
-        /* Slightly enlarge button on hover */
     }
 
-    /* Style the active link */
-    .nav-link.active {
-        text-decoration: underline;
-        font-weight: bold;
-        /* Optional, you can customize it further */
+    /* === MODAL === */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 100vw;
+        background-color: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(5px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+    }
+
+    .modal-overlay.active {
+        display: flex;
+    }
+
+    .modal-content {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        min-width: 300px;
+    }
+
+    .modal-content p {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+
+    .modal-buttons button {
+        background-color: var(--main-color);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        margin: 0 10px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .modal-buttons button:hover {
+        background-color: var(--light-green);
     }
 </style>
 
 <script>
+    function showLogoutModal() {
+        document.getElementById('logoutModal').classList.add('active');
+    }
+
+    function hideLogoutModal() {
+        document.getElementById('logoutModal').classList.remove('active');
+    }
+
+    function confirmLogout() {
+        window.location.href = "<?php echo URLROOT; ?>/Users/logout";
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
         const currentPath = window.location.pathname;
         const navItems = document.querySelectorAll('.nav-item');

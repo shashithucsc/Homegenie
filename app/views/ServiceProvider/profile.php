@@ -9,178 +9,544 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - Service Provider</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/SVP/SVP_Profile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --background: #f9fafb;
+            --card-background: #ffffff;
+            --text: #111827;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-hover: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Profile Header */
+        .profile-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .profile-header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .profile-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Profile Sections */
+        .profile-sections {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background: var(--card-background);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            text-align: center;
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            overflow: hidden;
+            border: 4px solid var(--primary);
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .rating {
+            color: #ffc107;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        /* Details Card */
+        .details-card {
+            background: var(--card-background);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+        }
+
+        .section-title {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .detail-item {
+            margin-bottom: 15px;
+        }
+
+        .detail-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        /* ID Verification Section */
+        .id-verification {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
+        }
+
+        .id-images {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .id-image {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .id-image img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        /* Work Photos Section */
+        .work-photos {
+            margin-top: 30px;
+        }
+
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .photo-item {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .photo-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        /* Edit Button */
+        .edit-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary);
+            color: var(--card-background);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-hover);
+            transition: all 0.3s ease;
+        }
+
+        .edit-button:hover {
+            background: var(--primary-hover);
+            transform: scale(1.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .profile-sections {
+                grid-template-columns: 1fr;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .id-images {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Add these styles to your existing CSS */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .edit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .edit-mode {
+            display: block !important;
+        }
+
+        .view-mode {
+            display: block;
+        }
+
+        .edit-mode + .view-mode {
+            display: none;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .save-btn, .cancel-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .save-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .cancel-btn {
+            background: var(--text-secondary);
+            color: white;
+        }
+
+        .photo-upload {
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .upload-btn {
+            margin-top: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .delete-photo {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .photo-item:hover .delete-photo {
+            opacity: 1;
+        }
+    </style>
 </head>
 
 <body>
-    <?php $row = isset($data['row']) ? $data['row'] : null; ?>
-
     <div class="container">
-        <!-- Profile Header -->
         <div class="profile-header">
-            <h1><?php echo htmlspecialchars($row->first_name . ' ' . $row->last_name); ?></h1>
+            <h1>Service Provider Profile</h1>
+            <p>Manage your professional information and settings</p>
         </div>
 
-        <!-- Profile Info -->
-      <!-- Profile Info -->
-<div class="profile-info">
-    <div class="profile-image">
-        <img src="<?php echo URLROOT . '/public/img/SVPpic/default_user.png'; ?>" alt="Profile Image">
-    </div>
+        <div class="profile-sections">
+            <!-- Profile Card -->
+            <div class="profile-card">
+            <div class="profile-image">
+                    <img src="<?php echo URLROOT . '/public/img/SVPpic/' . $data['user']->profile_image; ?>" alt="Profile Image">
+            </div>
+            <div class="rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <h2><?php echo htmlspecialchars($data['user']->first_name . ' ' . $data['user']->last_name); ?></h2>
+                <p class="text-secondary"><?php echo htmlspecialchars($data['provider']->expertise); ?></p>
+            </div>
 
-    <div class="rating">
-        <span class="star">★</span><span class="star">★</span><span class="star">★</span>
-        <span class="star">★</span><span class="star">☆</span>
-    </div>
-  <h3 style="text-align: center; font-size: 30px; font-weight: bold; color:rgb(54, 82, 172); margin-bottom: 40px;">Profile Information</h3>
+            <!-- Details Card -->
+            <div class="details-card">
+                <h3 class="section-title">Personal Information</h3>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <div class="detail-label">Full Name</div>
+                        <div class="detail-value"><?php echo htmlspecialchars($data['user']->first_name . ' ' . $data['user']->last_name); ?></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Email</div>
+                        <div class="detail-value"><?php echo htmlspecialchars($data['user']->email); ?></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Contact Number</div>
+                        <div class="detail-value"><?php echo htmlspecialchars($data['user']->contact_number); ?></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Address</div>
+                        <div class="detail-value"><?php echo htmlspecialchars($data['user']->address); ?></div>
+                    </div>
+                </div>
 
-<form method="POST" action="<?php echo URLROOT; ?>/ServiceProviderController/updateProfileFields" id="profile-form" style="max-width: 1200px; margin: 0 auto; padding: 30px; border-radius: 12px; background-color: #f9f9f9; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                <!-- Professional Information Section -->
+                <div class="professional-info">
+                    <div class="section-header">
+                        <h3 class="section-title">Professional Information</h3>
+                        <button class="edit-btn" onclick="toggleEditMode('professional')">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                    </div>
 
-    <!-- Row 1: 4 Fields -->
-    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin-bottom: 30px;">
-        <div style="display: flex; flex-direction: column; font-size: 18px; font-weight: 500;">
-            <strong>Full Name:</strong>
-            <span><?php echo htmlspecialchars($row->first_name . ' ' . $row->last_name); ?></span>
-        </div>
-        <div style="display: flex; flex-direction: column; font-size: 18px; font-weight: 500;">
-            <strong>Email:</strong>
-            <span><?php echo htmlspecialchars($row->email); ?></span>
-        </div>
-        <div style="display: flex; flex-direction: column; font-size: 18px; font-weight: 500;">
-            <strong>Contact Number:</strong>
-            <span><?php echo htmlspecialchars($row->contact_number); ?></span>
-        </div>
-        <div style="display: flex; flex-direction: column; font-size: 18px; font-weight: 500;">
-            <strong>Address:</strong>
-            <span><?php echo htmlspecialchars($row->address); ?></span>
-        </div>
-    </div>
+                    <form id="professional-form" action="<?php echo URLROOT; ?>/ServiceProviderController/updateProfessionalInfo" method="POST" style="display: none;">
+                        <div class="details-grid">
+                            <div class="detail-item">
+                                <div class="detail-label">Expertise</div>
+                                <input type="text" name="expertise" value="<?php echo htmlspecialchars($data['provider']->expertise); ?>">
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Working Hours</div>
+                                <input type="text" name="working_hours" value="<?php echo htmlspecialchars($data['provider']->working_hours); ?>">
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Service Areas</div>
+                                <select name="service_areas[]" multiple>
+                            <?php
+                            $districts = [
+                                        "Colombo", "Gampaha", "Kalutara", "Kandy", "Matale",
+                                        "Nuwara Eliya", "Galle", "Matara", "Hambantota", "Jaffna",
+                                        "Kilinochchi", "Mannar", "Vavuniya", "Mullaitivu", "Batticaloa",
+                                        "Ampara", "Trincomalee", "Kurunegala", "Puttalam", "Anuradhapura",
+                                        "Polonnaruwa", "Badulla", "Monaragala", "Ratnapura", "Kegalle"
+                                    ];
+                                    $selected_districts = explode(',', $data['provider']->service_areas);
+                            foreach ($districts as $district) {
+                                $selected = in_array(trim($district), $selected_districts) ? 'selected' : '';
+                                echo "<option value=\"$district\" $selected>$district</option>";
+                            }
+                            ?>
+                        </select>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Description</div>
+                                <textarea name="description"><?php echo htmlspecialchars($data['provider']->description); ?></textarea>
+                            </div>
+                        </div>
 
-    <!-- Row 2: 3 Editable Fields + Buttons -->
-    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; align-items: end;">
-        <!-- Expertise -->
-        <div style="display: flex; flex-direction: column; font-size: 18px; font-weight: 500;">
-            <strong>Expertise:</strong>
-            <span class="display-value" id="expertise-text"><?php echo htmlspecialchars($row->expertise); ?></span>
-            <input type="text" name="expertise" id="expertise-input" class="edit-field" value="<?php echo htmlspecialchars($row->expertise); ?>" style="display:none; padding: 8px; border: 1px solid #ccc; border-radius: 8px;">
-        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="save-btn">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                            <button type="button" class="cancel-btn" onclick="toggleEditMode('professional')">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </form>
 
-        <!-- Service Areas -->
-        <div style="display: flex; flex-direction: column; font-size: 18px; font-weight: 500;">
-            <strong>Service Areas:</strong>
-            <span class="display-value" id="service_areas-text"><?php echo htmlspecialchars($row->service_areas); ?></span>
-            <input type="text" name="service_areas" id="service_areas-input" class="edit-field" value="<?php echo htmlspecialchars($row->service_areas); ?>" style="display:none; padding: 8px; border: 1px solid #ccc; border-radius: 8px;">
-        </div>
+                    <div id="professional-view">
+                        <div class="details-grid">
+                            <div class="detail-item">
+                                <div class="detail-label">Expertise</div>
+                                <div class="detail-value"><?php echo htmlspecialchars($data['provider']->expertise); ?></div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Working Hours</div>
+                                <div class="detail-value"><?php echo htmlspecialchars($data['provider']->working_hours); ?></div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Service Areas</div>
+                                <div class="detail-value"><?php echo htmlspecialchars($data['provider']->service_areas); ?></div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Description</div>
+                                <div class="detail-value"><?php echo htmlspecialchars($data['provider']->description); ?></div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
 
-        <!-- Working Hours -->
-        <div style="display: flex; flex-direction: column; font-size: 18px; font-weight: 500;">
-            <strong>Working Hours:</strong>
-            <span class="display-value" id="working_hours-text"><?php echo htmlspecialchars($row->working_hours); ?></span>
-            <input type="text" name="working_hours" id="working_hours-input" class="edit-field" value="<?php echo htmlspecialchars($row->working_hours); ?>" style="display:none; padding: 8px; border: 1px solid #ccc; border-radius: 8px;">
-        </div>
+                <!-- ID Verification Section -->
+                <div class="id-verification">
+                    <h3 class="section-title">ID Verification</h3>
+                    <div class="id-images">
+                        <div class="id-image">
+                            <img src="<?php echo URLROOT . '/public/img/SVPpic/' . $data['provider']->id_front; ?>" alt="ID Front">
+                            <p class="detail-label">Front</p>
+                        </div>
+                        <div class="id-image">
+                            <img src="<?php echo URLROOT . '/public/img/SVPpic/' . $data['provider']->id_back; ?>" alt="ID Back">
+                            <p class="detail-label">Back</p>
+                        </div>
+                    </div>
+                    </div>
 
-        <!-- Buttons -->
-<div style="display: flex; justify-content: flex-end; align-items: flex-end; gap: 10px; margin-top: auto;">
-    <button type="button" id="edit-btn" class="update-button" style="
-        padding: 10px 20px;
-        width: 100%; 
-        background-color: #2563eb;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;">✎ &nbsp; Edit</button>
+                <!-- Work Photos Section -->
+                <div class="work-photos">
+                    <div class="section-header">
+                        <h3 class="section-title">Work Photos</h3>
+                        <button class="edit-btn" onclick="toggleEditMode('photos')">
+                            <i class="fas fa-edit"></i> Manage Photos
+                        </button>
+                    </div>
 
-    <button type="submit" id="save-btn" class="update-button" style="
-        display: none;
-        padding: 10px 20px;
-        background-color: #2196F3;
-        color: white;
-         width: 100%;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;">💾 Save</button>
+                    <form id="photos-form" action="<?php echo URLROOT; ?>/ServiceProviderController/updateWorkPhotos" method="POST" enctype="multipart/form-data" style="display: none;">
+                        <div class="photo-upload">
+                            <input type="file" name="work_photos[]" multiple accept="image/*">
+                            <button type="submit" class="upload-btn">
+                                <i class="fas fa-upload"></i> Upload New Photos
+                            </button>
+                </div>
+            </form>
 
-    <button type="button" id="cancel-btn" class="cancel-button" style="
-        display: none;
-        padding: 10px 20px;
-        background-color: #f44336;
-        color: white;
-         width: 100%;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;">❎ Cancel</button>
-</div>
-
-    </div>
-</form>
-
-<!-- Button Hover Effects -->
-<style>
-    .update-button:hover {
-        background-color: #45a049;
-    }
-    .cancel-button:hover {
-        background-color: #d32f2f;
-    }
-</style>
-
-</div>
-
-
-        <div class="work-photos">
-            <h3>Working Photos</h3>
-            <div class="image-row">
-                <?php
-                $photo_dir = dirname(dirname(dirname(__DIR__))) . '/public/img/SVPpic/';
-                $photo_url = URLROOT . '/public/img/SVPpic/';
-                $work_photos = glob($photo_dir . 'w*.*');
-
-                foreach ($work_photos as $photo_path) {
-                    $photo_name = basename($photo_path); // Extracts just the filename
-                    echo '<div class="image-tile"><img src="' . $photo_url . htmlspecialchars($photo_name) . '" alt="Work Photo"></div>';
-                }
-                ?>
+                    <div id="photos-view">
+                        <div class="photos-grid">
+                            <?php
+                            if (!empty($data['provider']->work_photos)) {
+                                $photos = explode(',', $data['provider']->work_photos);
+                                foreach ($photos as $index => $photo) {
+                                    if (!empty($photo)) {
+                                        echo '<div class="photo-item">
+                                                <img src="' . URLROOT . '/public/img/SVPpic/' . htmlspecialchars($photo) . '" alt="Work Photo">
+                                                <button class="delete-photo" onclick="deletePhoto(' . $index . ')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                              </div>';
+                                    }
+                                }
+                            } else {
+                                echo '<p class="no-photos">No work photos uploaded yet.</p>';
+                            }
+                            ?>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
- 
     </div>
 
     <script>
-    const editBtn = document.getElementById("edit-btn");
-    const saveBtn = document.getElementById("save-btn");
-    const cancelBtn = document.getElementById("cancel-btn");
+        function toggleEditMode(section) {
+            const form = document.getElementById(section + '-form');
+            const view = document.getElementById(section + '-view');
+            const editBtn = form.previousElementSibling.querySelector('.edit-btn');
 
-    const fields = ["expertise", "service_areas", "working_hours"];
+            if (form.style.display === 'none') {
+                form.style.display = 'block';
+                view.style.display = 'none';
+                editBtn.innerHTML = '<i class="fas fa-times"></i> Cancel';
+            } else {
+                form.style.display = 'none';
+                view.style.display = 'block';
+                editBtn.innerHTML = '<i class="fas fa-edit"></i> Edit';
+            }
+        }
 
-    editBtn.addEventListener("click", () => {
-        fields.forEach(field => {
-            document.getElementById(`${field}-text`).style.display = "none";
-            document.getElementById(`${field}-input`).style.display = "inline-block";
-        });
-        editBtn.style.display = "none";
-        saveBtn.style.display = "inline-block";
-        cancelBtn.style.display = "inline-block";
-    });
-
-    cancelBtn.addEventListener("click", () => {
-        fields.forEach(field => {
-            document.getElementById(`${field}-text`).style.display = "inline-block";
-            document.getElementById(`${field}-input`).style.display = "none";
-        });
-        editBtn.style.display = "inline-block";
-        saveBtn.style.display = "none";
-        cancelBtn.style.display = "none";
-    });
+        function deletePhoto(photoIndex) {
+            if (confirm('Are you sure you want to delete this photo?')) {
+                fetch('<?php echo URLROOT; ?>/ServiceProviderController/deleteWorkPhoto', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'photo_index=' + photoIndex
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Error deleting photo');
+                    }
+                });
+            }
+        }
 </script>
-
 </body>
 
 </html>

@@ -10,23 +10,20 @@ class ProfileSVPModel
 
   public function getProfileDetails($service_provider_id)
   {
-      $query = "
-          SELECT u.*, sp.*
-          FROM users u
-          JOIN service_providers sp ON u.user_id = sp.provider_id
-          WHERE u.user_id = :service_provider_id
-      ";		
-      
-      $this->db->query($query);
-      $this->db->bind(':service_provider_id', $service_provider_id); 
-      
-      $result = $this->db->single();
-  
-      if (!$result) {
-          die("Error: No record found for ID $service_provider_id");
-      }
-  
-      return $result;
+    $this->db->query('
+        SELECT 
+            u.user_id,
+            CONCAT(u.first_name, " ", u.last_name) as name,
+            u.email,
+            u.contact_number as phone,
+            u.address
+        FROM users u
+        WHERE u.user_id = :service_provider_id
+    ');
+    $this->db->bind(':service_provider_id', $service_provider_id);
+    
+    $row = $this->db->single();
+    return $row;
   }
   
 

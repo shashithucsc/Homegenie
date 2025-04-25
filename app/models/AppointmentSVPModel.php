@@ -55,5 +55,14 @@ class AppointmentSVPModel
             return ['success' => false];
         }
     }
+
+    public function getAppointmentById($appointment_id)
+    {
+        $this->db->query('SELECT * FROM appointments WHERE appointment_id = :appointment_id');
+        $this->db->bind(':appointment_id', $appointment_id);
+        
+        $row = $this->db->single();
+        return $row;
+    }
 }
 ?>

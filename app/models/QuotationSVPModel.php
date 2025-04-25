@@ -129,6 +129,13 @@ public function getAllQuotationslist($service_provider_id)
     return $this->db->execute();
   }
 
-
+  public function getQuotationById($quotation_id)
+  {
+    $this->db->query('SELECT * FROM quotations WHERE quotation_id = :quotation_id');
+    $this->db->bind(':quotation_id', $quotation_id);
+    
+    $row = $this->db->single();
+    return $row;
+  }
 
 }

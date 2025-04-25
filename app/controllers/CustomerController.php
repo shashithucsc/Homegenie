@@ -35,7 +35,7 @@ class CustomerController extends Controller {
     
         if (!$loggedUserId) {
             // Handle unauthorized access or redirect to login
-            redirect('Users/login');
+            header('Location: ' . URLROOT . '/LoginController');
             exit;
         }
         

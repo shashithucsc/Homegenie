@@ -22,6 +22,23 @@ class CustomerModel {
         return $this->db->single();
     }
 
+    public function getCustomerById($customer_id)
+    {
+        $this->db->query('
+            SELECT 
+                customer_id,
+                name,
+                address,
+                nic
+            FROM customers 
+            WHERE customer_id = :customer_id
+        ');
+        $this->db->bind(':customer_id', $customer_id);
+        
+        $row = $this->db->single();
+        return $row;
+    }
+
     public function getServiceProviderById($id) {
         $sql = "SELECT u.*, sp.expertise, sp.description, sp.work_photos, sp.working_hours, sp.service_areas 
                 FROM users u

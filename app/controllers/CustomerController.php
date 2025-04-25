@@ -86,106 +86,91 @@ class CustomerController extends Controller {
     
     // Handle appointment creation
     public function createAppointment(){
-    if($_SERVER['REQUEST_METHOD'] == 'POST'){
-        // Sanitize POST data
-        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-        
-        $data = [
-            'sp_id' => $_POST['sp_id'],
-            'date' => $_POST['date'],
-            'time' => $_POST['time'],
-            'address' => $_POST['address'],
-            'notes' => $_POST['msg'],
-            'cu_id' => $_SESSION['user_id'],
-            'created_time' => date('Y-m-d H:i:s')
-        ];
-        
-        if($this->CustomerModel->createAppointment($data)){
-            flash('appointment_success', 'Appointment created successfully!');
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            // Sanitize POST data
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            
+            $data = [
+                'sp_id' => $_POST['sp_id'],
+                'date' => $_POST['date'],
+                'time' => $_POST['time'],
+                'address' => $_POST['address'],
+                'notes' => $_POST['msg'],
+                'cu_id' => $_SESSION['user_id'],
+                'created_time' => date('Y-m-d H:i:s')
+            ];
+            
+            if($this->CustomerModel->createAppointment($data)){
+                flash('appointment_success', 'Appointment created successfully!');
+            } else {
+                flash('appointment_error', 'Failed to create appointment', 'alert alert-danger');
+            }
+            // Redirect back to the service provider's profile
+            header('Location: ' . URLROOT . '/CustomerController/SPProfile/' . $data['sp_id']);
         } else {
-            flash('appointment_error', 'Failed to create appointment', 'alert alert-danger');
-        }
-        
-        // Redirect back to the service provider's profile
-        redirect('CustomerController/SPProfile/' . $data['sp_id']);
-    } else {
-            redirect('CustomerController/services');
+            header('Location: ' . URLROOT . '/CustomerController/services');
         }
     }
     // Add these new methods to your existing CustomerController class
 
-public function editAppointment() {
-    if($_SERVER['REQUEST_METHOD'] == 'POST') {
-        // Sanitize POST data
-        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-        
-        // Check if user is logged in
-        if(!isset($_SESSION['user_id'])) {
-            redirect('Users/login');
+    public function editAppointment() {
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Sanitize POST data
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            
+            $data = [
+                'id' => $_POST['id'],
+                'date' => $_POST['date'],
+                'time' => $_POST['time'],
+                'notes' => $_POST['notes'],
+                'customer_id' => $_SESSION['user_id']
+            ];
+            
+            // Get appointment to verify ownership
+            $appointment = $this->CustomerModel->getAppointmentById($data['id']);
+            
+            // Verify appointment exists and belongs to current user
+            if(!$appointment || $appointment->customer_id != $_SESSION['user_id']) {
+                flash('appointment_error', 'Unauthorized access or appointment not found', 'alert alert-danger');
+                header('Location: ' . URLROOT . '/CustomerController/profile');
+                exit;
+            }
+            
+            if($this->CustomerModel->updateAppointment($data)) {
+                flash('appointment_success', 'Appointment updated successfully!');
+            } else {
+                flash('appointment_error', 'Failed to update appointment', 'alert alert-danger');
+            }
+            header('Location: ' . URLROOT . '/CustomerController/profile');
+        } else {
+            header('Location: ' . URLROOT . '/CustomerController/profile');
+        }
+    }
+
+    public function deleteAppointment($id = null) {
+        // Check if ID is provided
+        if($id == null) {
+            header('Location: ' . URLROOT . '/CustomerController/profile');
             exit;
         }
         
-        $data = [
-            'id' => $_POST['id'],
-            'date' => $_POST['date'],
-            'time' => $_POST['time'],
-            'notes' => $_POST['notes'],
-            'customer_id' => $_SESSION['user_id']
-        ];
-        
         // Get appointment to verify ownership
-        $appointment = $this->CustomerModel->getAppointmentById($data['id']);
+        $appointment = $this->CustomerModel->getAppointmentById($id);
         
         // Verify appointment exists and belongs to current user
         if(!$appointment || $appointment->customer_id != $_SESSION['user_id']) {
             flash('appointment_error', 'Unauthorized access or appointment not found', 'alert alert-danger');
-            redirect('CustomerController/profile');
+            header('Location: ' . URLROOT . '/CustomerController/profile');
             exit;
         }
         
-        if($this->CustomerModel->updateAppointment($data)) {
-            flash('appointment_success', 'Appointment updated successfully!');
+        if($this->CustomerModel->deleteAppointment($id, $_SESSION['user_id'])) {
+            flash('appointment_success', 'Appointment deleted successfully!');
         } else {
-            flash('appointment_error', 'Failed to update appointment', 'alert alert-danger');
+            flash('appointment_error', 'Failed to delete appointment', 'alert alert-danger');
         }
-        
-        redirect('CustomerController/profile');
-    } else {
-        redirect('CustomerController/profile');
+        header('Location: ' . URLROOT . '/CustomerController/profile');
     }
-}
-
-public function deleteAppointment($id = null) {
-    // Check if ID is provided
-    if($id == null) {
-        redirect('CustomerController/profile');
-        exit;
-    }
-    
-    // Check if user is logged in
-    if(!isset($_SESSION['user_id'])) {
-        redirect('Users/login');
-        exit;
-    }
-    
-    // Get appointment to verify ownership
-    $appointment = $this->CustomerModel->getAppointmentById($id);
-    
-    // Verify appointment exists and belongs to current user
-    if(!$appointment || $appointment->customer_id != $_SESSION['user_id']) {
-        flash('appointment_error', 'Unauthorized access or appointment not found', 'alert alert-danger');
-        redirect('CustomerController/profile');
-        exit;
-    }
-    
-    if($this->CustomerModel->deleteAppointment($id, $_SESSION['user_id'])) {
-        flash('appointment_success', 'Appointment deleted successfully!');
-    } else {
-        flash('appointment_error', 'Failed to delete appointment', 'alert alert-danger');
-    }
-    
-    redirect('CustomerController/profile');
-}
 }
 
 ?>

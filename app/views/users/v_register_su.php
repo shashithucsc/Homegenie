@@ -24,8 +24,10 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
     <div class="main-container">
         <!-- <div class="logo">Home<span>Genie</span></div> -->
         <h1>Register As a Supplier</h1>
-        <form class="register-form" action="control/register_su_controller.php" method="POST"
+        <form class="register-form" action="<?php echo URLROOT . '/LoginController/registerUser'; ?>" method="POST"
             enctype="multipart/form-data">
+            <input type="hidden" name="role" id="role" value="supplier">
+
             <!-- Personal Information -->
             <fieldset>
                 <legend>Personal Information</legend>
@@ -50,12 +52,71 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                         <input type="email" id="email" name="email" required>
                     </div>
                 </div>
+
+                <div class=""flex-row">
+                <div class="input-group">
+                    <label for="expertise">Expertise</label>
+                    <input type="text" id="expertise" name="expertise" required>
+            </div>
+
+
                 <div class="flex-row">
                     <div class="input-group">
-                        <label for="address">Home Address</label>
-                        <input type="text" id="address" name="address" required>
+                        <label for="province">Province</label>
+                        <select id="province" name="province" required>
+                            <option value="">-- Select Province --</option>
+                            <option value="Western">Western</option>
+                            <option value="Central">Central</option>
+                            <option value="Southern">Southern</option>
+                            <option value="Uva">Uva</option>
+                            <option value="Sabaragamuwa">Sabaragamuwa</option>
+                            <option value="North Western">North Western</option>
+                            <option value="North Central">North Central</option>
+                            <option value="Northern">Northern</option>
+                            <option value="Eastern">Eastern</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="district">District</label>
+                        <select id="district" name="district" required>
+                            <option value="">-- Select District --</option>
+                            <option value="Ampara">Ampara</option>
+                            <option value="Anuradhapura">Anuradhapura</option>
+                            <option value="Badulla">Badulla</option>
+                            <option value="Batticaloa">Batticaloa</option>
+                            <option value="Colombo">Colombo</option>
+                            <option value="Galle">Galle</option>
+                            <option value="Gampaha">Gampaha</option>
+                            <option value="Hambantota">Hambantota</option>
+                            <option value="Jaffna">Jaffna</option>
+                            <option value="Kalutara">Kalutara</option>
+                            <option value="Kandy">Kandy</option>
+                            <option value="Kegalle">Kegalle</option>
+                            <option value="Kilinochchi">Kilinochchi</option>
+                            <option value="Kurunegala">Kurunegala</option>
+                            <option value="Mannar">Mannar</option>
+                            <option value="Matale">Matale</option>
+                            <option value="Matara">Matara</option>
+                            <option value="Monaragala">Monaragala</option>
+                            <option value="Mullaitivu">Mullaitivu</option>
+                            <option value="Nuwara Eliya">Nuwara Eliya</option>
+                            <option value="Polonnaruwa">Polonnaruwa</option>
+                            <option value="Puttalam">Puttalam</option>
+                            <option value="Ratnapura">Ratnapura</option>
+                            <option value="Trincomalee">Trincomalee</option>
+                            <option value="Vavuniya">Vavuniya</option>
+                            <!-- Add more districts -->
+                        </select>
                     </div>
                 </div>
+
+                <div class="flex-row">
+                    <div class="input-group">
+                        <label for="street">Street</label>
+                        <input type="text" id="street" name="street" required>
+                    </div>
+                </div>
+
                 <div class="flex-row">
                     <div class="input-group">
                         <label for="profile-image">Profile Image</label>
@@ -66,24 +127,24 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
 
             <!-- Verification Details -->
             <fieldset>
-                <legend>Verification Details</legend>
-                <div class="flex-row">
-                    <div class="input-group">
-                        <label for="id-number">National ID Number</label>
-                        <input type="text" id="id-number" name="id_number" required>
-                    </div>
-                </div>
-                <div class="flex-row">
-                    <div class="input-group">
-                        <label for="id-front">Upload ID Front Photo</label>
-                        <input type="file" id="id-front" name="id_front" accept="image/*" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="id-back">Upload ID Back Photo</label>
-                        <input type="file" id="id-back" name="id_back" accept="image/*" required>
-                    </div>
-                </div>
-            </fieldset>
+    <legend>Verification Details</legend>
+    <div class="flex-row">
+        <div class="input-group">
+            <label for="id-number">National ID Number</label>
+            <input type="text" id="id-number" name="id_number" required> <!-- Keep as id_number -->
+        </div>
+    </div>
+    <div class="flex-row">
+        <div class="input-group">
+            <label for="id-front">Upload ID Front Photo</label>
+            <input type="file" id="id-front" name="id_front" accept="image/*" required> <!-- Keep as id_front -->
+        </div>
+        <div class="input-group">
+            <label for="id-back">Upload ID Back Photo</label>
+            <input type="file" id="id-back" name="id_back" accept="image/*" required> <!-- Keep as id_back -->
+        </div>
+    </div>
+</fieldset>
 
             <!-- Login Credentials -->
             <fieldset>

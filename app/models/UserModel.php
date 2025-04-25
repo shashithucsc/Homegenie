@@ -138,7 +138,7 @@ class UserModel {
     }
 
     public function getAllUsers() {
-        $this->db->query("SELECT users.user_id, users.first_name, users.last_name, users.address, 
+        $this->db->query("SELECT users.user_id, users.first_name, users.last_name, users.street, users.district, users.province, 
                            users.email, users.contact_number, users.role
                            FROM users
                            WHERE users.role != 'admin'");

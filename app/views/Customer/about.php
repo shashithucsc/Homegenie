@@ -127,7 +127,8 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 
     <?php require_once APPROOT . '/views/Customer/footer.php'; ?>
 
-    <script src="../../js/script-index.js"></script>
+    <script src="<?php echo URLROOT; ?>/public/js/script-index.js"></script>
+
 </body>
 
 </html>

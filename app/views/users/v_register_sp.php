@@ -30,7 +30,7 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
     <div class="main-container">
         <!-- <div class="logo">Home<span>Genie</span></div> -->
         <h1>Register As Service Provider</h1>
-        <form class="register-form" action="<?php echo URLROOT . '/LoginController/registerUser'; ?>" method="POST" enctype="multipart/form-data">
+        <form class="register-form" action="<?php echo URLROOT . '/SignUpController/registerUser'; ?>" method="POST" enctype="multipart/form-data">
             
             <!-- Personal Information -->
             <input type="hidden" name="role" id="role" value="service_provider">

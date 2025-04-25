@@ -24,7 +24,7 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
     <div class="main-container">
         <!-- <div class="logo">Home<span>Genie</span></div> -->
         <h1>Register As a Supplier</h1>
-        <form class="register-form" action="<?php echo URLROOT . '/LoginController/registerUser'; ?>" method="POST"
+        <form class="register-form" action="<?php echo URLROOT . '/SignUpController/registerUser'; ?>" method="POST"
             enctype="multipart/form-data">
             <input type="hidden" name="role" id="role" value="supplier">
 

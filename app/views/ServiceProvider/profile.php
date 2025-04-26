@@ -507,7 +507,7 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
             <!-- Profile Card -->
             <div class="profile-card">
                 <div class="profile-image">
-                    <img src="<?php echo URLROOT . '/public/img/SVPpic/' . $data['user']->profile_image; ?>" alt="Profile Image">
+                    <img src="data:image/jpeg;base64,<?php echo base64_encode($data['user']->profile_image); ?>" alt="Profile Image">
                 </div>
                 <div class="rating">
                     <?php
@@ -671,7 +671,7 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Hourly Rate</div>
-                                <div class="hourly-rate-value">$<?php echo number_format($data['provider']->hourly_rate, 2); ?></div>
+                                <div class="hourly-rate-value">Rs. <?php echo number_format($data['provider']->hourly_rate, 2); ?></div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Service Areas</div>
@@ -690,11 +690,11 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                     <h3 class="section-title">ID Verification</h3>
                     <div class="id-images">
                         <div class="id-image">
-                            <img src="<?php echo URLROOT . '/public/img/SVPpic/' . $data['provider']->id_front; ?>" alt="ID Front">
+                            <img src="data:image/jpeg;base64,<?php echo base64_encode($data['provider']->id_front); ?>" alt="ID Front">
                             <p class="detail-label">Front</p>
                         </div>
                         <div class="id-image">
-                            <img src="<?php echo URLROOT . '/public/img/SVPpic/' . $data['provider']->id_back; ?>" alt="ID Back">
+                            <img src="data:image/jpeg;base64,<?php echo base64_encode($data['provider']->id_back); ?>" alt="ID Back">
                             <p class="detail-label">Back</p>
                         </div>
                     </div>

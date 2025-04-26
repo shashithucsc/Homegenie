@@ -94,7 +94,7 @@
             <div class="services-grid" id="servicesGrid">
                 <?php foreach ($data['serviceProviders'] as $provider): ?>
                     <div class="service-card" id="<?php echo htmlspecialchars($provider->user_id ?? ''); ?>">
-                        <img src="<?php echo URLROOT; ?>/public/register/uploads/<?php echo htmlspecialchars($provider->profile_image ?? 'default.jpg'); ?>"
+                        <img src="data:image/jpeg;base64,<?php echo base64_encode($provider->profile_image); ?>"
                             alt="<?php echo htmlspecialchars(($provider->first_name ?? '') . ' ' . ($provider->last_name ?? '')); ?>"
                             class="service-image">
                         <div class="service-content">

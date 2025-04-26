@@ -275,13 +275,15 @@ $spImagePath = URLROOT . '/public/register/uploads/' . $provider->profile_image;
     <section class="container">
         <div class="profile-header">
             <div class="profile-avatar">
-                <img id="avatarImage" src="<?php echo htmlspecialchars($spImagePath); ?>" alt="Profile Picture">
+                <img id="avatarImage" src="data:image/jpeg;base64,<?php echo base64_encode($provider->profile_image); ?>" alt="Profile Picture">
             </div>
             <div class="profile-info">
-                <h1 id="profileName"><?php echo htmlspecialchars($providerName); ?> 
-                    <span class="service-type"><?php echo htmlspecialchars($provider->expertise); ?></span>
-                </h1>
+            <h1 id="profileName"><?php echo htmlspecialchars($providerName); ?> </h1>
                 <p id="profileEmail"><?php echo htmlspecialchars($provider->email); ?></p>
+                <h1>
+                    <span class="service-type"><?php echo htmlspecialchars($provider->expertise); ?></span>
+                    <span class="service-type">Rs.<?php echo htmlspecialchars($provider->hourly_rate); ?> per Hour</span>
+                </h1>
                 <div class="edit-profile-btn" id="makeAppointmentBtn">
                     <i class='bx bx-calendar-plus'></i> Make an Appointment
                 </div>
@@ -301,9 +303,8 @@ $spImagePath = URLROOT . '/public/register/uploads/' . $provider->profile_image;
                     </div>
                     <div class="info-item">
                         <i class='bx bx-map'></i>
-                        <div>
-                            <label>Address</label>
-                            <p id="spAddress"><?php echo htmlspecialchars($provider->address); ?></p>
+                        <div style="display: flex">
+                            <p id="spStreet"><?php echo htmlspecialchars($provider->street); ?> , </p><p id="spDistrict"><?php echo htmlspecialchars($provider->district); ?> , </p><p id="spProvince"><?php echo htmlspecialchars($provider->province); ?> .</p>
                         </div>
                     </div>
                 </div>

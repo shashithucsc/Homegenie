@@ -115,7 +115,6 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
                 <?php if(empty($data['a_appointments'])): ?>
                     <div class="no-appointments">
                         <p>You don't have any appointments yet.</p>
-                        <a href="<?php echo URLROOT; ?>/CustomerController/bookAppointment" class="btn btn-pay"><i class='bx bx-calendar-plus'></i> Book an Appointment</a>
                     </div>
                 <?php else: ?>
                 <div class="info-grid">
@@ -172,30 +171,6 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
             </section>
         </div>
     </div>
-
-    <!-- Rating Modal -->
-    <!-- <div id="ratingModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeRatingModal()">&times;</span>
-            <h2>Rate your experience</h2>
-            <p id="ratingProviderName">How was your experience with this service provider?</p>
-            
-            <div class="rating-stars">
-                <i class='bx bx-star rating-star' data-value="1"></i>
-                <i class='bx bx-star rating-star' data-value="2"></i>
-                <i class='bx bx-star rating-star' data-value="3"></i>
-                <i class='bx bx-star rating-star' data-value="4"></i>
-                <i class='bx bx-star rating-star' data-value="5"></i>
-            </div>
-            
-            <form id="ratingForm" method="POST" action="<?php echo URLROOT; ?>/CustomerController/rateProvider">
-                <input type="hidden" id="appointmentId" name="appointment_id" value="">
-                <input type="hidden" id="ratingValue" name="rating" value="">
-                <textarea name="review" placeholder="Write your review here (optional)" rows="4" class="form-control"></textarea>
-                <button type="submit" class="btn btn-rate" style="width: 100%; margin-top: 1rem;">Submit Rating</button>
-            </form>
-        </div>
-    </div> -->
 
     <script>
         function openEditModal(id, date, time, notes) {

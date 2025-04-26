@@ -79,7 +79,43 @@ class CustomerModel {
                 FROM appointments a
                 JOIN users u ON a.service_provider_id = u.user_id
                 LEFT JOIN quotations q ON a.appointment_id = q.appointment_id
-                WHERE a.customer_id = :user_id AND a.status = 'approved'
+                WHERE a.customer_id = :user_id AND a.status = 'approved' AND q.status = 'Pending'
+                ORDER BY a.created_at DESC";
+        
+        $this->db->query($sql);
+        $this->db->bind(':user_id', $userId);
+        return $this->db->resultSet();
+    }
+    public function getPaidAppointments($userId) {
+        $sql = "SELECT 
+                a.*,
+                u.first_name AS sp_first_name, 
+                u.last_name AS sp_last_name,
+                q.quotation_details,
+                q.work_hours,
+                q.cost
+                FROM appointments a
+                JOIN users u ON a.service_provider_id = u.user_id
+                JOIN quotations q ON a.appointment_id = q.appointment_id
+                WHERE a.customer_id = :user_id AND a.status = 'Approved' AND q.status = 'Approved' AND a.finish_status != 'complete'
+                ORDER BY a.created_at DESC";
+        
+        $this->db->query($sql);
+        $this->db->bind(':user_id', $userId);
+        return $this->db->resultSet();
+    }
+    public function getFinishedAppointments($userId) {
+        $sql = "SELECT 
+                a.*,
+                u.first_name AS sp_first_name, 
+                u.last_name AS sp_last_name,
+                q.quotation_details,
+                q.work_hours,
+                q.cost
+                FROM appointments a
+                JOIN users u ON a.service_provider_id = u.user_id
+                JOIN quotations q ON a.appointment_id = q.appointment_id
+                WHERE a.customer_id = :user_id AND q.status = 'Approved' AND a.finish_status = 'complete'
                 ORDER BY a.created_at DESC";
         
         $this->db->query($sql);
@@ -132,6 +168,19 @@ public function getQuotationByAppointmentId($appointment_id) {
 
 public function updateAppointmentStatus($appointment_id, $status) {
     $this->db->query("UPDATE appointments SET status = :status, updated_at = NOW() WHERE appointment_id = :appointment_id");
+    $this->db->bind(':status', $status);
+    $this->db->bind(':appointment_id', $appointment_id);
+    return $this->db->execute();
+}
+
+public function updateAppointmentWithRating($appointment_id, $rating) {
+    $this->db->query("UPDATE appointments SET finish_status = 'complete', rating = :rating, updated_at = NOW() WHERE appointment_id = :appointment_id");
+    $this->db->bind(':rating', $rating);
+    $this->db->bind(':appointment_id', $appointment_id);
+    return $this->db->execute();
+}
+public function updateQuotationStatus($appointment_id, $status) {
+    $this->db->query("UPDATE quotations SET status = :status WHERE appointment_id = :appointment_id");
     $this->db->bind(':status', $status);
     $this->db->bind(':appointment_id', $appointment_id);
     return $this->db->execute();

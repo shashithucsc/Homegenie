@@ -53,7 +53,8 @@ class CustomerController extends Controller {
             header('Location: ' . URLROOT . '/LoginController');
             exit;
         }
-        $appointments = $this->CustomerModel->getPendingAppointments($loggedUserId);
+        $p_appointments = $this->CustomerModel->getPaidAppointments($loggedUserId);
+        $f_appointments = $this->CustomerModel->getFinishedAppointments($loggedUserId);
         $customer = $this->CustomerModel->getCustomer($loggedUserId);
         if (!$customer) {
             die('Customer not found.');
@@ -62,7 +63,8 @@ class CustomerController extends Controller {
         // Prepare data for the view
         $data = [
             'customer' => $customer,
-            'appointments' => $appointments
+            'p_appointments' => $p_appointments,
+            'f_appointments' => $f_appointments
         ];
         $this->view('Customer/cu_profile', $data);
     }
@@ -222,6 +224,31 @@ class CustomerController extends Controller {
         header('Location: ' . URLROOT . '/CustomerController/appointment');
     }
 
+    public function rateAppointment($appointment_id) {
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Sanitize POST data
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            
+            $rating = isset($_POST['rating']) ? (int)$_POST['rating'] : 0;
+            
+            // Validate rating (1-5)
+            if($rating < 1 || $rating > 5) {
+                flash('appointment_error', 'Invalid rating. Please provide a rating between 1 and 5.', 'alert alert-danger');
+                header('Location: ' . URLROOT . '/CustomerController/profile');
+                exit;
+            }
+            
+            if($this->CustomerModel->updateAppointmentWithRating($appointment_id, $rating)) {
+                flash('appointment_success', 'Appointment rated successfully!');
+            } else {
+                flash('appointment_error', 'Failed to rate appointment', 'alert alert-danger');
+            }
+            header('Location: ' . URLROOT . '/CustomerController/profile');
+        } else {
+            header('Location: ' . URLROOT . '/CustomerController/profile');
+        }
+    }
+
     public function payment($appointment_id) {
         // Get appointment details
         $appointment = $this->CustomerModel->getAppointmentById($appointment_id);
@@ -262,7 +289,7 @@ class CustomerController extends Controller {
             // Create transaction record
             if($this->CustomerModel->createTransaction($data['appointment_id'], $data['amount'])) {
                 // Update appointment status to completed
-                if($this->CustomerModel->updateAppointmentStatus($data['appointment_id'], 'completed')) {
+                if($this->CustomerModel->updateQuotationStatus($data['appointment_id'], 'Approved')) {
                     flash('payment_success', 'Payment processed successfully!');
                     header('Location: ' . URLROOT . '/CustomerController/appointment');
                     exit;
@@ -290,10 +317,52 @@ class CustomerController extends Controller {
                 'email' => trim($_POST['email']),
                 'street' => trim($_POST['street']),
                 'district' => trim($_POST['district']),
-                'province' => trim($_POST['province']),
                 'profile_image' => null, // Initialize as null
                 'user_id' => $_SESSION['user_id']
             ];
+            
+            // Automatically set province based on district
+            $district = $data['district'];
+            $province = '';
+            
+            // Western Province
+            if (in_array($district, ['Colombo', 'Gampaha', 'Kalutara'])) {
+                $province = 'Western';
+            }
+            // Central Province
+            else if (in_array($district, ['Kandy', 'Matale', 'Nuwara Eliya'])) {
+                $province = 'Central';
+            }
+            // Southern Province
+            else if (in_array($district, ['Galle', 'Matara', 'Hambantota'])) {
+                $province = 'Southern';
+            }
+            // Eastern Province
+            else if (in_array($district, ['Ampara', 'Batticaloa', 'Trincomalee'])) {
+                $province = 'Eastern';
+            }
+            // Northern Province
+            else if (in_array($district, ['Jaffna', 'Kilinochchi', 'Mullaitivu', 'Vavuniya', 'Mannar'])) {
+                $province = 'Northern';
+            }
+            // North Western Province
+            else if (in_array($district, ['Kurunegala', 'Puttalam'])) {
+                $province = 'North Western';
+            }
+            // North Central Province
+            else if (in_array($district, ['Anuradhapura', 'Polonnaruwa'])) {
+                $province = 'North Central';
+            }
+            // Sabaragamuwa Province
+            else if (in_array($district, ['Kegalle', 'Ratnapura'])) {
+                $province = 'Sabaragamuwa';
+            }
+            // Uva Province
+            else if (in_array($district, ['Badulla', 'Monaragala'])) {
+                $province = 'Uva';
+            }
+            
+            $data['province'] = $province;
 
             // Handle file upload
             if(!empty($_FILES['profile_image']['name'])) {

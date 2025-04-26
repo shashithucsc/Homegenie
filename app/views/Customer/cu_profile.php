@@ -181,6 +181,36 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
             text-decoration: none;
             cursor: pointer;
         }
+
+        .rating-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .star-rating {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+        
+        .star-rating input {
+            display: none;
+        }
+        
+        .star-rating label {
+            cursor: pointer;
+            font-size: 30px;
+            color: #ccc;
+            margin: 0 5px;
+            transition: color 0.2s;
+        }
+        
+        .star-rating label:hover,
+        .star-rating label:hover ~ label,
+        .star-rating input:checked ~ label {
+            color: #ffcc00;
+        }
     </style>
 </head>
 
@@ -241,44 +271,95 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
             </section>
             <section class="profile-section">
                 <h2>Appointments History</h2>
-                <?php if(empty($data['appointments'])): ?>
+                <?php if(empty($data['p_appointments'])): ?>
                     <p>You don't have any appointments yet.</p>
                 <?php else: ?>
                 <div class="info-grid">
-                    <?php foreach ($data['appointments'] as $appointment): ?>
+                <?php foreach ($data['p_appointments'] as $p_appointment): ?>
                         <div class="info-item">
-                            <i class='bx bx-task'></i>
-                            <div>
+                            <i class='bx bx-calendar-check'></i>
+                            <div class="content">
                                 <div class="field">
                                     <label>Service Provider:</label>
-                                    <span><?php echo htmlspecialchars($appointment->sp_first_name . ' ' . $appointment->sp_last_name); ?></span>
+                                    <span><?php echo htmlspecialchars($p_appointment->sp_first_name . ' ' . $p_appointment->sp_last_name); ?></span>
                                 </div>
                                 <div class="field">
                                     <label>Date:</label>
-                                    <span><?php echo htmlspecialchars($appointment->appointment_date); ?></span>
+                                    <span><?php echo htmlspecialchars($p_appointment->appointment_date); ?></span>
                                 </div>
                                 <div class="field">
                                     <label>Time:</label>
-                                    <span><?php echo htmlspecialchars($appointment->appointment_time); ?></span>
+                                    <span><?php echo htmlspecialchars($p_appointment->appointment_time); ?></span>
                                 </div>
                                 <div class="field">
-                                    <label>Notes:</label><br>
-                                    <span><?php echo htmlspecialchars($appointment->description); ?></span>
+                                    <label>Notes:</label>
+                                    <span><?php echo htmlspecialchars($p_appointment->description); ?></span>
+                                </div>
+                                <?php if(isset($p_appointment->quotation_details)): ?>
+                                <div class="field">
+                                    <label>Quotation Details:</label>
+                                    <span><?php echo htmlspecialchars($p_appointment->quotation_details); ?></span>
                                 </div>
                                 <div class="field">
-                                    <span class="edit-btn" 
-                                        onclick="openEditModal(
-                                            <?php echo $appointment->appointment_id; ?>, 
-                                            '<?php echo $appointment->appointment_date; ?>', 
-                                            '<?php echo $appointment->appointment_time; ?>', 
-                                            '<?php echo addslashes(htmlspecialchars($appointment->description)); ?>')">
-                                        <i class='bx bx-edit-alt'></i>
-                                    </span>
-                                    <span class="delete-btn" 
-                                        onclick="deleteAppointment(<?php echo $appointment->appointment_id; ?>)">
-                                        <i class='bx bx-trash'></i>
-                                    </span>
+                                    <label>Work Hours:</label>
+                                    <span><?php echo htmlspecialchars($p_appointment->work_hours); ?> hours</span>
                                 </div>
+                                <div class="field">
+                                    <label>Cost:</label>
+                                    <span>$<?php echo number_format($p_appointment->cost, 2); ?></span>
+                                </div>
+                                <?php endif; ?>
+                                <div class="action-buttons">
+                                    <button type="button" class="btn btn-pay" onclick="openRatingModal(<?php echo $p_appointment->appointment_id; ?>)">
+                                        Mark as Finished
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
+            </section>
+            <section class="profile-section">
+                <h2>Appointments History</h2>
+                <?php if(empty($data['f_appointments'])): ?>
+                    <p>You don't have any appointments yet.</p>
+                <?php else: ?>
+                <div class="info-grid">
+                <?php foreach ($data['f_appointments'] as $f_appointment): ?>
+                        <div class="info-item">
+                            <i class='bx bx-calendar-check'></i>
+                            <div class="content">
+                                <div class="field">
+                                    <label>Service Provider:</label>
+                                    <span><?php echo htmlspecialchars($f_appointment->sp_first_name . ' ' . $f_appointment->sp_last_name); ?></span>
+                                </div>
+                                <div class="field">
+                                    <label>Date:</label>
+                                    <span><?php echo htmlspecialchars($f_appointment->appointment_date); ?></span>
+                                </div>
+                                <div class="field">
+                                    <label>Time:</label>
+                                    <span><?php echo htmlspecialchars($f_appointment->appointment_time); ?></span>
+                                </div>
+                                <div class="field">
+                                    <label>Notes:</label>
+                                    <span><?php echo htmlspecialchars($f_appointment->description); ?></span>
+                                </div>
+                                <?php if(isset($f_appointment->quotation_details)): ?>
+                                <div class="field">
+                                    <label>Quotation Details:</label>
+                                    <span><?php echo htmlspecialchars($f_appointment->quotation_details); ?></span>
+                                </div>
+                                <div class="field">
+                                    <label>Work Hours:</label>
+                                    <span><?php echo htmlspecialchars($f_appointment->work_hours); ?> hours</span>
+                                </div>
+                                <div class="field">
+                                    <label>Cost:</label>
+                                    <span>$<?php echo number_format($f_appointment->cost, 2); ?></span>
+                                </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -372,22 +453,6 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
                         <option value="Ratnapura">Ratnapura</option>
                         <option value="Trincomalee">Trincomalee</option>
                         <option value="Vavuniya">Vavuniya</option>
-                        <!-- Add more districts -->
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="province">Province</label>
-                    <select id="province" name="province" required>
-                        <option value="">-- Select Province --</option>
-                        <option value="Western">Western</option>
-                        <option value="Central">Central</option>
-                        <option value="Southern">Southern</option>
-                        <option value="Uva">Uva</option>
-                        <option value="Sabaragamuwa">Sabaragamuwa</option>
-                        <option value="North Western">North Western</option>
-                        <option value="North Central">North Central</option>
-                        <option value="Northern">Northern</option>
-                        <option value="Eastern">Eastern</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -398,6 +463,34 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Save Changes</button>
                     <button type="button" onclick="closeEditProfileModal()" class="btn btn-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Rating Modal -->
+    <div id="ratingModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeRatingModal()">&times;</span>
+            <h2>Rate Your Appointment</h2>
+            <form id="ratingForm" method="POST">
+                <div class="rating-container">
+                    <div class="star-rating">
+                        <input type="radio" id="star5" name="rating" value="5">
+                        <label for="star5" title="5 stars"><i class='bx bxs-star'></i></label>
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4" title="4 stars"><i class='bx bxs-star'></i></label>
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3" title="3 stars"><i class='bx bxs-star'></i></label>
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2" title="2 stars"><i class='bx bxs-star'></i></label>
+                        <input type="radio" id="star1" name="rating" value="1">
+                        <label for="star1" title="1 star"><i class='bx bxs-star'></i></label>
+                    </div>
+                </div>
+                <div class="form-group" style="text-align: right; margin-top: 20px;">
+                    <button type="button" onclick="closeRatingModal()" style="padding: 8px 15px; margin-right: 10px; border-radius: 5px; border: none; background: #6c757d; color: white;">Cancel</button>
+                    <button type="submit" style="padding: 8px 15px; border-radius: 5px; border: none; background: #2563eb; color: white;">Submit Rating</button>
                 </div>
             </form>
         </div>
@@ -487,6 +580,64 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
                 closeEditProfileModal();
             }
         }
+
+        function openRatingModal(appointmentId) {
+            document.getElementById('ratingModal').style.display = "block";
+            document.getElementById('ratingForm').action = "<?php echo URLROOT; ?>/CustomerController/rateAppointment/" + appointmentId;
+        }
+
+        function closeRatingModal() {
+            document.getElementById('ratingModal').style.display = "none";
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('ratingModal')) {
+                closeRatingModal();
+            }
+        }
+
+        // Star rating functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const stars = document.querySelectorAll('.star-rating input');
+            const labels = document.querySelectorAll('.star-rating label');
+            
+            // Add hover effect
+            labels.forEach((label, index) => {
+                label.addEventListener('mouseover', function() {
+                    for(let i = 0; i <= index; i++) {
+                        labels[i].style.color = '#ffcc00';
+                    }
+                });
+                
+                label.addEventListener('mouseout', function() {
+                    const checkedStar = document.querySelector('.star-rating input:checked');
+                    if(checkedStar) {
+                        const checkedIndex = Array.from(stars).indexOf(checkedStar);
+                        for(let i = 0; i <= checkedIndex; i++) {
+                            labels[i].style.color = '#ffcc00';
+                        }
+                        for(let i = checkedIndex + 1; i < labels.length; i++) {
+                            labels[i].style.color = '#ccc';
+                        }
+                    } else {
+                        labels.forEach(l => l.style.color = '#ccc');
+                    }
+                });
+            });
+            
+            // Update stars when a rating is selected
+            stars.forEach((star, index) => {
+                star.addEventListener('change', function() {
+                    for(let i = 0; i <= index; i++) {
+                        labels[i].style.color = '#ffcc00';
+                    }
+                    for(let i = index + 1; i < labels.length; i++) {
+                        labels[i].style.color = '#ccc';
+                    }
+                });
+            });
+        });
     </script>
     <script src="<?php echo URLROOT; ?>/public/js/script-index.js"></script>
 </body>

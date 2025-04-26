@@ -10,12 +10,9 @@
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/navbar.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/footer.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 </head>
 
 <body>
-
-
     <main>
         <div class="cart-container">
             <h1>Your Cart</h1>
@@ -43,24 +40,17 @@
                                         </td>
                                         <td>Rs. <?php echo htmlspecialchars($item->selling_price); ?></td>
                                         <td>
-                                            <form action="<?php echo URLROOT; ?>/StorePageController/updateItemQuantity"
-                                                method="POST" class="quantity-controls">
+                                            <form action="<?php echo URLROOT; ?>/StorePageController/updateItemQuantity" method="POST" class="quantity-controls">
                                                 <input type="hidden" name="cart_item_id" value="<?php echo $item->id; ?>">
-                                                <input type="number" name="new_quantity" value="<?php echo $item->quantity; ?>"
-                                                    min="1" max="<?php echo $item->available_quantity; ?>">
+                                                <input type="number" name="new_quantity" value="<?php echo $item->quantity; ?>" min="1" max="<?php echo $item->available_quantity; ?>">
                                                 <button type="submit" class="update-btn">
                                                     <i class="fas fa-sync-alt"></i>
                                                 </button>
                                             </form>
                                         </td>
+                                        <td><strong>Rs. <?php echo htmlspecialchars($item->quantity * $item->selling_price); ?></strong></td>
                                         <td>
-                                            <strong>Rs.
-                                                <?php echo htmlspecialchars($item->quantity * $item->selling_price); ?></strong>
-                                        </td>
-                                        <td>
-                                            <form
-                                                action="<?php echo URLROOT; ?>/StorePageController/removeItem/<?php echo $item->id; ?>"
-                                                method="POST">
+                                            <form action="<?php echo URLROOT; ?>/StorePageController/removeItem/<?php echo $item->id; ?>" method="POST">
                                                 <button type="submit" class="remove-btn">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
@@ -78,14 +68,12 @@
 
                             <div class="summary-item">
                                 <span>Subtotal</span>
-                                <span id="subtotal">Rs.
-                                    <?php echo isset($data['total']) ? htmlspecialchars($data['total']) : '0'; ?></span>
+                                <span id="subtotal">Rs. <?php echo isset($data['total']) ? htmlspecialchars($data['total']) : '0'; ?></span>
                             </div>
 
-                            <!-- Province Selection -->
                             <div class="summary-item">
                                 <label for="province">Your Province</label>
-                                <select id="province" name="province" onchange="updateDeliveryFee()">
+                                <select id="province" name="province" onchange="updateDeliveryFee()" required>
                                     <option value="" disabled selected>Select province</option>
                                     <option value="Western">Western</option>
                                     <option value="Central">Central</option>
@@ -106,36 +94,35 @@
 
                             <div class="summary-total">
                                 <span>Grand Total</span>
-                                <span id="grand-total">
-                                    Rs. <?php echo isset($data['total']) ? htmlspecialchars($data['total']) : '0'; ?>
-                                </span>
+                                <span id="grand-total">Rs. <?php echo isset($data['total']) ? htmlspecialchars($data['total']) : '0'; ?></span>
                             </div>
                         </div>
-                        <a href="<?php echo URLROOT; ?>/StorePageController/checkout?grand_total=<?php echo $data['total']; ?>" class="checkout-btn" id="checkoutBtn">
-    <i class="fas fa-credit-card mr-2"></i> Proceed to Checkout
-</a>
+
+                        <div class="summary-item">
+                            <form id="checkoutForm" action="<?php echo URLROOT; ?>/StorePageController/checkout" method="POST">
+                                <input type="hidden" name="grand_total" id="grand_total_input" value="<?php echo $data['total']; ?>">
+                                <input type="hidden" name="delivery_fee" id="delivery_fee_input" value="0">
+                                <input type="hidden" name="supplier_totals" id="supplier_totals_input" value="">
+                                <button type="submit" class="checkout-btn">
+                                    <i class="fas fa-credit-card mr-2"></i> Proceed to Checkout
+                                </button>
+                            </form>
+                        </div>
 
                         <a href="<?php echo URLROOT; ?>/StorePageController/index" class="continue-shopping">
                             <i class="fas fa-arrow-left mr-2"></i> Continue Shopping
                         </a>
-
-                        
-
                     </div>
-
-
-
                 </div>
-            </div>
-        <?php else: ?>
-            <div class="empty-cart">
-                <i class="fas fa-shopping-cart"></i>
-                <p>Your cart is empty.</p>
-                <a href="<?php echo URLROOT; ?>/StorePageController/index" class="continue-shopping">
-                    <i class="fas fa-arrow-left mr-2"></i> Browse Products
-                </a>
-            </div>
-        <?php endif; ?>
+            <?php else: ?>
+                <div class="empty-cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <p>Your cart is empty.</p>
+                    <a href="<?php echo URLROOT; ?>/StorePageController/index" class="continue-shopping">
+                        <i class="fas fa-arrow-left mr-2"></i> Browse Products
+                    </a>
+                </div>
+            <?php endif; ?>
         </div>
     </main>
 
@@ -145,53 +132,76 @@
         $supplierIds[$item->supplier_id] = true;
     }
     $numSuppliers = count($supplierIds);
-?>
-<script>
-    const numSuppliers = <?php echo isset($data['numSuppliers']) ? (int)$data['numSuppliers'] : 1; ?>;
-</script>
 
-
-
-<script>
-    const deliveryRates = {
-        "Western": 200,
-        "Central": 250,
-        "Southern": 220,
-        "Northern": 350,
-        "Eastern": 300,
-        "North Western": 340,
-        "North Central": 280,
-        "Uva": 250,
-        "Sabaragamuwa": 240
-    };
-
-    function updateDeliveryFee() {
-        const province = document.getElementById('province').value;
-        const ratePerSupplier = deliveryRates[province] || 0;
-        const deliveryFee = ratePerSupplier * numSuppliers;
-
-        const subtotalText = document.getElementById('subtotal').innerText.replace('Rs. ', '');
-        const subtotal = parseFloat(subtotalText) || 0;
-
-        const grandTotal = subtotal + deliveryFee;
-
-        document.getElementById('delivery-fee').innerText = `Rs. ${deliveryFee}`;
-        document.getElementById('grand-total').innerText = `Rs. ${grandTotal}`;
-    }
-</script>
-
-<!-- province selection section make required one -->
-<script>
-    document.getElementById('checkoutBtn').addEventListener('click', function (e) {
-        const province = document.getElementById('province').value;
-        if (!province) {
-            e.preventDefault(); // Prevent link navigation
-            alert("Please select your province before proceeding to checkout.");
+    $supplierTotals = [];
+    foreach ($data['cartItems'] as $item) {
+        if (!isset($supplierTotals[$item->supplier_id])) {
+            $supplierTotals[$item->supplier_id] = 0;
         }
-    });
-</script>
+        $supplierTotals[$item->supplier_id] += $item->selling_price * $item->quantity;
+    }
+    ?>
 
+    <script>
+        const numSuppliers = <?php echo (int) $numSuppliers; ?>;
+        const supplierTotals = <?php echo json_encode($supplierTotals); ?>;
 
+        const deliveryRates = {
+            "Western": 200,
+            "Central": 250,
+            "Southern": 220,
+            "Northern": 350,
+            "Eastern": 300,
+            "North Western": 340,
+            "North Central": 280,
+            "Uva": 250,
+            "Sabaragamuwa": 240
+        };
+
+        function updateDeliveryFee() {
+            const province = document.getElementById('province').value;
+            const ratePerSupplier = deliveryRates[province] || 0;
+            
+            // Calculate delivery fee per supplier
+            const supplierDeliveryFees = {};
+            const supplierGrandTotals = {};
+            let totalDeliveryFee = 0;
+            let grandTotal = 0;
+
+            // Calculate subtotal from cart items
+            const subtotalText = document.getElementById('subtotal').innerText.replace('Rs. ', '');
+            const subtotal = parseFloat(subtotalText) || 0;
+
+            // Calculate delivery fees and totals for each supplier
+            Object.keys(supplierTotals).forEach(supplierId => {
+                supplierDeliveryFees[supplierId] = ratePerSupplier;
+                supplierGrandTotals[supplierId] = supplierTotals[supplierId] + ratePerSupplier;
+                totalDeliveryFee += ratePerSupplier;
+                grandTotal += supplierGrandTotals[supplierId];
+            });
+
+            // Update UI
+            document.getElementById('delivery-fee').innerText = `Rs. ${totalDeliveryFee}`;
+            document.getElementById('grand-total').innerText = `Rs. ${grandTotal}`;
+            document.getElementById('grand_total_input').value = grandTotal;
+            document.getElementById('delivery_fee_input').value = totalDeliveryFee;
+
+            // Store supplier-specific data in hidden inputs
+            document.getElementById('supplier_totals_input').value = JSON.stringify({
+                totals: supplierTotals,
+                deliveryFees: supplierDeliveryFees,
+                grandTotals: supplierGrandTotals
+            });
+        }
+
+        document.getElementById('checkoutForm').addEventListener('submit', function (e) {
+            const province = document.getElementById('province').value;
+            if (!province) {
+                e.preventDefault();
+                alert("Please select your province before proceeding to checkout.");
+            }
+        });
+    </script>
 
     <?php require_once APPROOT . '/views/footer.php'; ?>
 </body>

@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/navbar.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/storeHomepage.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/footer.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+        integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM8d7xg1z5l5e5e5e5e5e5e5e5e5e5e5e5e5" crossorigin="anonymous">
 </head>
 
 <body>
@@ -28,12 +31,11 @@
     <div class="main2">
         <div class="box-container">
             <div class="left-section">
-                <img src="<?php echo URLROOT; ?>/public/img/home.png" alt="Descriptive Image">
+                <img src="<?php echo URLROOT; ?>/public/img/neww.png" alt="Descriptive Image">
             </div>
             <div class="right-section">
-                <h2>HomeGenie Special Christmas Offers</h2>
-                <p>Celebrate this Christmas with HomeGenie! Enjoy exclusive discounts on essential home services and
-                    products.</p>
+                <h2>HomeGenie වෙසක් වට්ටම්</h2>
+                <p>HomeGenie වෙසක් උළෙල අරඹමින් විශේෂ වට්ටම් ! ඔබට අවශ්‍ය සියලු නිවසේ උපකරණ හා සේවා දැන් විශේෂ මිල අඩුවෙන් ලබාගන්න. </p>
 
             </div>
         </div>
@@ -41,11 +43,16 @@
         <section class="categories">
             <h1>Explore Popular Categories</h1>
             <div class="category-buttons">
-                <a href="<?php echo URLROOT; ?>/StorePageController/cleaning" class="category-btn">🧹 Cleaning</a>
-                <a href="<?php echo URLROOT; ?>/StorePageController/electricity" class="category-btn">💡 Electrical</a>
-                <a href="<?php echo URLROOT; ?>/StorePageController/painting" class="category-btn">🎨 Painting</a>
-                <a href="<?php echo URLROOT; ?>/StorePageController/carpentry" class="category-btn">🪚 Carpentry</a>
-                <a href="<?php echo URLROOT; ?>/StorePageController/masonary" class="category-btn">🧱 Masonry</a>
+                <a href="<?php echo URLROOT; ?>/StorePageController/cleaning" class="category-btn"><i
+                        class="fa fa-broom"></i> Cleaning</a>
+                <a href="<?php echo URLROOT; ?>/StorePageController/electricity" class="category-btn"><i
+                        class="fa fa-lightbulb"></i> Electrical</a>
+                <a href="<?php echo URLROOT; ?>/StorePageController/painting" class="category-btn"><i
+                        class="fa fa-paint-brush"></i> Painting</a>
+                <a href="<?php echo URLROOT; ?>/StorePageController/carpentry" class="category-btn"><i
+                        class="fa fa-hammer"></i> Carpentry</a>
+                <a href="<?php echo URLROOT; ?>/StorePageController/masonary" class="category-btn"><i
+                        class="fa fa-hammer"></i> Masonry</a>
             </div>
         </section>
 
@@ -74,11 +81,20 @@
                 <?php if (!empty($data['items'])): ?>
                     <?php foreach ($data['items'] as $item): ?>
                         <div class="item">
+                            <div class="wishlist-container">
+                                <form action="<?php echo URLROOT; ?>/StorePageController/addToWishlist" method="POST"
+                                    class="wishlist-form">
+                                    <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
+                                    <button type="submit" class="modern-btn-save">
+                                        💙
+                                    </button>
+                                </form>
+                            </div>
                             <img src="data:image/jpeg;base64,<?php echo base64_encode($item->image_path); ?>"
                                 alt="<?php echo htmlspecialchars($item->item_name); ?>">
                             <h3><?php echo htmlspecialchars($item->item_name); ?></h3>
 
-                           
+
                             <p class="rating-stars">
                                 <?php
                                 for ($i = 1; $i <= 5; $i++) {
@@ -97,7 +113,7 @@
 
                             <button class="more-btn" onclick="openModal(<?php echo $item->item_id; ?>)">More Details</button>
 
-                            <!-- Form container -->
+                            
                             <div class="button-container">
                                 <form action="<?php echo URLROOT; ?>/StorePageController/addToCart" method="POST"
                                     class="form-left same-row-form">
@@ -116,14 +132,6 @@
                                         🛒&nbsp;Add
                                     </button>
                                 </form>
-
-                                <form action="<?php echo URLROOT; ?>/StorePageController/addToWishlist" method="POST"
-                                    class="form-right same-row-form">
-                                    <input type="hidden" name="item_id" value="<?php echo $item->item_id; ?>">
-                                    <button type="submit" class="modern-btn-save">
-                                        💙 Save
-                                    </button>
-                                </form>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -139,7 +147,7 @@
                         <h2><?php echo htmlspecialchars($item->item_name); ?></h2>
                         <p><?php echo nl2br(htmlspecialchars($item->description)); ?></p>
 
-                        
+
                         <p><strong>Supplier:</strong> <?php echo htmlspecialchars($item->supplier_name); ?></p>
 
                         <p class="rating-stars">
@@ -194,67 +202,62 @@
                 </div>
             <?php endforeach; ?>
         </section>
+    </div>
+    <?php require_once APPROOT . '/views/footer.php'; ?>
 
-        <script>
-            function openModal(id) {
-                const modals = document.querySelectorAll('.modal');
-                modals.forEach(modal => modal.style.display = 'none');
-                document.getElementById('modal_' + id).style.display = 'flex';
-            }
+    <script>
+        function openModal(id) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => modal.style.display = 'none');
+            document.getElementById('modal_' + id).style.display = 'flex';
+        }
 
-            function closeModal(id) {
-                document.getElementById('modal_' + id).style.display = 'none';
-            }
+        function closeModal(id) {
+            document.getElementById('modal_' + id).style.display = 'none';
+        }
 
-            window.addEventListener('click', function (e) {
-                const modals = document.querySelectorAll('.modal');
-                modals.forEach(modal => {
-                    if (e.target === modal) {
-                        modal.style.display = 'none';
-                    }
-                });
-            });
-
-            function checkQuantity(itemId) {
-                const quantityInput = document.getElementById('quantity_' + itemId);
-                const maxQuantity = parseInt(document.getElementById('available_quantity_' + itemId).value, 10);
-                const selectedQuantity = parseInt(quantityInput.value, 10);
-
-                if (selectedQuantity > maxQuantity) {
-                    alert('Cannot select more than available inventory!');
-                    quantityInput.value = maxQuantity;
+        window.addEventListener('click', function (e) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
                 }
+            });
+        });
+
+        function checkQuantity(itemId) {
+            const quantityInput = document.getElementById('quantity_' + itemId);
+            const maxQuantity = parseInt(document.getElementById('available_quantity_' + itemId).value, 10);
+            const selectedQuantity = parseInt(quantityInput.value, 10);
+
+            if (selectedQuantity > maxQuantity) {
+                alert('Cannot select more than available inventory!');
+                quantityInput.value = maxQuantity;
             }
+        }
+    </script>
+    <script>
+        function toggleDropdown() {
+            const menu = document.getElementById("dropdownMenu");
+            menu.style.display = (menu.style.display === "block") ? "none" : "block";
+        }
+
+        // Optional: close dropdown when clicking outside
+        window.onclick = function (event) {
+            const dropdown = document.getElementById("dropdownMenu");
+            if (!event.target.closest('.user-dropdown')) {
+                dropdown.style.display = "none";
+            }
+        };
+    </script>
+
+    <?php if (isset($_SESSION['wishlist_msg'])): ?>
+        <script>
+            alert("<?php echo $_SESSION['wishlist_msg']; ?>");
         </script>
+        <?php unset($_SESSION['wishlist_msg']); ?>
+    <?php endif; ?>
 
-
-
-
-<!-- logout button drop down -->
-<script>
-function toggleDropdown() {
-    const menu = document.getElementById("dropdownMenu");
-    menu.style.display = (menu.style.display === "block") ? "none" : "block";
-}
-
-// Optional: close dropdown when clicking outside
-window.onclick = function(event) {
-    const dropdown = document.getElementById("dropdownMenu");
-    if (!event.target.closest('.user-dropdown')) {
-        dropdown.style.display = "none";
-    }
-};
-</script>
-
-        <?php if (isset($_SESSION['wishlist_msg'])): ?>
-            <script>
-                alert("<?php echo $_SESSION['wishlist_msg']; ?>");
-            </script>
-            <?php unset($_SESSION['wishlist_msg']); ?>
-        <?php endif; ?>
-
-
-        <?php require_once APPROOT . '/views/footer.php'; ?>
 </body>
 
 </html>

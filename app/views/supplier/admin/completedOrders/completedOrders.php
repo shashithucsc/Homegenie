@@ -37,16 +37,8 @@
                     <?php foreach ($order->items as $item): ?>
                       <li>
                         <div class="item-attribute">
-                          <strong><i class="fas fa-box"></i> Item</strong>
-                          <span><?php echo $item->item_name; ?></span>
-                        </div>
-                        <div class="item-attribute">
-                          <strong><i class="fas fa-sort-numeric-up-alt"></i> Qty</strong>
-                          <span><?php echo $item->quantity; ?></span>
-                        </div>
-                        <div class="item-attribute">
-                          <strong><i class="fas fa-tag"></i> Price</strong>
-                          <span><?php echo number_format($item->price, 2); ?></span>
+                          <strong><i class="fas fa-box"></i> </strong>
+                          <span><?php echo $item->item_name; ?></span><span>  x <?php echo $item->quantity; ?></span>
                         </div>
                       </li>
                     <?php endforeach; ?>

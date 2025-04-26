@@ -10,7 +10,7 @@ if (session_status() == PHP_SESSION_NONE) {
 <body>
     <header class="top-nav">
         <div class="logo">
-            <a href="<?php echo URLROOT; ?>/HomeController/index" target="main">
+            <a href="<?php echo URLROOT; ?>/CustomerController/index" target="main">
                 <img src="<?php echo URLROOT; ?>/public/img/logo.png" alt="HomeGenie Logo" class="circle-logo">
             </a>
             <h1>HomeGenie Store</h1>

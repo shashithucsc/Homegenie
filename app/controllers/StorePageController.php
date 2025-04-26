@@ -65,6 +65,11 @@ class StorePageController extends Controller
    
   }
 
+  public function cardpayment(){
+    $this->view('supplier/homepage/paymentGateway');
+        
+  }
+
   public function myOrders()
   {
       if (!isset($_SESSION['user_id'])) {
@@ -89,7 +94,8 @@ class StorePageController extends Controller
     public function wishlist()
     {
         if (!isset($_SESSION['user_id'])) {
-           redirect('LoginController/index');
+           header("Location: " . URLROOT . "/StorePageController/index");
+          
             return;
         }
 

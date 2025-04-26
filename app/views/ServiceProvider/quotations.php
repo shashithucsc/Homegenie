@@ -236,26 +236,23 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null; ?>
     }
 
     function deleteQuotation(quotationId) {
-        if (confirm('Are you sure you want to delete this quotation?')) {
-            fetch('<?php echo URLROOT; ?>/ServiceProviderController/deleteQuotation/' + quotationId, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
+        if (confirm('Are you sure you want to hide this quotation?')) {
+            // Find the row containing the quotation
+            const rows = document.querySelectorAll('tr');
+            for (const row of rows) {
+                const firstCell = row.querySelector('td:first-child');
+                if (firstCell && firstCell.textContent.trim() === quotationId.toString()) {
+                    // Hide the row with a fade-out animation
+                    row.style.transition = 'opacity 0.3s ease';
+                    row.style.opacity = '0';
+                    
+                    // Remove the row after the animation completes
+                    setTimeout(() => {
+                        row.style.display = 'none';
+                    }, 300);
+                    break;
                 }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Quotation deleted successfully');
-                    location.reload();
-                } else {
-                    alert('Failed to delete quotation');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while deleting the quotation');
-            });
+            }
         }
     }
   </script>

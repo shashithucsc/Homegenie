@@ -68,6 +68,22 @@ class CartModel {
         return $this->db->resultSet();
     }
 
+    public function getCartItemsByUserIdAndSupplierId($userId, $supplierId)
+{
+    $this->db->query('
+        SELECT cart.*, inventory.selling_price 
+        FROM cart
+        INNER JOIN inventory ON cart.item_id = inventory.item_id
+        WHERE cart.customer_id = :customer_id AND cart.supplier_id = :supplier_id
+    ');
+    $this->db->bind(':customer_id', $userId);
+    $this->db->bind(':supplier_id', $supplierId);
+    return $this->db->resultSet();
+}
+
+    
+
+
     public function removeItemFromCart($cartItemId) {
         $this->db->query("DELETE FROM cart WHERE id = :cart_item_id");
         $this->db->bind(':cart_item_id', $cartItemId);
@@ -88,21 +104,26 @@ class CartModel {
     }
     
     // Create an order
-    public function createOrder($customerId, $totalAmount, $paymentMethod, $deliveryAddress, $supplierId) {
-        $this->db->query("INSERT INTO sales_orders (customer_id, total_amount, payment_method, delivery_address, supplier_id, created_at) 
-                          VALUES (:customer_id, :total_amount, :payment_method, :delivery_address, :supplier_id, NOW())");
-        
-        $this->db->bind(':customer_id', $customerId);
-        $this->db->bind(':total_amount', $totalAmount);
-        $this->db->bind(':payment_method', $paymentMethod);
-        $this->db->bind(':delivery_address', $deliveryAddress);
-        $this->db->bind(':supplier_id', $supplierId);
+   // Create an order for a specific supplier (with delivery fee)
+public function createOrder($customerId, $supplierTotal, $paymentMethod, $deliveryAddress, $supplierId, $deliveryFee) {
+    $this->db->query("INSERT INTO sales_orders 
+    (customer_id, total_amount, payment_method, delivery_address, supplier_id, delivery_fee, created_at) 
+    VALUES 
+    (:customer_id, :total_amount, :payment_method, :delivery_address, :supplier_id, :delivery_fee, NOW())");
     
-        if ($this->db->execute()) {
-            return $this->db->lastInsertId(); // Return order ID if successful
-        }
-        return false; // Return false if the query fails
+    $this->db->bind(':customer_id', $customerId);
+    $this->db->bind(':total_amount', $supplierTotal);  
+    $this->db->bind(':payment_method', $paymentMethod);
+    $this->db->bind(':delivery_address', $deliveryAddress);
+    $this->db->bind(':supplier_id', $supplierId);
+    $this->db->bind(':delivery_fee', $deliveryFee);  // ✅ new binding
+
+    if ($this->db->execute()) {
+        return $this->db->lastInsertId();
     }
+    return false;
+}
+
     
     
     

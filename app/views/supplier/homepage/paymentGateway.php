@@ -120,11 +120,15 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
         <div class="payment-container">
             <h2>Payment Details</h2>
             <div class="amount-display">
-                Amount to Pay: $<?php echo number_format($data['quotation']->cost, 2); ?>
+                Amount to Pay: $<?php echo number_format($data['grand_total'], 2); ?>
             </div>
-            <form class="payment-form" action="<?php echo URLROOT; ?>/CustomerController/processPayment" method="POST">
-                <input type="hidden" name="appointment_id" value="<?php echo $data['appointment']->appointment_id; ?>">
-                <input type="hidden" name="amount" value="<?php echo $data['quotation']->cost; ?>">
+            <form class="payment-form" action="<?php echo URLROOT; ?>/StorePageController/processPayment" method="POST">
+                <input type="hidden" name="grand_total" value="<?php echo $data['grand_total']; ?>">
+                <input type="hidden" name="delivery_address" value="<?php echo htmlspecialchars($data['delivery_address']); ?>">
+                <input type="hidden" name="supplier_ids" value='<?php echo json_encode($_SESSION['pending_supplier_ids']); ?>'>
+                <input type="hidden" name="supplier_totals" value='<?php echo json_encode($_SESSION['pending_supplier_totals']); ?>'>
+                <input type="hidden" name="supplier_delivery_fees" value='<?php echo json_encode($_SESSION['pending_supplier_delivery_fees']); ?>'>
+                <input type="hidden" name="supplier_grand_totals" value='<?php echo json_encode($_SESSION['pending_supplier_grand_totals']); ?>'>
                 
                 <div class="form-group">
                     <label>Card Number</label>

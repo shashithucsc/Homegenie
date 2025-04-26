@@ -21,9 +21,12 @@
 
             <!-- Order Summary -->
             <div class="cart-summary">
+            
+
                 <h2>Order Summary</h2>
                 <p>Total Items: <?php echo htmlspecialchars($data['total_items']); ?></p>
-                <h3>Grand Total: Rs. <?php echo htmlspecialchars($data['grand_total']); ?></h3>
+                <h3>Grand Total: Rs. <?php echo htmlspecialchars($_POST['grand_total']); ?></h3>
+
                 <p style="color: gray;">*Delivery charges were already added in your cart.</p>
             </div>
 
@@ -31,10 +34,13 @@
             <div class="checkout-section">
                 <h2>Delivery Address</h2>
                 <form id="checkoutForm" action="<?php echo URLROOT; ?>/StorePageController/confirmOrder" method="POST">
-                    <textarea name="delivery_address" rows="4" placeholder="Enter your delivery address here..."
-                        required></textarea>
+                    <textarea name="delivery_address" rows="4" placeholder="Enter your delivery address here..." required></textarea>
 
                     <input type="hidden" name="grand_total" value="<?php echo $data['grand_total']; ?>">
+                    <input type="hidden" name="supplier_ids" value='<?php echo json_encode(array_keys($data['supplier_totals'])); ?>'>
+                    <input type="hidden" name="supplier_totals" value='<?php echo json_encode($data['supplier_totals']); ?>'>
+                    <input type="hidden" name="supplier_delivery_fees" value='<?php echo json_encode($data['supplier_delivery_fees']); ?>'>
+                    <input type="hidden" name="supplier_grand_totals" value='<?php echo json_encode($data['supplier_grand_totals']); ?>'>
 
                     <div class="payment-options">
                         <label>
@@ -50,6 +56,8 @@
                     <button type="submit" class="confirm-button">Confirm Order</button>
                 </form>
 
+                
+
                 <div class="checkout" style="margin-top: 20px;">
                     <a href="<?php echo URLROOT; ?>/StorePageController/index" class="button">
                         <i class="fas fa-arrow-left"></i> Back to Store
@@ -59,25 +67,7 @@
         </div>
     </main>
 
-    <script>
-        document.getElementById('checkoutForm').addEventListener('submit', function (e) {
-            const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
-
-            if (selectedMethod === 'card') {
-                e.preventDefault(); // Stop normal form submission
-
-                // Redirect to card payment page, passing data via URL or session
-                const grandTotal = document.querySelector('input[name="grand_total"]').value;
-                const deliveryAddress = document.querySelector('textarea[name="delivery_address"]').value;
-
-                // Optionally store data in session or URL params
-                const encodedAddress = encodeURIComponent(deliveryAddress);
-                window.location.href = `<?php echo URLROOT; ?>/StorePageController/cardPaymentPage?total=${grandTotal}&address=${encodedAddress}`;
-            }
-
-            // If COD is selected, let form submit normally
-        });
-    </script>
+   
 
     <?php require_once APPROOT . '/views/footer.php'; ?>
 </body>

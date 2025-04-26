@@ -46,7 +46,18 @@ class ProfileSVPModel
     return $this->db->execute();
 }
 
-
-
+public function getAverageRating($svp_id) {
+    $sql = "SELECT AVG(rating) as average_rating 
+            FROM appointments 
+            WHERE svp_id = :svp_id 
+            AND finish_status = 'complete' 
+            AND rating IS NOT NULL";
+    
+    $this->db->query($sql);
+    $this->db->bind(':svp_id', $svp_id);
+    $result = $this->db->single();
+    
+    return $result ? round($result->average_rating, 1) : 0;
+}
 
 }

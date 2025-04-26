@@ -238,51 +238,57 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
             background: var(--background);
         }
 
-        /* Approved Appointments Table */
+        /* Updated Table Styles */
         .table-container {
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow: auto;
-            margin-top: 15px;
+            margin-top: 20px;
             max-width: 100%;
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .approved-appointments-table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
         }
 
         .approved-appointments-table thead th {
-            background: #f8fafc;
-            color: #1e293b;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.9) 0%, rgba(29, 78, 216, 0.9) 100%);
+            color: white;
             font-weight: 600;
-            padding: 8px 10px;
+            padding: 16px;
             text-align: left;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             white-space: nowrap;
             position: sticky;
             top: 0;
             z-index: 1;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
         }
 
         .approved-appointments-table tbody tr {
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             border-bottom: 1px solid #f1f5f9;
         }
 
         .approved-appointments-table tbody tr:hover {
             background-color: #f8fafc;
-            transform: translateY(-1px);
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
 
         .approved-appointments-table td {
-            padding: 8px 10px;
+            padding: 16px;
             vertical-align: middle;
             color: #334155;
             white-space: nowrap;
@@ -291,52 +297,206 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
         .approved-appointments-table .id-cell {
             font-weight: 600;
             color: #2563eb;
-            font-size: 0.75rem;
+            font-size: 0.9rem;
+            background: rgba(37, 99, 235, 0.1);
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
+        }
+
+        .approved-appointments-table .customer-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .approved-appointments-table .customer-name,
+        .approved-appointments-table .customer-contact {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #1e293b;
+        }
+
+        .approved-appointments-table .customer-name i,
+        .approved-appointments-table .customer-contact i {
+            color: #2563eb;
+            font-size: 0.9rem;
         }
 
         .approved-appointments-table .datetime-cell {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 8px;
+            min-width: 150px;
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .approved-appointments-table .date,
+        .approved-appointments-table .time {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .approved-appointments-table .date {
             font-weight: 600;
             color: #1e293b;
-            font-size: 0.75rem;
+            font-size: 0.9rem;
         }
 
         .approved-appointments-table .time {
             color: #64748b;
-            font-size: 0.7rem;
+            font-size: 0.85rem;
+            background: rgba(37, 99, 235, 0.1);
+            padding: 6px 10px;
+            border-radius: 6px;
+        }
+
+        .approved-appointments-table .details-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-width: 300px;
+            max-width: 300px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .approved-appointments-table .description,
+        .approved-appointments-table .quotation {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            color: #475569;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            word-break: break-word;
+            white-space: normal;
+        }
+
+        .approved-appointments-table .description i,
+        .approved-appointments-table .quotation i {
+            color: #2563eb;
+            font-size: 0.9rem;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+        .approved-appointments-table .description span,
+        .approved-appointments-table .quotation span {
+            flex: 1;
         }
 
         .approved-appointments-table .location-cell {
-            font-weight: 500;
-            color: #1e293b;
-            font-size: 0.75rem;
-        }
-
-        .approved-appointments-table .description-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 150px;
+            max-width: 150px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 8px;
             color: #475569;
-            line-height: 1.3;
-            font-size: 0.75rem;
-            max-width: 200px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            font-size: 0.85rem;
+            word-break: break-word;
+            white-space: normal;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
-        .approved-appointments-table .hours-cell {
-            font-weight: 500;
+        .approved-appointments-table .location-cell i {
             color: #2563eb;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
+            flex-shrink: 0;
         }
 
-        .approved-appointments-table .cost-cell {
+        .approved-appointments-table .location-cell span {
+            flex: 1;
+            line-height: 1.3;
+        }
+
+        .approved-appointments-table .work-details-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 150px;
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .approved-appointments-table .hours,
+        .approved-appointments-table .cost {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
             font-weight: 600;
-            color: #1e293b;
-            font-size: 0.75rem;
+        }
+
+        .approved-appointments-table .hours {
+            background: rgba(37, 99, 235, 0.1);
+            color: #2563eb;
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
+        }
+
+        .approved-appointments-table .cost {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+            box-shadow: 0 2px 4px rgba(34, 197, 94, 0.1);
+        }
+
+        .approved-appointments-table .hours i,
+        .approved-appointments-table .cost i {
+            font-size: 0.9rem;
+        }
+
+        /* Scrollbar Styling */
+        .table-container::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Responsive Table */
+        @media (max-width: 768px) {
+            .approved-appointments-table {
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .approved-appointments-table td {
+                padding: 12px;
+            }
+            
+            .approved-appointments-table thead th {
+                padding: 12px;
+            }
         }
 
         /* Modal */
@@ -641,23 +801,6 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
             background: #218838;
         }
 
-        /* Responsive Table */
-        @media (max-width: 768px) {
-            .approved-appointments-table {
-                display: block;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-            
-            .approved-appointments-table td {
-                padding: 6px 8px;
-            }
-            
-            .approved-appointments-table thead th {
-                padding: 6px 8px;
-            }
-        }
-
         /* Calendar Styles */
         .calendar-container {
             background: white;
@@ -850,25 +993,150 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
         /* Layout Styles */
         .approved-content-wrapper {
             display: flex;
-            gap: 15px;
-            align-items: flex-start;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .calendar-container {
+            width: 100%;
+            max-width: 280px;
+            margin: 0 auto;
         }
 
         .table-container {
-            flex: 1;
-            min-width: 0;
+            width: 100%;
+            margin-top: 20px;
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
             .approved-content-wrapper {
-                flex-direction: column;
+                gap: 15px;
             }
             
             .calendar-container {
                 width: 100%;
-                margin-bottom: 15px;
+                max-width: none;
             }
+        }
+
+        /* Pending Appointments Cards */
+        .pending-appointments {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .appointment-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        
+
+        .appointment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .appointment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(37, 99, 235, 0.1);
+        }
+
+        .appointment-id {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .appointment-date {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .appointment-details {
+            margin-bottom: 15px;
+        }
+
+        .appointment-details p {
+            margin: 8px 0;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .appointment-details i {
+            color: var(--primary);
+            width: 20px;
+        }
+
+        .appointment-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .approve-btn {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+        }
+
+        .approve-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .reject-btn {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .reject-btn:hover {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .appointment-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
         }
     </style>
 </head>
@@ -904,16 +1172,24 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
 
         <!-- Pending Appointments -->
         <div id="pending-tab" class="tab-content active">
-            <div class="appointments-grid" id="pending-appointments-grid">
-                <?php foreach ($data['pendingAppointments'] as $appointment): ?>
+            <div class="pending-appointments" id="pending-appointments-grid">
+                <?php 
+                // Sort appointments by date and time
+                usort($data['pendingAppointments'], function($a, $b) {
+                    $dateA = strtotime($a->appointment_date . ' ' . $a->appointment_time);
+                    $dateB = strtotime($b->appointment_date . ' ' . $b->appointment_time);
+                    return $dateA - $dateB;
+                });
+                
+                foreach ($data['pendingAppointments'] as $appointment): ?>
                     <div class="appointment-card"
                          id="appointment-<?= $appointment->appointment_id ?>"
                          data-description="<?= strtolower($appointment->description) ?>"
                          data-location="<?= strtolower($appointment->location) ?>">
-                        <div class="card-header">
+                        <div class="appointment-header">
                             <span class="appointment-id">ID: <?= $appointment->appointment_id ?></span>
                         </div>
-                        <div class="card-content">
+                        <div class="appointment-details">
                             <div class="info-row">
                                 <i class="fas fa-calendar"></i>
                                 <span><?= $appointment->appointment_date ?></span>
@@ -930,15 +1206,16 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                                 <i class="fas fa-info-circle"></i>
                                 <span><?= $appointment->description ?></span>
                             </div>
-                            <div class="card-actions">
-                                <button class="btn btn-primary" onclick="approveAppointment(<?= $appointment->appointment_id ?>)">
-                                    <i class="fas fa-check"></i> Approve
-                                </button>
-                                <button class="btn btn-danger" onclick="rejectAppointment(<?= $appointment->appointment_id ?>)">
-                                    <i class="fas fa-times"></i> Reject
-                                </button>
-                            </div>
                         </div>
+                        <div class="appointment-actions">
+                            <button class="action-btn approve-btn" onclick="approveAppointment(<?= $appointment->appointment_id ?>)">
+                                <i class="fas fa-check"></i> Approve
+                            </button>
+                            <button class="action-btn reject-btn" onclick="rejectAppointment(<?= $appointment->appointment_id ?>)">
+                                <i class="fas fa-times"></i> Reject
+                            </button>
+                        </div>
+                        <div class="appointment-status">Pending</div>
                     </div>
                 <?php endforeach; ?>
             </div>
@@ -981,13 +1258,10 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                             <thead>
                                 <tr>
                                     <th>Appointment ID</th>
-                                    <th>Customer Name</th>
-                                    <th>Contact Number</th>
-                                    <th>Description</th>
+                                    <th>Customer</th>
                                     <th>Date & Time</th>
+                                    <th>Details</th>
                                     <th>Location</th>
-                                    <th>Quotation Details</th>
-                                    <th>Work Hours</th>
                                     <th>Cost</th>
                                 </tr>
                             </thead>
@@ -1001,43 +1275,55 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                                         </td>
                                         <td>
                                             <div class="customer-cell">
-                                                <?php echo htmlspecialchars($appointment->customer_name); ?>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="contact-cell">
-                                                <?php echo htmlspecialchars($appointment->contact_number); ?>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="description-cell">
-                                                <?php echo htmlspecialchars($appointment->description); ?>
+                                                <div class="customer-name">
+                                                    <i class="fas fa-user"></i>
+                                                    <?php echo htmlspecialchars($appointment->customer_name); ?>
+                                                </div>
+                                                <div class="customer-contact">
+                                                    <i class="fas fa-phone"></i>
+                                                    <?php echo htmlspecialchars($appointment->contact_number); ?>
+                                                </div>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="datetime-cell">
-                                                <div class="date"><?php echo date('F d, Y', strtotime($appointment->appointment_date)); ?></div>
-                                                <div class="time"><?php echo $appointment->appointment_time; ?></div>
+                                                <div class="date">
+                                                    <i class="fas fa-calendar"></i>
+                                                    <?php echo date('F d, Y', strtotime($appointment->appointment_date)); ?>
+                                                </div>
+                                                <div class="time">
+                                                    <i class="fas fa-clock"></i>
+                                                    <?php echo $appointment->appointment_time; ?>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="details-cell">
+                                                <div class="description">
+                                                    <i class="fas fa-info-circle"></i>
+                                                    <span><?php echo htmlspecialchars($appointment->description); ?></span>
+                                                </div>
+                                                <div class="quotation">
+                                                    <i class="fas fa-file-alt"></i>
+                                                    <span><?php echo htmlspecialchars($appointment->quotation_details); ?></span>
+                                                </div>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="location-cell">
-                                                <?php echo htmlspecialchars($appointment->location); ?>
+                                                <i class="fas fa-map-marker-alt"></i>
+                                                <span><?php echo htmlspecialchars($appointment->location); ?></span>
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="quotation-cell">
-                                                <?php echo htmlspecialchars($appointment->quotation_details); ?>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="hours-cell">
-                                                <?php echo $appointment->work_hours ?? '0'; ?> hours
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="cost-cell">
-                                                $<?php echo number_format($appointment->cost, 2); ?>
+                                            <div class="work-details-cell">
+                                                <div class="hours">
+                                                    <i class="fas fa-hourglass-half"></i>
+                                                    <?php echo $appointment->work_hours ?? '0'; ?> hours
+                                                </div>
+                                                <div class="cost">
+                                                    Rs: <?php echo number_format($appointment->cost, 2); ?>
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>

@@ -32,9 +32,7 @@ class CustomerController extends Controller {
         // Get customer appointments
         $p_appointments = $this->CustomerModel->getPendingAppointments($loggedUserId);
         $a_appointments = $this->CustomerModel->getApprovedAppointments($loggedUserId);
-        if (!$p_appointments || !$a_appointments) {
-            die('No appointments found.');
-        }
+        
         $data = [
             'p_appointments' => $p_appointments,
             'a_appointments' => $a_appointments
@@ -68,6 +66,44 @@ class CustomerController extends Controller {
         ];
         $this->view('Customer/cu_profile', $data);
     }
+    public function editProfile() {
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Sanitize POST data
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            
+            $data = [
+                'id' => $_POST['id'],
+                'fname' => $_POST['fname'],
+                'lname' => $_POST['lname'],
+                'province' => $_POST['province'],
+                'district' => $_POST['district'],
+                'street' => $_POST['street'],
+                'psw' => $_POST['psw'],
+                'rpsw' => $_POST['rpsw'],
+                'customer_id' => $_SESSION['user_id']
+            ];
+            
+            // Get appointment to verify ownership
+            $editprofile = $this->CustomerModel->getProfileById($data['id']);
+            
+            // Verify appointment exists and belongs to current user
+            if(!$editprofile || $editprofile->customer_id != $_SESSION['user_id']) {
+                flash('profile_update_error', 'Unauthorized access or profile not found', 'alert alert-danger');
+                header('Location: ' . URLROOT . '/CustomerController/profile');
+                exit;
+            }
+            
+            if($this->CustomerModel->updateProfile($data)) {
+                flash('profile_update_success', 'Profile updated successfully!');
+            } else {
+                flash('profile_update_error', 'Failed to update profile', 'alert alert-danger');
+            }
+            header('Location: ' . URLROOT . '/CustomerController/profile');
+        } else {
+            header('Location: ' . URLROOT . '/CustomerController/profile');
+        }
+    }
+
 
     public function SPProfile($id = null){
         // Check if ID is provided
@@ -239,6 +275,58 @@ class CustomerController extends Controller {
         } else {
             header('Location: ' . URLROOT . '/CustomerController/appointment');
             exit;
+        }
+    }
+
+    public function updateProfile() {
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Sanitize POST data
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            
+            $data = [
+                'fname' => trim($_POST['fname']),
+                'lname' => trim($_POST['lname']),
+                'contact_number' => trim($_POST['contact_number']),
+                'email' => trim($_POST['email']),
+                'street' => trim($_POST['street']),
+                'district' => trim($_POST['district']),
+                'province' => trim($_POST['province']),
+                'profile_image' => null, // Initialize as null
+                'user_id' => $_SESSION['user_id']
+            ];
+
+            // Handle file upload
+            if(!empty($_FILES['profile_image']['name'])) {
+                // Get file details
+                $file = $_FILES['profile_image'];
+                $fileType = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+                
+                // Check if file is an image
+                $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
+                if(in_array($fileType, $allowedTypes)) {
+                    // Read the file content
+                    $imageContent = file_get_contents($file['tmp_name']);
+                    $data['profile_image'] = $imageContent;
+                } else {
+                    flash('profile_update_error', 'Invalid file type. Only JPG, JPEG, PNG & GIF files are allowed.', 'alert alert-danger');
+                    header('Location: ' . URLROOT . '/CustomerController/profile');
+                    exit;
+                }
+            } else {
+                // If no new image is uploaded, keep the existing one
+                $currentUser = $this->CustomerModel->getCustomer($_SESSION['user_id']);
+                $data['profile_image'] = $currentUser->profile_image;
+            }
+
+            if($this->CustomerModel->updateProfile($data)) {
+                flash('profile_update_success', 'Profile updated successfully!');
+                header('Location: ' . URLROOT . '/CustomerController/profile');
+            } else {
+                flash('profile_update_error', 'Failed to update profile', 'alert alert-danger');
+                header('Location: ' . URLROOT . '/CustomerController/profile');
+            }
+        } else {
+            header('Location: ' . URLROOT . '/CustomerController/profile');
         }
     }
 }

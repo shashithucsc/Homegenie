@@ -12,6 +12,7 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - HomeGenie</title>
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/navigationbar.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/style-profile.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <style>
@@ -189,14 +190,18 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
     <section class="container">
         <div class="profile-header">
             <div class="profile-avatar">
-                <img id="avatarImage" src="<?php echo htmlspecialchars($profile_pic); ?>" alt="Profile Picture">
+                <?php if(!empty($data['customer']->profile_image)): ?>
+                    <img src="data:image/jpeg;base64,<?php echo base64_encode($data['customer']->profile_image); ?>" alt="Profile Picture">
+                <?php else: ?>
+                    <img src="<?php echo URLROOT; ?>/public/images/default-profile.png" alt="Default Profile Picture">
+                <?php endif; ?>
             </div>
             <div class="profile-info">
-                <h1 id="profileName"><?php echo htmlspecialchars($user_name); ?></h1>
-                <p id="profileEmail"><?php echo htmlspecialchars($email); ?></p>
-                <a href="cu_settings.php" class="edit-profile-btn">
+                <h1><?php echo $data['customer']->first_name . ' ' . $data['customer']->last_name; ?></h1>
+                <p><?php echo $data['customer']->email; ?></p>
+                <button onclick="openEditProfileModal()" class="edit-profile-btn">
                     <i class='bx bx-edit-alt'></i> Edit Profile
-                </a>
+                </button>
             </div>
         </div>
 
@@ -227,11 +232,7 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
                             <!-- Directly access $data['customer'] -->
                             <p id="profileAddress">
                                 <?php
-                                if (!empty($data['customer']) && isset($data['customer']->address)) {
-                                    echo htmlspecialchars($data['customer']->address);
-                                } else {
-                                    echo 'N/A';
-                                }
+                                    echo htmlspecialchars($data['customer']->street . ', ' . $data['customer']->district . ', ' . $data['customer']->province);
                                 ?>
                             </p>
                         </div>
@@ -316,6 +317,92 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
         </div>
     </div>
 
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditProfileModal()">&times;</span>
+            <h2>Edit Profile</h2>
+            <form action="<?php echo URLROOT; ?>/CustomerController/updateProfile" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="fname">First Name</label>
+                    <input type="text" id="fname" name="fname" value="<?php echo $data['customer']->first_name; ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="lname">Last Name</label>
+                    <input type="text" id="lname" name="lname" value="<?php echo $data['customer']->last_name; ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="contact_number">Contact Number</label>
+                    <input type="text" id="contact_number" name="contact_number" value="<?php echo $data['customer']->contact_number; ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="<?php echo $data['customer']->email; ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="street">Street</label>
+                    <input type="text" id="street" name="street" value="<?php echo $data['customer']->street; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="district">District</label>
+                    <select id="district" name="district" required>
+                        <option value="">-- Select District --</option>
+                        <option value="Ampara">Ampara</option>
+                        <option value="Anuradhapura">Anuradhapura</option>
+                        <option value="Badulla">Badulla</option>
+                        <option value="Batticaloa">Batticaloa</option>
+                        <option value="Colombo">Colombo</option>
+                        <option value="Galle">Galle</option>
+                        <option value="Gampaha">Gampaha</option>
+                        <option value="Hambantota">Hambantota</option>
+                        <option value="Jaffna">Jaffna</option>
+                        <option value="Kalutara">Kalutara</option>
+                        <option value="Kandy">Kandy</option>
+                        <option value="Kegalle">Kegalle</option>
+                        <option value="Kilinochchi">Kilinochchi</option>
+                        <option value="Kurunegala">Kurunegala</option>
+                        <option value="Mannar">Mannar</option>
+                        <option value="Matale">Matale</option>
+                        <option value="Matara">Matara</option>
+                        <option value="Monaragala">Monaragala</option>
+                        <option value="Mullaitivu">Mullaitivu</option>
+                        <option value="Nuwara Eliya">Nuwara Eliya</option>
+                        <option value="Polonnaruwa">Polonnaruwa</option>
+                        <option value="Puttalam">Puttalam</option>
+                        <option value="Ratnapura">Ratnapura</option>
+                        <option value="Trincomalee">Trincomalee</option>
+                        <option value="Vavuniya">Vavuniya</option>
+                        <!-- Add more districts -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="province">Province</label>
+                    <select id="province" name="province" required>
+                        <option value="">-- Select Province --</option>
+                        <option value="Western">Western</option>
+                        <option value="Central">Central</option>
+                        <option value="Southern">Southern</option>
+                        <option value="Uva">Uva</option>
+                        <option value="Sabaragamuwa">Sabaragamuwa</option>
+                        <option value="North Western">North Western</option>
+                        <option value="North Central">North Central</option>
+                        <option value="Northern">Northern</option>
+                        <option value="Eastern">Eastern</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="profile_image">Profile Image</label>
+                    <input type="file" id="profile_image" name="profile_image" accept="image/jpeg,image/png,image/gif">
+                    <small>Accepted formats: JPG, JPEG, PNG, GIF</small>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" onclick="closeEditProfileModal()" class="btn btn-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <footer>
         <div class="footer-content">
             <div class="footer-section brand">
@@ -383,6 +470,21 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
         window.onclick = function(event) {
             if (event.target == document.getElementById('editModal')) {
                 closeEditModal();
+            }
+        }
+
+        function openEditProfileModal() {
+            document.getElementById('editProfileModal').style.display = 'block';
+        }
+
+        function closeEditProfileModal() {
+            document.getElementById('editProfileModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('editProfileModal')) {
+                closeEditProfileModal();
             }
         }
     </script>

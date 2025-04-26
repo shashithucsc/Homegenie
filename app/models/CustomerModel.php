@@ -13,30 +13,13 @@ class CustomerModel {
     }
 
     public function getCustomer($id) {
-        $sql = "SELECT u.user_id, u.first_name, u.last_name, u.contact_number, u.email, u.profile_image
-            FROM users u
-            LEFT JOIN customers c ON u.user_id = c.customer_id
-            WHERE u.user_id = :user_id";
+        $sql = "SELECT u.user_id, u.first_name, u.last_name, u.contact_number, u.email, u.profile_image,
+                u.street, u.district, u.province
+                FROM users u
+                WHERE u.user_id = :user_id";
         $this->db->query($sql);
         $this->db->bind(':user_id', $id);
         return $this->db->single();
-    }
-
-    public function getCustomerById($customer_id)
-    {
-        $this->db->query('
-            SELECT 
-                customer_id,
-                name,
-                address,
-                nic
-            FROM customers 
-            WHERE customer_id = :customer_id
-        ');
-        $this->db->bind(':customer_id', $customer_id);
-        
-        $row = $this->db->single();
-        return $row;
     }
 
     public function getServiceProviderById($id) {
@@ -156,6 +139,33 @@ public function createTransaction($appointment_id, $amount) {
     $this->db->bind(':appointment_id', $appointment_id);
     $this->db->bind(':amount', $amount);
     
+    return $this->db->execute();
+}
+
+public function updateProfile($data) {
+    $this->db->query("UPDATE users SET 
+        first_name = :fname,
+        last_name = :lname,
+        contact_number = :contact_number,
+        email = :email,
+        profile_image = :profile_image,
+        street = :street,
+        district = :district,
+        province = :province
+        WHERE user_id = :user_id");
+
+    // Bind values
+    $this->db->bind(':fname', $data['fname']);
+    $this->db->bind(':lname', $data['lname']);
+    $this->db->bind(':contact_number', $data['contact_number']);
+    $this->db->bind(':email', $data['email']);
+    $this->db->bind(':profile_image', $data['profile_image']);
+    $this->db->bind(':street', $data['street']);
+    $this->db->bind(':district', $data['district']);
+    $this->db->bind(':province', $data['province']);
+    $this->db->bind(':user_id', $data['user_id']);
+
+    // Execute
     return $this->db->execute();
 }
 }

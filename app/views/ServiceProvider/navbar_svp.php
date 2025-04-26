@@ -19,7 +19,7 @@ if (session_status() == PHP_SESSION_NONE) {
                 class="nav-item <?= $current_page == 'profile.php' ? 'active' : '' ?>" id="profile-link">Profile</a>
         </div>
         <div class="user-info">
-            <img src="<?php echo isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : URLROOT . '/public/img/SVPpic/default_user.png'; ?>"
+            <img src="data:image/jpeg;base64,<?php echo base64_encode($_SESSION['profile_pic']); ?>"
                 alt="User Profile" class="profile-pic">
             <span class="user-name"><?php echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest'; ?></span>
             <button onclick="showLogoutModal()" class="logout-btn">Logout</button>

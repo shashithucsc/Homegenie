@@ -28,7 +28,7 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
             <div class="user-info">
                 <div class="user-greeting">Hello, <?php echo htmlspecialchars($user_name); ?></div>
                 <div class="user-avatar">
-                    <img src="<?php echo URLROOT; ?>/public/images/<?php echo $profile_pic; ?>" alt="Profile">
+                <img src="data:image/jpeg;base64,<?php echo base64_encode($_SESSION['profile_pic']); ?>" alt="Profile Picture" class="profile-pic">
                 </div>
             </div>
         </div>

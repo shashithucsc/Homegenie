@@ -34,8 +34,7 @@ require_once APPROOT . '/views/supplier/admin/sidebar.php';
                 <span><?php echo htmlspecialchars($user_name); ?></span>
 
                 <!-- Display the profile picture -->
-                <img src="<?php echo URLROOT . '/public/img/' . htmlspecialchars($profile_pic); ?>" alt="User Avatar"
-                    onclick="toggleDropdown()">
+                <img src="data:image/jpeg;base64,<?php echo base64_encode($_SESSION['profile_pic']); ?>" alt="Profile Picture" class="profile-pic" onclick="toggleDropdown()">
 
                 <div class="dropdown" id="dropdown">
                     <a href="myProfile.html">View Profile</a>

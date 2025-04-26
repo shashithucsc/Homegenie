@@ -21,6 +21,11 @@ class ServiceProviderController extends Controller
         // Assuming the user is logged in and their ID is stored in the session
         $service_provider_id = $_SESSION['user_id'];
 
+        // Get service provider's hourly rate
+        $this->db->query('SELECT hourly_rate FROM service_providers WHERE provider_id = :provider_id');
+        $this->db->bind(':provider_id', $service_provider_id);
+        $hourlyRate = $this->db->single()->hourly_rate;
+
         // Fetch the appointments from the model
         $pendingAppointments = $this->AppointmentSVPModel->getPendingAppointments($service_provider_id);
         $approvedAppointments = $this->AppointmentSVPModel->getApprovedAppointments($service_provider_id);
@@ -28,8 +33,74 @@ class ServiceProviderController extends Controller
         // Pass the appointments to the view
         $this->view('ServiceProvider/appointments', [
             'pendingAppointments' => $pendingAppointments,
-            'approvedAppointments' => $approvedAppointments
+            'approvedAppointments' => $approvedAppointments,
+            'hourlyRate' => $hourlyRate
         ]);
+    }
+
+    public function getAppointmentDetails($appointment_id)
+    {
+        $appointment = $this->AppointmentSVPModel->getAppointmentById($appointment_id);
+        
+        if ($appointment) {
+            echo json_encode([
+                'success' => true,
+                'appointment' => $appointment
+            ]);
+        } else {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Appointment not found'
+            ]);
+        }
+    }
+
+    public function rejectAppointment()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $appointment_id = $_POST['id'];
+            
+            $result = $this->AppointmentSVPModel->rejectAppointment($appointment_id);
+            
+            if ($result) {
+                // Simply redirect back to appointments page
+                header('Location: ' . URLROOT . '/ServiceProviderController/appointments');
+                exit();
+            } else {
+                // Simply redirect back to appointments page
+                header('Location: ' . URLROOT . '/ServiceProviderController/appointments');
+                exit();
+            }
+        }
+    }
+
+    public function createQuotation()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $data = [
+                'appointment_id' => $_POST['appointment_id'],
+                'service_provider_id' => $_POST['service_provider_id'],
+                'quotation_details' => $_POST['quotation_details'],
+                'work_hours' => $_POST['work_hours'],
+                'cost' => $_POST['cost']
+            ];
+
+            // Create quotation
+            if ($this->QuotationSVPModel->createQuotation($data)) {
+                // Update appointment status to approved
+                $this->AppointmentSVPModel->approveAppointment($data['appointment_id']);
+                
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Quotation created successfully'
+                ]);
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Failed to create quotation'
+                ]);
+            }
+        }
     }
 
     // Method to approve an appointment
@@ -105,7 +176,8 @@ class ServiceProviderController extends Controller
             // Get form data
             $appointment_id = trim($_POST['appointment_id']);
             $quotation_details = trim($_POST['quotation_details']);
-            $price = trim($_POST['price']);
+            $work_hours = trim($_POST['work_hours']);
+            $cost = trim($_POST['cost']);
 
             // Get the service_provider_id from the appointment
             $appointment = $this->QuotationSVPModel->getAppointmentById($appointment_id);
@@ -122,13 +194,14 @@ class ServiceProviderController extends Controller
                 'appointment_id' => $appointment_id,
                 'service_provider_id' => $service_provider_id,
                 'quotation_details' => $quotation_details,
-                'price' => $price,
-                'status' => 'pending'
+                'work_hours' => $work_hours,
+                'cost' => $cost,
+                'status' => 'Pending'
             ];
 
             // Call the model to add the quotation
             if ($this->QuotationSVPModel->addQuotation($data)) {
-                // Update the appointment status to 'Approved'
+                // Update the appointment status to 'approved'
                 $this->AppointmentSVPModel->approveAppointment($appointment_id);
                 
                 // Clear the session variable
@@ -147,11 +220,12 @@ class ServiceProviderController extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $quotation_details = trim($_POST['quotation_details']);
-            $price = trim($_POST['price']);
+            $work_hours = trim($_POST['work_hours']);
+            $cost = trim($_POST['cost']);
 
             $quotationModel = $this->model('QuotationSVPModel');
 
-            if ($quotationModel->updateQuotation($id, $quotation_details, $price)) {
+            if ($quotationModel->updateQuotation($id, $quotation_details, $work_hours, $cost)) {
                 echo json_encode(['success' => true]);
             } else {
                 echo json_encode(['success' => false]);
@@ -287,115 +361,112 @@ class ServiceProviderController extends Controller
         if (!$quotation) {
             die("Quotation not found.");
         }
-
+        
         // Get appointment details
         $appointment = $this->AppointmentSVPModel->getAppointmentById($quotation->appointment_id);
         
         if (!$appointment) {
             die("Appointment not found.");
         }
-
-        // Get customer details
-        $customer = $this->model('CustomerModel')->getCustomerById($appointment->customer_id);
+        
+        // Get customer details from users table
+        $this->db->query('SELECT first_name, last_name, email, contact_number FROM users WHERE user_id = :customer_id');
+        $this->db->bind(':customer_id', $appointment->customer_id);
+        $customer = $this->db->single();
         
         if (!$customer) {
             die("Customer not found.");
         }
-
-        // Get service provider details
-        $service_provider = $this->ProfileSVPModel->getProfileDetails($quotation->service_provider_id);
+        
+        // Get service provider details from users table
+        $this->db->query('SELECT first_name, last_name, email, contact_number FROM users WHERE user_id = :provider_id');
+        $this->db->bind(':provider_id', $quotation->service_provider_id);
+        $service_provider = $this->db->single();
         
         if (!$service_provider) {
             die("Service provider not found.");
         }
 
-        // Create printable HTML content
+        // Generate HTML for the quotation
         $html = '
         <!DOCTYPE html>
         <html>
         <head>
             <title>Quotation #' . $quotation->quotation_id . '</title>
             <style>
-                @media print {
-                    body { font-family: Arial, sans-serif; margin: 0; }
-                    .no-print { display: none; }
-                    .print-button { display: none; }
-                }
-                body { 
-                    font-family: Arial, sans-serif; 
+                @page {
+                    size: A4;
                     margin: 0;
+                }
+                body {
+                    font-family: Arial, sans-serif;
+                    line-height: 1.4;
                     color: #333;
+                    margin: 0;
+                    padding: 20px;
+                    font-size: 12px;
                 }
                 .header {
-                    background-color: #1a237e;
-                    color: white;
-                    padding: 20px;
                     text-align: center;
-                    position: relative;
+                    margin-bottom: 15px;
+                    padding-bottom: 10px;
+                    border-bottom: 2px solid #2563eb;
                 }
-                .logo {
-                    font-size: 28px;
-                    font-weight: bold;
-                    margin-bottom: 10px;
-                    color: #fff;
-                }
-                .logo span {
-                    color: #64b5f6;
+                .company-name {
+                    font-size: 20px;
+                    color: #2563eb;
+                    margin: 0;
                 }
                 .quotation-title {
-                    font-size: 24px;
-                    margin: 20px 0;
-                    color: #1a237e;
-                    text-align: center;
-                }
-                .content {
-                    padding: 40px;
-                    max-width: 800px;
-                    margin: 0 auto;
-                }
-                .details-section {
-                    background-color: #f5f5f5;
-                    padding: 20px;
-                    border-radius: 8px;
-                    margin-bottom: 30px;
-                }
-                .details-section h2 {
-                    color: #1a237e;
-                    border-bottom: 2px solid #64b5f6;
-                    padding-bottom: 10px;
-                    margin-bottom: 20px;
+                    color: #374151;
+                    margin: 10px 0;
+                    font-size: 16px;
                 }
                 .details-grid {
                     display: grid;
-                    grid-template-columns: repeat(2, 1fr);
-                    gap: 20px;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 15px;
+                    margin-bottom: 15px;
+                }
+                .details-section {
+                    background: #f8fafc;
+                    padding: 10px;
+                    border-radius: 4px;
+                }
+                .details-section h2 {
+                    margin: 0 0 8px 0;
+                    font-size: 14px;
+                    color: #2563eb;
                 }
                 .detail-item {
-                    margin-bottom: 10px;
+                    margin-bottom: 5px;
+                    display: flex;
                 }
                 .detail-label {
                     font-weight: bold;
                     color: #666;
+                    width: 80px;
                 }
                 .quotation-details {
                     background-color: white;
-                    padding: 20px;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    padding: 10px;
+                    border-radius: 4px;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
                 }
                 .quotation-table {
                     width: 100%;
                     border-collapse: collapse;
-                    margin: 20px 0;
+                    margin: 10px 0;
+                    font-size: 12px;
                 }
                 .quotation-table th {
-                    background-color: #1a237e;
+                    background-color: #2563eb;
                     color: white;
-                    padding: 12px;
+                    padding: 8px;
                     text-align: left;
                 }
                 .quotation-table td {
-                    padding: 12px;
+                    padding: 8px;
                     border-bottom: 1px solid #ddd;
                 }
                 .quotation-table tr:last-child td {
@@ -403,123 +474,108 @@ class ServiceProviderController extends Controller
                 }
                 .price-cell {
                     font-weight: bold;
-                    color: #1a237e;
+                    color: #2563eb;
                 }
                 .footer {
-                    margin-top: 50px;
+                    margin-top: 20px;
                     text-align: center;
                     color: #666;
-                    font-size: 14px;
+                    font-size: 10px;
+                    padding-top: 10px;
+                    border-top: 1px solid #ddd;
                 }
-                .print-button {
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    padding: 10px 20px;
-                    background-color: #1a237e;
-                    color: white;
-                    border: none;
-                    border-radius: 4px;
-                    cursor: pointer;
-                    font-weight: bold;
-                }
-                .print-button:hover {
-                    background-color: #0d47a1;
-                }
-                .status-badge {
-                    display: inline-block;
-                    padding: 5px 10px;
-                    border-radius: 15px;
-                    font-weight: bold;
-                    font-size: 14px;
-                }
-                .status-approved {
-                    background-color: #e8f5e9;
-                    color: #2e7d32;
-                }
-                .status-pending {
-                    background-color: #fff3e0;
-                    color: #f57c00;
-                }
-                .status-rejected {
-                    background-color: #ffebee;
-                    color: #c62828;
+                @media print {
+                    .no-print { display: none; }
+                    body { padding: 15px; }
                 }
             </style>
         </head>
         <body>
-            <button class="print-button" onclick="window.print()">Print / Save as PDF</button>
-
             <div class="header">
-                <div class="logo">Home<span>Genie</span></div>
-                <p>Your Trusted Home Service Partner</p>
+                <div class="company-name">HomeGenie</div>
+                <p style="color: #666; margin: 5px 0;">Your Trusted Service Provider</p>
             </div>
 
-            <div class="content">
-                <h1 class="quotation-title">Quotation #' . $quotation->quotation_id . '</h1>
-                <p style="text-align: center; color: #666; margin-bottom: 30px;">Generated on: ' . date('F d, Y', strtotime($quotation->created_at)) . '</p>
+            <h1 class="quotation-title">Quotation #' . $quotation->quotation_id . '</h1>
+            <p style="text-align: center; color: #666; margin: 0 0 15px 0;">Generated on: ' . date('F d, Y', strtotime($quotation->created_at)) . '</p>
 
-                <div class="details-grid">
-                    <div class="details-section">
-                        <h2>Service Provider Details</h2>
-                        <div class="detail-item">
-                            <div class="detail-label">Name</div>
-                            <div>' . htmlspecialchars($service_provider->name) . '</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Email</div>
-                            <div>' . htmlspecialchars($service_provider->email) . '</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Phone</div>
-                            <div>' . htmlspecialchars($service_provider->phone) . '</div>
-                        </div>
+            <div class="details-grid">
+                <div class="details-section">
+                    <h2>Service Provider</h2>
+                    <div class="detail-item">
+                        <div class="detail-label">Name:</div>
+                        <div>' . htmlspecialchars($service_provider->first_name . ' ' . $service_provider->last_name) . '</div>
                     </div>
-
-                    <div class="details-section">
-                        <h2>Customer Details</h2>
-                        <div class="detail-item">
-                            <div class="detail-label">Name</div>
-                            <div>' . htmlspecialchars($customer->name) . '</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">NIC</div>
-                            <div>' . htmlspecialchars($customer->nic) . '</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Address</div>
-                            <div>' . htmlspecialchars($customer->address) . '</div>
-                        </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Email:</div>
+                        <div>' . htmlspecialchars($service_provider->email) . '</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Phone:</div>
+                        <div>' . htmlspecialchars($service_provider->contact_number) . '</div>
                     </div>
                 </div>
 
-                <div class="quotation-details">
-                    <h2 style="color: #1a237e; margin-bottom: 20px;">Quotation Details</h2>
-                    <table class="quotation-table">
-                        <tr>
-                            <th>Description</th>
-                            <td>' . htmlspecialchars($quotation->quotation_details) . '</td>
-                        </tr>
-                        <tr>
-                            <th>Price</th>
-                            <td class="price-cell">$' . number_format($quotation->price, 2) . '</td>
-                        </tr>
-                        <tr>
-                            <th>Status</th>
-                            <td>
-                                <span class="status-badge status-' . strtolower($quotation->status) . '">
-                                    ' . htmlspecialchars($quotation->status) . '
-                                </span>
-                            </td>
-                        </tr>
-                    </table>
+                <div class="details-section">
+                    <h2>Customer</h2>
+                    <div class="detail-item">
+                        <div class="detail-label">Name:</div>
+                        <div>' . htmlspecialchars($customer->first_name . ' ' . $customer->last_name) . '</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Email:</div>
+                        <div>' . htmlspecialchars($customer->email) . '</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Phone:</div>
+                        <div>' . htmlspecialchars($customer->contact_number) . '</div>
+                    </div>
                 </div>
+            </div>
 
-                <div class="footer">
-                    <p>This is a computer-generated quotation from HomeGenie</p>
-                    <p>For any inquiries, please contact our customer service</p>
-                    <p>Generated on: ' . date('F d, Y H:i:s') . '</p>
-                </div>
+            <div class="quotation-details">
+                <h2 style="color: #2563eb; margin: 0 0 10px 0; font-size: 14px;">Quotation Details</h2>
+                <table class="quotation-table">
+                    <tr>
+                        <th>Appointment Description</th>
+                        <td>' . htmlspecialchars($appointment->description) . '</td>
+                    </tr>
+                    <tr>
+                        <th>Location</th>
+                        <td>' . htmlspecialchars($appointment->location) . '</td>
+                    </tr>
+                    <tr>
+                        <th>Quotation Details</th>
+                        <td>' . htmlspecialchars($quotation->quotation_details) . '</td>
+                    </tr>
+                    <tr>
+                        <th>Work Hours</th>
+                        <td>' . htmlspecialchars($quotation->work_hours) . ' hours</td>
+                    </tr>
+                    <tr>
+                        <th>Cost</th>
+                        <td class="price-cell">$' . number_format($quotation->cost, 2) . '</td>
+                    </tr>
+                    <tr>
+                        <th>Status</th>
+                        <td>
+                            <span style="color: ' . ($quotation->status === 'Approved' ? '#28a745' : ($quotation->status === 'Rejected' ? '#dc3545' : '#ffc107')) . ';">
+                                ' . htmlspecialchars($quotation->status) . '
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="footer">
+                <p>This is a computer-generated quotation from HomeGenie</p>
+                <p>Generated on: ' . date('F d, Y H:i:s') . '</p>
+            </div>
+
+            <div class="no-print" style="text-align: center; margin-top: 15px;">
+                <button onclick="window.print()" style="padding: 8px 16px; background-color: #2563eb; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                    Print / Save as PDF
+                </button>
             </div>
         </body>
         </html>';

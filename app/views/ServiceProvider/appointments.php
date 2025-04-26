@@ -240,32 +240,82 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
 
         /* Approved Appointments Table */
         .table-container {
-            background: var(--card-background);
+            background: white;
             border-radius: 12px;
-            box-shadow: var(--shadow);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             overflow: hidden;
+            margin-top: 20px;
         }
 
-        table {
+        .approved-appointments-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
         }
 
-        th {
-            background: var(--primary);
-            color: var(--card-background);
-            padding: 15px;
-            text-align: left;
+        .approved-appointments-table thead th {
+            background: #f8fafc;
+            color: #1e293b;
             font-weight: 600;
+            padding: 16px 20px;
+            text-align: left;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        td {
-            padding: 15px;
-            border-bottom: 1px solid var(--border);
+        .approved-appointments-table tbody tr {
+            transition: all 0.2s ease;
+            border-bottom: 1px solid #f1f5f9;
         }
 
-        tr:hover {
-            background: var(--background);
+        .approved-appointments-table tbody tr:hover {
+            background-color: #f8fafc;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .approved-appointments-table td {
+            padding: 20px;
+            vertical-align: middle;
+            color: #334155;
+        }
+
+        .approved-appointments-table .id-cell {
+            font-weight: 600;
+            color: #2563eb;
+        }
+
+        .approved-appointments-table .datetime-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .approved-appointments-table .date {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 1rem;
+        }
+
+        .approved-appointments-table .time {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .approved-appointments-table .location-cell {
+            font-weight: 500;
+            color: #1e293b;
+        }
+
+        .approved-appointments-table .description-cell {
+            color: #475569;
+            line-height: 1.5;
+        }
+
+        .approved-appointments-table .hours-cell {
+            font-weight: 500;
+            color: #2563eb;
         }
 
         /* Modal */
@@ -276,26 +326,32 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow-y: auto;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
         }
 
         .modal-content {
-            background: var(--card-background);
-            padding: 30px;
-            border-radius: 12px;
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
+            animation: modalFadeIn 0.3s ease-out;
         }
 
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 20px;
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
         /* Tab Content */
@@ -457,6 +513,320 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                 margin-top: 0;
             }
         }
+
+        /* Approved Appointments Card Styles */
+        .appointment-card.approved {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 1px solid #e9ecef;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .appointment-card.approved:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .appointment-card.approved .card-header {
+            background: #28a745;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .appointment-card.approved .status-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .appointment-card.approved .quotation-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .appointment-card.approved .card-body {
+            padding: 20px;
+        }
+
+        .appointment-card.approved .info-group {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .appointment-card.approved .info-group i {
+            color: #28a745;
+            font-size: 1.1rem;
+            margin-top: 3px;
+        }
+
+        .appointment-card.approved .main-info {
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .appointment-card.approved .date {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #212529;
+        }
+
+        .appointment-card.approved .time {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .appointment-card.approved .location,
+        .appointment-card.approved .description {
+            color: #495057;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .appointment-card.approved .card-footer {
+            padding: 15px;
+            border-top: 1px solid #e9ecef;
+            text-align: right;
+        }
+
+        .appointment-card.approved .btn-primary {
+            background: #28a745;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .appointment-card.approved .btn-primary:hover {
+            background: #218838;
+        }
+
+        /* Responsive Table */
+        @media (max-width: 768px) {
+            .approved-appointments-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .approved-appointments-table td {
+                padding: 15px;
+            }
+        }
+
+        /* Calendar Styles */
+        .calendar-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            width: 350px;
+            flex-shrink: 0;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .calendar-header h2 {
+            color: #1e293b;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .calendar-nav-btn {
+            background: #f8fafc;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 15px;
+            cursor: pointer;
+            color: #64748b;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .calendar-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        .calendar-weekdays div {
+            text-align: center;
+            font-weight: 700;
+            color: #64748b;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 8px 0;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            font-size: 0.95rem;
+            font-weight: 500;
+            background: #f8fafc;
+            border: 1px solid transparent;
+            min-width: 40px;
+            min-height: 40px;
+            margin: 0;
+        }
+
+        .calendar-day:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar-day.today {
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-weight: 700;
+            border: 2px solid #60a5fa;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.1);
+        }
+
+        .calendar-day.has-appointment {
+            background: #dcfce7;
+            color: #15803d;
+            font-weight: 600;
+            border: 2px solid #86efac;
+            box-shadow: 0 4px 6px rgba(34, 197, 94, 0.1);
+            position: relative;
+        }
+
+        .calendar-day.has-appointment::after {
+            content: '';
+            position: absolute;
+            bottom: 6px;
+            width: 6px;
+            height: 6px;
+            background: #15803d;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(34, 197, 94, 0.2);
+        }
+
+        .calendar-day.has-appointment .appointment-tooltip {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #15803d;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .calendar-day.has-appointment:hover .appointment-tooltip {
+            opacity: 1;
+        }
+
+        .calendar-day.other-month {
+            color: #94a3b8;
+            background: #f1f5f9;
+            opacity: 0.7;
+        }
+
+        .calendar-day.selected {
+            background: #2563eb;
+            color: white;
+            font-weight: 700;
+            border: 2px solid #60a5fa;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+            transform: scale(1.1);
+            z-index: 1;
+        }
+
+        /* Animation for calendar day selection */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .calendar-day.selected {
+            animation: pulse 0.3s ease;
+        }
+
+        /* Layout Styles */
+        .approved-content-wrapper {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .table-container {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .approved-content-wrapper {
+                flex-direction: column;
+            }
+            
+            .calendar-container {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -498,7 +868,6 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                          data-description="<?= strtolower($appointment->description) ?>"
                          data-location="<?= strtolower($appointment->location) ?>">
                         <div class="card-header">
-                            <!-- <span class="service-category"><?= $appointment->service_category ?></span> -->
                             <span class="appointment-id">ID: <?= $appointment->appointment_id ?></span>
                         </div>
                         <div class="card-content">
@@ -522,8 +891,8 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                                 <button class="btn btn-primary" onclick="approveAppointment(<?= $appointment->appointment_id ?>)">
                                     <i class="fas fa-check"></i> Approve
                                 </button>
-                                <button class="btn btn-outline" onclick="cancelAppointment(<?= $appointment->appointment_id ?>)">
-                                    <i class="fas fa-times"></i> Cancel
+                                <button class="btn btn-danger" onclick="rejectAppointment(<?= $appointment->appointment_id ?>)">
+                                    <i class="fas fa-times"></i> Reject
                                 </button>
                             </div>
                         </div>
@@ -534,117 +903,157 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
 
         <!-- Approved Appointments -->
         <div id="approved-tab" class="tab-content">
-            <div class="appointments-grid">
-                <?php if (!empty($data['approvedAppointments'])): ?>
-                    <?php foreach ($data['approvedAppointments'] as $appointment): ?>
-                        <div class="appointment-card approved">
-                            <div class="card-header">
-                                <h3>Appointment #<?php echo $appointment->appointment_id; ?></h3>
-                                <span class="status-badge approved">Approved</span>
-                            </div>
-                            
-                            <div class="card-body">
-                                <div class="info-group">
-                                    <i class="fas fa-user"></i>
-                                    <div>
-                                        <label>Customer ID</label>
-                                        <p><?php echo htmlspecialchars($appointment->customer_id); ?></p>
-                                    </div>
-                                </div>
-                                
-                                <!-- <div class="info-group">
-                                    <i class="fas fa-tasks"></i>
-                                    <div>
-                                        <label>Service Category</label>
-                                        <p><?php echo htmlspecialchars($appointment->service_category); ?></p>
-                                    </div>
-                                </div> -->
-                                
-                                <div class="info-group">
-                                    <i class="fas fa-comment"></i>
-                                    <div>
-                                        <label>Description</label>
-                                        <p><?php echo htmlspecialchars($appointment->description); ?></p>
-                                    </div>
-                                </div>
-                                
-                                <div class="info-group">
-                                    <i class="fas fa-calendar"></i>
-                                    <div>
-                                        <label>Appointment Date</label>
-                                        <p><?php echo date('F d, Y', strtotime($appointment->appointment_date)); ?></p>
-                                    </div>
-                                </div>
-                                
-                                <div class="info-group">
-                                    <i class="fas fa-clock"></i>
-                                    <div>
-                                        <label>Appointment Time</label>
-                                        <p><?php echo htmlspecialchars($appointment->appointment_time); ?></p>
-                                    </div>
-                                </div>
-                                
-                                <div class="info-group">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <div>
-                                        <label>Location</label>
-                                        <p><?php echo htmlspecialchars($appointment->location); ?></p>
-                                    </div>
-                                </div>
-                                
-                                <div class="info-group">
-                                    <i class="fas fa-info-circle"></i>
-                                    <div>
-                                        <label>Status</label>
-                                        <p><?php echo htmlspecialchars($appointment->status); ?></p>
-                                    </div>
-                                </div>
-                                
-                                <div class="info-group">
-                                    <i class="fas fa-calendar-plus"></i>
-                                    <div>
-                                        <label>Created At</label>
-                                        <p><?php echo date('F d, Y H:i', strtotime($appointment->created_at)); ?></p>
-                                    </div>
-                                </div>
-                                
-                                <div class="info-group">
-                                    <i class="fas fa-calendar-check"></i>
-                                    <div>
-                                        <label>Last Updated</label>
-                                        <p><?php echo date('F d, Y H:i', strtotime($appointment->updated_at)); ?></p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="card-footer">
-                                <button class="btn btn-primary" onclick="generateQuotation(<?php echo $appointment->appointment_id; ?>)">
-                                    <i class="fas fa-file-invoice"></i> Generate Quotation
-                                </button>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <div class="no-appointments">
-                        <i class="fas fa-calendar-check"></i>
-                        <p>No approved appointments found</p>
+            <div class="approved-content-wrapper">
+                <!-- Calendar Section -->
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button id="prevMonth" class="calendar-nav-btn">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <h2 id="currentMonthYear"><?php echo date('F Y'); ?></h2>
+                        <button id="nextMonth" class="calendar-nav-btn">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
                     </div>
-                <?php endif; ?>
+                    <div class="calendar-grid">
+                        <div class="calendar-weekdays">
+                            <div>Sun</div>
+                            <div>Mon</div>
+                            <div>Tue</div>
+                            <div>Wed</div>
+                            <div>Thu</div>
+                            <div>Fri</div>
+                            <div>Sat</div>
+                        </div>
+                        <div id="calendarDays" class="calendar-days">
+                            <!-- Calendar days will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table Section -->
+                <div class="table-container">
+                    <?php if (!empty($data['approvedAppointments'])): ?>
+                        <table class="approved-appointments-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Description</th>
+                                    <th>Location</th>
+                                    <th>Date & Time</th>
+                                    <th>Work Hours</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($data['approvedAppointments'] as $appointment): ?>
+                                    <tr class="appointment-row" data-date="<?php echo $appointment->appointment_date; ?>">
+                                        <td>
+                                            <div class="id-cell">
+                                                #<?php echo $appointment->appointment_id; ?>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="description-cell">
+                                                <?php echo htmlspecialchars($appointment->description); ?>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="location-cell">
+                                                <?php echo htmlspecialchars($appointment->location); ?>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="datetime-cell">
+                                                <div class="date"><?php echo date('F d, Y', strtotime($appointment->appointment_date)); ?></div>
+                                                <div class="time"><?php echo $appointment->appointment_time; ?></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="hours-cell">
+                                                <?php echo $appointment->work_hours ?? '0'; ?> hours
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    <?php else: ?>
+                        <div class="no-appointments">
+                            <i class="fas fa-calendar-check"></i>
+                            <p>No approved appointments found</p>
+                        </div>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Confirm Modal -->
     <div id="confirm-modal" class="modal">
-        <div class="modal-content">
-            <p id="confirm-message">Are you sure?</p>
-            <div class="modal-buttons">
-                <button class="btn btn-primary" onclick="handleConfirm(true)">
-                    <i class="fas fa-check"></i> Yes
-                </button>
-                <button class="btn btn-outline" onclick="handleConfirm(false)">
-                    <i class="fas fa-times"></i> No
-                </button>
+        <div class="modal-content" style="max-width: 400px; margin: 50px auto; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); position: relative;">
+            <div style="padding: 30px; text-align: center;">
+                <p id="confirm-message" style="color: #374151; font-size: 18px; margin-bottom: 25px; line-height: 1.5;"></p>
+                <div class="modal-buttons" style="display: flex; justify-content: center; gap: 15px;">
+                    <button class="btn btn-primary" onclick="handleConfirm(true)" 
+                        style="padding: 12px 24px; border: none; border-radius: 6px; background: #2563eb; color: white; cursor: pointer; font-weight: 500; min-width: 100px;">
+                        <i class="fas fa-check"></i> Yes
+                    </button>
+                    <button class="btn btn-outline" onclick="handleConfirm(false)"
+                        style="padding: 12px 24px; border: 1px solid #e5e7eb; border-radius: 6px; background: white; color: #4b5563; cursor: pointer; font-weight: 500; min-width: 100px;">
+                        <i class="fas fa-times"></i> No
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quotation Modal -->
+    <div id="quotationModal" class="modal">
+        <div class="modal-content" style="max-width: 600px; margin: 50px auto; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); position: relative;">
+            <span class="close" onclick="closeQuotationModal()" style="position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: #666;">&times;</span>
+            <div style="padding: 30px;">
+                <h2 style="color: #2563eb; margin-bottom: 25px; text-align: center; font-size: 24px;">Create Quotation</h2>
+                <form id="quotationForm" action="<?php echo URLROOT; ?>/ServiceProviderController/createQuotation" method="POST">
+                    <input type="hidden" name="appointment_id" id="quotationAppointmentId">
+                    <input type="hidden" name="service_provider_id" value="<?= $_SESSION['user_id'] ?>">
+                    
+                    <div class="form-group" style="margin-bottom: 20px; background: #f8fafc; padding: 15px; border-radius: 8px;">
+                        <label style="display: block; color: #4b5563; font-weight: 500; margin-bottom: 10px;">Appointment Details:</label>
+                        <div id="appointmentDetails" style="color: #374151;"></div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label for="quotation_details" style="display: block; color: #4b5563; font-weight: 500; margin-bottom: 8px;">Task Description:</label>
+                        <textarea id="quotation_details" name="quotation_details" required 
+                            style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 6px; min-height: 100px; resize: vertical;"
+                            placeholder="Enter detailed description of the work to be done"></textarea>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label for="work_hours" style="display: block; color: #4b5563; font-weight: 500; margin-bottom: 8px;">Estimated Time to Work (hours):</label>
+                        <input type="number" id="work_hours" name="work_hours" required min="1" 
+                            style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 6px;"
+                            placeholder="Enter estimated hours">
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label for="cost" style="display: block; color: #4b5563; font-weight: 500; margin-bottom: 8px;">Full Cost:</label>
+                        <input type="number" id="cost" name="cost" readonly 
+                            style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 6px; background: #f3f4f6;"
+                            placeholder="Cost will be calculated automatically">
+                    </div>
+                    
+                    <div class="form-actions" style="display: flex; justify-content: flex-end; gap: 15px;">
+                        <button type="button" onclick="closeQuotationModal()" 
+                            style="padding: 12px 24px; border: 1px solid #e5e7eb; border-radius: 6px; background: white; color: #4b5563; cursor: pointer; font-weight: 500;">
+                            Cancel
+                        </button>
+                        <button type="submit" 
+                            style="padding: 12px 24px; border: none; border-radius: 6px; background: #2563eb; color: white; cursor: pointer; font-weight: 500;">
+                            Generate Quotation
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -671,44 +1080,69 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
             });
         });
 
-        // Approve / Cancel Handlers
+        // Approve / Reject Handlers
         function approveAppointment(id) {
             customConfirm('Do you want to create a quotation for this appointment?', confirmed => {
                 if (confirmed) {
-                    fetch('<?php echo URLROOT; ?>/ServiceProviderController/approveAppointment', {
-                        method: 'POST',
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest'
-                        },
-                        body: new URLSearchParams({ id })
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            window.location.href = data.redirect;
-                        } else {
-                            showToast('Error creating quotation', 'error');
-                        }
-                    });
-                } else {
-                    showToast('Create quotation to accept the appointment.', 'info');
+                    // Fetch appointment details
+                    fetch('<?php echo URLROOT; ?>/ServiceProviderController/getAppointmentDetails/' + id)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                document.getElementById('quotationAppointmentId').value = id;
+                                document.getElementById('appointmentDetails').innerHTML = `
+                                    <div style="margin-bottom: 8px;">
+                                        <strong style="color: #2563eb;">Appointment ID:</strong> 
+                                        <span>${data.appointment.appointment_id}</span>
+                                    </div>
+                                    <div style="margin-bottom: 8px;">
+                                        <strong style="color: #2563eb;">Date:</strong> 
+                                        <span>${data.appointment.appointment_date}</span>
+                                    </div>
+                                    <div style="margin-bottom: 8px;">
+                                        <strong style="color: #2563eb;">Time:</strong> 
+                                        <span>${data.appointment.appointment_time}</span>
+                                    </div>
+                                    <div style="margin-bottom: 8px;">
+                                        <strong style="color: #2563eb;">Location:</strong> 
+                                        <span>${data.appointment.location}</span>
+                                    </div>
+                                    <div>
+                                        <strong style="color: #2563eb;">Description:</strong> 
+                                        <span>${data.appointment.description}</span>
+                                    </div>
+                                `;
+                                document.getElementById('quotationModal').style.display = 'block';
+                                // Reset form fields
+                                document.getElementById('quotation_details').value = '';
+                                document.getElementById('work_hours').value = '';
+                                document.getElementById('cost').value = '';
+                            } else {
+                                showToast('Error fetching appointment details', 'error');
+                            }
+                        });
                 }
             });
         }
 
-        function cancelAppointment(id) {
-            customConfirm('Are you sure you want to cancel this appointment?', confirmed => {
+        function rejectAppointment(id) {
+            customConfirm('Are you sure you want to reject this appointment?', confirmed => {
                 if (confirmed) {
-                    fetch('<?php echo URLROOT; ?>/ServiceProviderController/cancelAppointment', {
-                        method: 'POST',
-                        body: new URLSearchParams({ id })
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) showToast('Appointment canceled!');
-                        else showToast('Error canceling appointment', 'error');
-                        setTimeout(() => location.reload(), 300);
-                    });
+                    // Create a form element
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '<?php echo URLROOT; ?>/ServiceProviderController/rejectAppointment';
+                    
+                    // Create and append the appointment ID input
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'id';
+                    input.value = id;
+                    form.appendChild(input);
+                    
+                    // Append form to body and submit
+                    document.body.appendChild(form);
+                    form.submit();
                 }
             });
         }
@@ -760,9 +1194,162 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
         document.getElementById('search-input').addEventListener('input', filterAppointments);
         districtSelect.addEventListener('change', filterAppointments);
 
-        function generateQuotation(appointmentId) {
-            window.location.href = '<?php echo URLROOT; ?>/ServiceProviderController/quotationAdd?appointment_id=' + appointmentId;
+        function closeQuotationModal() {
+            document.getElementById('quotationModal').style.display = 'none';
         }
+
+        // Calculate cost based on work hours
+        document.getElementById('work_hours').addEventListener('input', function() {
+            const hourlyRate = <?= $data['hourlyRate'] ?? 0 ?>;
+            const workHours = this.value;
+            document.getElementById('cost').value = hourlyRate * workHours;
+        });
+
+        // Update the form submission to handle redirection
+        document.getElementById('quotationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch(this.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('Quotation created successfully!', 'success');
+                    closeQuotationModal();
+                    // Redirect to quotations tab after a short delay
+                    setTimeout(() => {
+                        window.location.href = '<?php echo URLROOT; ?>/ServiceProviderController/quotation';
+                    }, 1000);
+                } else {
+                    showToast(data.message || 'Failed to create quotation', 'error');
+                }
+            })
+            .catch(error => {
+                showToast('An error occurred', 'error');
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const calendarDays = document.getElementById('calendarDays');
+            const currentMonthYear = document.getElementById('currentMonthYear');
+            const prevMonthBtn = document.getElementById('prevMonth');
+            const nextMonthBtn = document.getElementById('nextMonth');
+            const appointmentRows = document.querySelectorAll('.appointment-row');
+
+            let currentDate = new Date();
+            let appointments = <?php echo json_encode($data['approvedAppointments'] ?? []); ?>;
+            let selectedDate = null;
+
+            function generateCalendar() {
+                calendarDays.innerHTML = '';
+                
+                const year = currentDate.getFullYear();
+                const month = currentDate.getMonth();
+                
+                // Get first day of the month
+                const firstDay = new Date(year, month, 1);
+                const startingDay = firstDay.getDay();
+                
+                // Get last day of the month
+                const lastDay = new Date(year, month + 1, 0);
+                const totalDays = lastDay.getDate();
+                
+                // Get last day of previous month
+                const prevLastDay = new Date(year, month, 0).getDate();
+                
+                // Update month and year display
+                currentMonthYear.textContent = new Date(year, month).toLocaleString('default', { month: 'long', year: 'numeric' });
+                
+                // Add days from previous month
+                for (let i = startingDay - 1; i >= 0; i--) {
+                    const day = document.createElement('div');
+                    day.className = 'calendar-day other-month';
+                    day.textContent = prevLastDay - i;
+                    calendarDays.appendChild(day);
+                }
+                
+                // Add days of current month
+                for (let i = 1; i <= totalDays; i++) {
+                    const day = document.createElement('div');
+                    day.className = 'calendar-day';
+                    day.textContent = i;
+                    
+                    // Check if today
+                    const today = new Date();
+                    if (i === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                        day.classList.add('today');
+                    }
+                    
+                    // Check if has appointment
+                    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                    const dayAppointments = appointments.filter(apt => apt.appointment_date === dateStr);
+                    
+                    if (dayAppointments.length > 0) {
+                        day.classList.add('has-appointment');
+                        day.dataset.date = dateStr;
+                        
+                        // Create tooltip with appointment IDs
+                        const tooltip = document.createElement('div');
+                        tooltip.className = 'appointment-tooltip';
+                        tooltip.textContent = `Appointments: ${dayAppointments.map(apt => apt.appointment_id).join(', ')}`;
+                        day.appendChild(tooltip);
+                    }
+                    
+                    // Add click event
+                    day.addEventListener('click', () => {
+                        if (day.classList.contains('has-appointment')) {
+                            // Remove previous selection
+                            document.querySelectorAll('.calendar-day.selected').forEach(el => {
+                                el.classList.remove('selected');
+                            });
+                            document.querySelectorAll('.appointment-row.highlighted').forEach(el => {
+                                el.classList.remove('highlighted');
+                            });
+                            
+                            // Add new selection
+                            day.classList.add('selected');
+                            selectedDate = dateStr;
+                            
+                            // Highlight corresponding rows
+                            appointmentRows.forEach(row => {
+                                if (row.dataset.date === dateStr) {
+                                    row.classList.add('highlighted');
+                                    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                }
+                            });
+                        }
+                    });
+                    
+                    calendarDays.appendChild(day);
+                }
+                
+                // Add days from next month
+                const remainingDays = 42 - (startingDay + totalDays); // 6 rows * 7 days
+                for (let i = 1; i <= remainingDays; i++) {
+                    const day = document.createElement('div');
+                    day.className = 'calendar-day other-month';
+                    day.textContent = i;
+                    calendarDays.appendChild(day);
+                }
+            }
+            
+            prevMonthBtn.addEventListener('click', () => {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                generateCalendar();
+            });
+            
+            nextMonthBtn.addEventListener('click', () => {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                generateCalendar();
+            });
+            
+            // Initial calendar generation
+            generateCalendar();
+        });
     </script>
 </body>
 </html>

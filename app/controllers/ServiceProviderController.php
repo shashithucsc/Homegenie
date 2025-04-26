@@ -280,6 +280,11 @@ class ServiceProviderController extends Controller
 
     public function profile()
     {
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: ' . URLROOT . '/users/login');
+            exit();
+        }
+
         $service_provider_id = $_SESSION['user_id'];
         
         // Fetch user details from users table
@@ -290,7 +295,9 @@ class ServiceProviderController extends Controller
                 last_name,
                 email,
                 contact_number,
-                address,
+                street,
+                district,
+                province,
                 profile_image
             FROM users 
             WHERE user_id = :user_id
@@ -308,21 +315,60 @@ class ServiceProviderController extends Controller
                 service_areas,
                 id_number,
                 id_front,
-                id_back
+                id_back,
+                hourly_rate
             FROM service_providers 
             WHERE provider_id = :provider_id
         ');
         $this->db->bind(':provider_id', $service_provider_id);
         $provider = $this->db->single();
 
+        // Get average rating
+        $this->db->query('
+            SELECT AVG(rating) as average_rating 
+            FROM appointments 
+            WHERE service_provider_id = :service_provider_id 
+            AND finish_status = "complete" 
+            AND rating IS NOT NULL
+        ');
+        $this->db->bind(':service_provider_id', $service_provider_id);
+        $rating_result = $this->db->single();
+        $average_rating = $rating_result ? round($rating_result->average_rating, 1) : 0;
+
+        // Get quotation statistics
+        $this->db->query('
+            SELECT 
+                SUM(CASE WHEN status = "Approved" THEN 1 ELSE 0 END) as approved_count,
+                SUM(CASE WHEN status = "Pending" THEN 1 ELSE 0 END) as pending_count,
+                SUM(CASE WHEN status = "Rejected" THEN 1 ELSE 0 END) as rejected_count
+            FROM quotations 
+            WHERE service_provider_id = :service_provider_id
+        ');
+        $this->db->bind(':service_provider_id', $service_provider_id);
+        $quotation_stats = $this->db->single();
+
+        // Get job status statistics
+        $this->db->query('
+            SELECT 
+                SUM(CASE WHEN finish_status = "complete" THEN 1 ELSE 0 END) as completed_jobs,
+                SUM(CASE WHEN finish_status = "pending" THEN 1 ELSE 0 END) as pending_jobs
+            FROM appointments 
+            WHERE service_provider_id = :service_provider_id
+        ');
+        $this->db->bind(':service_provider_id', $service_provider_id);
+        $job_stats = $this->db->single();
+
         if (!$user || !$provider) {
             die("Error: No data returned from database.");
         }
 
-        // Pass both user and provider data to the view
+        // Pass all data to the view
         $this->view('ServiceProvider/profile', [
             'user' => $user,
-            'provider' => $provider
+            'provider' => $provider,
+            'average_rating' => $average_rating,
+            'quotation_stats' => $quotation_stats,
+            'job_stats' => $job_stats
         ]);
     }
 
@@ -622,6 +668,7 @@ class ServiceProviderController extends Controller
             $expertise = trim($_POST['expertise']);
             $working_hours = trim($_POST['working_hours']);
             $description = trim($_POST['description']);
+            $hourly_rate = trim($_POST['hourly_rate']);
             
             // Handle service areas (array)
             $service_areas = isset($_POST['service_areas']) && is_array($_POST['service_areas'])
@@ -634,7 +681,8 @@ class ServiceProviderController extends Controller
                 SET expertise = :expertise,
                     working_hours = :working_hours,
                     service_areas = :service_areas,
-                    description = :description
+                    description = :description,
+                    hourly_rate = :hourly_rate
                 WHERE provider_id = :provider_id
             ');
 
@@ -642,6 +690,7 @@ class ServiceProviderController extends Controller
             $this->db->bind(':working_hours', $working_hours);
             $this->db->bind(':service_areas', $service_areas);
             $this->db->bind(':description', $description);
+            $this->db->bind(':hourly_rate', $hourly_rate);
             $this->db->bind(':provider_id', $service_provider_id);
 
             if ($this->db->execute()) {

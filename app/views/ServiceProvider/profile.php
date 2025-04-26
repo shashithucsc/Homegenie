@@ -88,7 +88,31 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
         .rating {
             color: #ffc107;
             font-size: 1.2rem;
-            margin-bottom: 20px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .rating i {
+            margin: 0 2px;
+        }
+
+        .rating .rating-number {
+            color: var(--text);
+            font-size: 1rem;
+            margin-left: 8px;
+            font-weight: 500;
+        }
+
+        .rating .fa-star,
+        .rating .fa-star-half-alt {
+            color: #ffc107;
+        }
+
+        .rating .far.fa-star {
+            color: #e4e5e9;
         }
 
         /* Details Card */
@@ -326,6 +350,149 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
         .photo-item:hover .delete-photo {
             opacity: 1;
         }
+
+        .quotation-stats {
+            margin-top: 20px;
+            padding: 15px;
+            border-top: 1px solid var(--border);
+            background-color: rgba(37, 99, 235, 0.1); /* Semi-transparent dark blue */
+            border-radius: 8px;
+            margin: 20px 15px;
+        }
+
+        .stats-title {
+            text-align: center;
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .stat-item {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 6px;
+            min-width: 80px;
+        }
+
+        .stat-number {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Job Status Statistics */
+        .job-stats {
+            margin-top: 20px;
+            padding: 15px;
+            border-top: 1px solid var(--border);
+            background-color: rgba(37, 99, 235, 0.1); /* Semi-transparent dark blue */
+            border-radius: 8px;
+            margin: 20px 15px;
+        }
+
+        .job-stats .stats-title {
+            text-align: center;
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .job-stats .stats-container {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .job-stats .stat-item {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 6px;
+            min-width: 80px;
+        }
+
+        .job-stats .stat-number {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .job-stats .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Professional Information Highlight */
+        .details-grid .detail-item {
+            background-color: rgba(37, 99, 235, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .details-grid .detail-label {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .details-grid .detail-value {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .details-grid input,
+        .details-grid select,
+        .details-grid textarea {
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            border-radius: 6px;
+            padding: 8px 12px;
+            width: 100%;
+            color: var(--text);
+        }
+
+        .details-grid input:focus,
+        .details-grid select:focus,
+        .details-grid textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+
+        /* Remove the specific hourly rate styles since they're now part of the general styles */
+        .hourly-rate-value,
+        .hourly-rate-input {
+            background-color: transparent;
+            padding: 0;
+            border-radius: 0;
+            font-weight: inherit;
+            color: inherit;
+        }
+
+        .hourly-rate-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
     </style>
 </head>
 
@@ -339,18 +506,71 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
         <div class="profile-sections">
             <!-- Profile Card -->
             <div class="profile-card">
-            <div class="profile-image">
+                <div class="profile-image">
                     <img src="<?php echo URLROOT . '/public/img/SVPpic/' . $data['user']->profile_image; ?>" alt="Profile Image">
-            </div>
-            <div class="rating">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <div class="rating">
+                    <?php
+                    $rating = $data['average_rating'];
+                    $full_stars = floor($rating);
+                    $half_star = $rating - $full_stars >= 0.5;
+                    $empty_stars = 5 - $full_stars - ($half_star ? 1 : 0);
+                    
+                    // Display full stars
+                    for ($i = 0; $i < $full_stars; $i++) {
+                        echo '<i class="fas fa-star"></i>';
+                    }
+                    
+                    // Display half star if needed
+                    if ($half_star) {
+                        echo '<i class="fas fa-star-half-alt"></i>';
+                    }
+                    
+                    // Display empty stars
+                    for ($i = 0; $i < $empty_stars; $i++) {
+                        echo '<i class="far fa-star"></i>';
+                    }
+                    
+                    // Display rating number
+                    echo '<span class="rating-number">' . number_format($rating, 1) . '</span>';
+                    ?>
                 </div>
                 <h2><?php echo htmlspecialchars($data['user']->first_name . ' ' . $data['user']->last_name); ?></h2>
                 <p class="text-secondary"><?php echo htmlspecialchars($data['provider']->expertise); ?></p>
+                
+                <!-- Quotation Statistics -->
+                <div class="quotation-stats">
+                    <h3 class="stats-title">Quotation Summary</h3>
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <span class="stat-number"><?php echo $data['quotation_stats']->approved_count; ?></span>
+                            <span class="stat-label">Approved</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number"><?php echo $data['quotation_stats']->pending_count; ?></span>
+                            <span class="stat-label">Pending</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number"><?php echo $data['quotation_stats']->rejected_count; ?></span>
+                            <span class="stat-label">Rejected</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Job Status Statistics -->
+                <div class="job-stats">
+                    <h3 class="stats-title">Job Summary</h3>
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <span class="stat-number"><?php echo $data['job_stats']->completed_jobs; ?></span>
+                            <span class="stat-label">Completed</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number"><?php echo $data['job_stats']->pending_jobs; ?></span>
+                            <span class="stat-label">In Progress</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Details Card -->
@@ -371,7 +591,13 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                     </div>
                     <div class="detail-item">
                         <div class="detail-label">Address</div>
-                        <div class="detail-value"><?php echo htmlspecialchars($data['user']->address); ?></div>
+                        <div class="detail-value"><?php 
+                            echo htmlspecialchars(
+                                $data['user']->street . ', ' . 
+                                $data['user']->district . ', ' . 
+                                $data['user']->province
+                            ); 
+                        ?></div>
                     </div>
                 </div>
 
@@ -393,6 +619,10 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                             <div class="detail-item">
                                 <div class="detail-label">Working Hours</div>
                                 <input type="text" name="working_hours" value="<?php echo htmlspecialchars($data['provider']->working_hours); ?>">
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Hourly Rate</div>
+                                <input type="number" name="hourly_rate" value="<?php echo htmlspecialchars($data['provider']->hourly_rate); ?>" min="0" step="0.01" class="hourly-rate-input">
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Service Areas</div>
@@ -438,6 +668,10 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                             <div class="detail-item">
                                 <div class="detail-label">Working Hours</div>
                                 <div class="detail-value"><?php echo htmlspecialchars($data['provider']->working_hours); ?></div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Hourly Rate</div>
+                                <div class="hourly-rate-value">$<?php echo number_format($data['provider']->hourly_rate, 2); ?></div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Service Areas</div>

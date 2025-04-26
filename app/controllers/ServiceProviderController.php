@@ -18,7 +18,7 @@ class ServiceProviderController extends Controller
 
     public function index()
     {
-        // Assuming the user is logged in and their ID is stored in the session
+        // Get the logged-in service provider's ID
         $service_provider_id = $_SESSION['user_id'];
 
         // Get service provider's hourly rate
@@ -26,11 +26,34 @@ class ServiceProviderController extends Controller
         $this->db->bind(':provider_id', $service_provider_id);
         $hourlyRate = $this->db->single()->hourly_rate;
 
-        // Fetch the appointments from the model
+        // Get pending appointments
         $pendingAppointments = $this->AppointmentSVPModel->getPendingAppointments($service_provider_id);
-        $approvedAppointments = $this->AppointmentSVPModel->getApprovedAppointments($service_provider_id);
 
-        // Pass the appointments to the view
+        // Get approved appointments with customer and quotation details
+        $this->db->query('
+            SELECT 
+                a.appointment_id,
+                a.customer_id,
+                a.description,
+                a.appointment_date,
+                a.appointment_time,
+                a.location,
+                CONCAT(u.first_name, " ", u.last_name) as customer_name,
+                u.contact_number,
+                q.quotation_details,
+                q.work_hours,
+                q.cost
+            FROM appointments a
+            JOIN quotations q ON a.appointment_id = q.appointment_id
+            JOIN users u ON a.customer_id = u.user_id
+            WHERE q.service_provider_id = :service_provider_id 
+            AND q.status = "Approved"
+            ORDER BY a.appointment_date DESC, a.appointment_time DESC
+        ');
+        $this->db->bind(':service_provider_id', $service_provider_id);
+        $approvedAppointments = $this->db->resultSet();
+
+        // Pass the data to the view
         $this->view('ServiceProvider/appointments', [
             'pendingAppointments' => $pendingAppointments,
             'approvedAppointments' => $approvedAppointments,
@@ -88,12 +111,17 @@ class ServiceProviderController extends Controller
             // Create quotation
             if ($this->QuotationSVPModel->createQuotation($data)) {
                 // Update appointment status to approved
-                $this->AppointmentSVPModel->approveAppointment($data['appointment_id']);
-                
-                echo json_encode([
-                    'success' => true,
-                    'message' => 'Quotation created successfully'
-                ]);
+                if ($this->AppointmentSVPModel->approveAppointment($data['appointment_id'])) {
+                    echo json_encode([
+                        'success' => true,
+                        'message' => 'Quotation created and appointment approved successfully'
+                    ]);
+                } else {
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'Failed to update appointment status'
+                    ]);
+                }
             } else {
                 echo json_encode([
                     'success' => false,

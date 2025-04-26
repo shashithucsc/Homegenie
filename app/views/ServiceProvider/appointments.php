@@ -241,27 +241,33 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
         /* Approved Appointments Table */
         .table-container {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            overflow: auto;
+            margin-top: 15px;
+            max-width: 100%;
         }
 
         .approved-appointments-table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
+            font-size: 0.8rem;
         }
 
         .approved-appointments-table thead th {
             background: #f8fafc;
             color: #1e293b;
             font-weight: 600;
-            padding: 16px 20px;
+            padding: 8px 10px;
             text-align: left;
-            font-size: 0.95rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+            z-index: 1;
         }
 
         .approved-appointments-table tbody tr {
@@ -272,50 +278,65 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
         .approved-appointments-table tbody tr:hover {
             background-color: #f8fafc;
             transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
 
         .approved-appointments-table td {
-            padding: 20px;
+            padding: 8px 10px;
             vertical-align: middle;
             color: #334155;
+            white-space: nowrap;
         }
 
         .approved-appointments-table .id-cell {
             font-weight: 600;
             color: #2563eb;
+            font-size: 0.75rem;
         }
 
         .approved-appointments-table .datetime-cell {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 2px;
         }
 
         .approved-appointments-table .date {
             font-weight: 600;
             color: #1e293b;
-            font-size: 1rem;
+            font-size: 0.75rem;
         }
 
         .approved-appointments-table .time {
             color: #64748b;
-            font-size: 0.9rem;
+            font-size: 0.7rem;
         }
 
         .approved-appointments-table .location-cell {
             font-weight: 500;
             color: #1e293b;
+            font-size: 0.75rem;
         }
 
         .approved-appointments-table .description-cell {
             color: #475569;
-            line-height: 1.5;
+            line-height: 1.3;
+            font-size: 0.75rem;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .approved-appointments-table .hours-cell {
             font-weight: 500;
             color: #2563eb;
+            font-size: 0.75rem;
+        }
+
+        .approved-appointments-table .cost-cell {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 0.75rem;
         }
 
         /* Modal */
@@ -625,39 +646,46 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
             .approved-appointments-table {
                 display: block;
                 overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
             }
             
             .approved-appointments-table td {
-                padding: 15px;
+                padding: 6px 8px;
+            }
+            
+            .approved-appointments-table thead th {
+                padding: 6px 8px;
             }
         }
 
         /* Calendar Styles */
         .calendar-container {
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            padding: 25px;
-            width: 350px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            width: 240px;
             flex-shrink: 0;
             border: 1px solid rgba(0, 0, 0, 0.05);
             display: flex;
             flex-direction: column;
+            position: relative;
+            z-index: 1;
         }
 
         .calendar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f1f5f9;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f1f5f9;
         }
 
         .calendar-header h2 {
             color: #1e293b;
-            font-size: 1.4rem;
-            font-weight: 700;
+            font-size: 0.9rem;
+            font-weight: 600;
             margin: 0;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -666,42 +694,42 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
         .calendar-nav-btn {
             background: #f8fafc;
             border: none;
-            border-radius: 10px;
-            padding: 10px 15px;
+            border-radius: 4px;
+            padding: 4px 8px;
             cursor: pointer;
             color: #64748b;
             transition: all 0.3s ease;
-            font-size: 1.1rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            font-size: 0.8rem;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
 
         .calendar-grid {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 4px;
         }
 
         .calendar-weekdays {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
-            margin-bottom: 5px;
+            gap: 1px;
+            margin-bottom: 1px;
         }
 
         .calendar-weekdays div {
             text-align: center;
-            font-weight: 700;
+            font-weight: 600;
             color: #64748b;
-            font-size: 0.9rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            padding: 8px 0;
+            padding: 2px 0;
         }
 
         .calendar-days {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
+            gap: 1px;
         }
 
         .calendar-day {
@@ -709,72 +737,54 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 12px;
+            border-radius: 4px;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
-            font-size: 0.95rem;
+            font-size: 0.75rem;
             font-weight: 500;
             background: #f8fafc;
             border: 1px solid transparent;
-            min-width: 40px;
-            min-height: 40px;
+            min-width: 25px;
+            min-height: 25px;
             margin: 0;
+            z-index: 1;
         }
 
         .calendar-day:hover {
             background: #e2e8f0;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         .calendar-day.today {
             background: #dbeafe;
             color: #1d4ed8;
-            font-weight: 700;
-            border: 2px solid #60a5fa;
-            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.1);
+            font-weight: 600;
+            border: 1px solid #60a5fa;
+            box-shadow: 0 1px 2px rgba(37, 99, 235, 0.1);
         }
 
         .calendar-day.has-appointment {
             background: #dcfce7;
             color: #15803d;
             font-weight: 600;
-            border: 2px solid #86efac;
-            box-shadow: 0 4px 6px rgba(34, 197, 94, 0.1);
+            border: 1px solid #86efac;
+            box-shadow: 0 1px 2px rgba(34, 197, 94, 0.1);
             position: relative;
+            cursor: pointer;
+            z-index: 2;
         }
 
         .calendar-day.has-appointment::after {
             content: '';
             position: absolute;
-            bottom: 6px;
-            width: 6px;
-            height: 6px;
+            bottom: 3px;
+            width: 3px;
+            height: 3px;
             background: #15803d;
             border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(34, 197, 94, 0.2);
-        }
-
-        .calendar-day.has-appointment .appointment-tooltip {
-            position: absolute;
-            bottom: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #15803d;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        .calendar-day.has-appointment:hover .appointment-tooltip {
-            opacity: 1;
+            box-shadow: 0 1px 2px rgba(34, 197, 94, 0.2);
         }
 
         .calendar-day.other-month {
@@ -786,28 +796,61 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
         .calendar-day.selected {
             background: #2563eb;
             color: white;
-            font-weight: 700;
-            border: 2px solid #60a5fa;
-            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
-            transform: scale(1.1);
+            font-weight: 600;
+            border: 1px solid #60a5fa;
+            box-shadow: 0 1px 2px rgba(37, 99, 235, 0.2);
+            transform: scale(1.05);
             z-index: 1;
         }
 
-        /* Animation for calendar day selection */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        .appointment-popup {
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #15803d;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            z-index: 100;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+            display: none;
+            pointer-events: none;
         }
 
-        .calendar-day.selected {
-            animation: pulse 0.3s ease;
+        .appointment-popup::after {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 6px 6px 6px;
+            border-style: solid;
+            border-color: transparent transparent #15803d transparent;
+        }
+
+        .appointment-popup.show {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translate(-50%, 5px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translate(-50%, 0);
+            }
         }
 
         /* Layout Styles */
         .approved-content-wrapper {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             align-items: flex-start;
         }
 
@@ -824,7 +867,7 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
             
             .calendar-container {
                 width: 100%;
-                margin-bottom: 20px;
+                margin-bottom: 15px;
             }
         }
     </style>
@@ -930,18 +973,22 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- Table Section -->
                 <div class="table-container">
                     <?php if (!empty($data['approvedAppointments'])): ?>
                         <table class="approved-appointments-table">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>Appointment ID</th>
+                                    <th>Customer Name</th>
+                                    <th>Contact Number</th>
                                     <th>Description</th>
-                                    <th>Location</th>
                                     <th>Date & Time</th>
+                                    <th>Location</th>
+                                    <th>Quotation Details</th>
                                     <th>Work Hours</th>
+                                    <th>Cost</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -953,13 +1000,18 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="description-cell">
-                                                <?php echo htmlspecialchars($appointment->description); ?>
+                                            <div class="customer-cell">
+                                                <?php echo htmlspecialchars($appointment->customer_name); ?>
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="location-cell">
-                                                <?php echo htmlspecialchars($appointment->location); ?>
+                                            <div class="contact-cell">
+                                                <?php echo htmlspecialchars($appointment->contact_number); ?>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="description-cell">
+                                                <?php echo htmlspecialchars($appointment->description); ?>
                                             </div>
                                         </td>
                                         <td>
@@ -969,8 +1021,23 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                                             </div>
                                         </td>
                                         <td>
+                                            <div class="location-cell">
+                                                <?php echo htmlspecialchars($appointment->location); ?>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="quotation-cell">
+                                                <?php echo htmlspecialchars($appointment->quotation_details); ?>
+                                            </div>
+                                        </td>
+                                        <td>
                                             <div class="hours-cell">
                                                 <?php echo $appointment->work_hours ?? '0'; ?> hours
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="cost-cell">
+                                                $<?php echo number_format($appointment->cost, 2); ?>
                                             </div>
                                         </td>
                                     </tr>
@@ -1086,9 +1153,9 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                 if (confirmed) {
                     // Fetch appointment details
                     fetch('<?php echo URLROOT; ?>/ServiceProviderController/getAppointmentDetails/' + id)
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.success) {
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
                                 document.getElementById('quotationAppointmentId').value = id;
                                 document.getElementById('appointmentDetails').innerHTML = `
                                     <div style="margin-bottom: 8px;">
@@ -1117,10 +1184,10 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                                 document.getElementById('quotation_details').value = '';
                                 document.getElementById('work_hours').value = '';
                                 document.getElementById('cost').value = '';
-                            } else {
+                        } else {
                                 showToast('Error fetching appointment details', 'error');
-                            }
-                        });
+                        }
+                    });
                 }
             });
         }
@@ -1195,7 +1262,10 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
         districtSelect.addEventListener('change', filterAppointments);
 
         function closeQuotationModal() {
-            document.getElementById('quotationModal').style.display = 'none';
+            const modal = document.getElementById('quotationModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
         }
 
         // Calculate cost based on work hours
@@ -1218,18 +1288,15 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    showToast('Quotation created successfully!', 'success');
-                    closeQuotationModal();
-                    // Redirect to quotations tab after a short delay
-                    setTimeout(() => {
-                        window.location.href = '<?php echo URLROOT; ?>/ServiceProviderController/quotation';
-                    }, 1000);
+                    document.getElementById('quotationModal').style.display = 'none';
+                    window.location.reload();
                 } else {
                     showToast(data.message || 'Failed to create quotation', 'error');
                 }
             })
             .catch(error => {
                 showToast('An error occurred', 'error');
+                console.error('Error:', error);
             });
         });
 
@@ -1292,43 +1359,32 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                         day.classList.add('has-appointment');
                         day.dataset.date = dateStr;
                         
-                        // Create tooltip with appointment IDs
-                        const tooltip = document.createElement('div');
-                        tooltip.className = 'appointment-tooltip';
-                        tooltip.textContent = `Appointments: ${dayAppointments.map(apt => apt.appointment_id).join(', ')}`;
-                        day.appendChild(tooltip);
+                        // Create popup for appointment IDs
+                        const popup = document.createElement('div');
+                        popup.className = 'appointment-popup';
+                        popup.textContent = `Appointments: ${dayAppointments.map(apt => apt.appointment_id).join(', ')}`;
+                        day.appendChild(popup);
+                        
+                        // Add click event to show/hide popup
+                        day.addEventListener('click', () => {
+                            // Hide all other popups
+                            document.querySelectorAll('.appointment-popup').forEach(p => p.classList.remove('show'));
+                            
+                            // Show this popup
+                            popup.classList.add('show');
+                            
+                            // Hide popup after 3 seconds
+                            setTimeout(() => {
+                                popup.classList.remove('show');
+                            }, 3000);
+                        });
                     }
-                    
-                    // Add click event
-                    day.addEventListener('click', () => {
-                        if (day.classList.contains('has-appointment')) {
-                            // Remove previous selection
-                            document.querySelectorAll('.calendar-day.selected').forEach(el => {
-                                el.classList.remove('selected');
-                            });
-                            document.querySelectorAll('.appointment-row.highlighted').forEach(el => {
-                                el.classList.remove('highlighted');
-                            });
-                            
-                            // Add new selection
-                            day.classList.add('selected');
-                            selectedDate = dateStr;
-                            
-                            // Highlight corresponding rows
-                            appointmentRows.forEach(row => {
-                                if (row.dataset.date === dateStr) {
-                                    row.classList.add('highlighted');
-                                    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                }
-                            });
-                        }
-                    });
                     
                     calendarDays.appendChild(day);
                 }
                 
                 // Add days from next month
-                const remainingDays = 42 - (startingDay + totalDays); // 6 rows * 7 days
+                const remainingDays = 42 - (startingDay + totalDays);
                 for (let i = 1; i <= remainingDays; i++) {
                     const day = document.createElement('div');
                     day.className = 'calendar-day other-month';

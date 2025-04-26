@@ -230,7 +230,9 @@ public function getCompletedOrders($supplierId)
 
 
 public function getSupplierById($userId) {
-    $sql = "SELECT u.user_id, u.first_name, u.last_name, u.contact_number, u.email, u.address, u.profile_image, s.expertise, s.service_areas
+    $sql = "SELECT u.user_id, u.first_name, u.last_name, u.contact_number, u.email, 
+                   u.street, u.district, u.province, u.profile_image, u.role,
+                   s.expertise, s.description, s.NIC, s.id_front_photo, s.id_back_photo, s.bank_details
             FROM users u
             LEFT JOIN suppliers s ON u.user_id = s.user_id
             WHERE u.user_id = :user_id";
@@ -249,8 +251,14 @@ public function getProductsBySupplier($userId) {
 
 // Update supplier profile
 public function updateSupplierProfile($data) {
+    // Update users table
     $sql = "UPDATE users
-            SET first_name = :first_name, last_name = :last_name, contact_number = :contact_number, address = :address
+            SET first_name = :first_name, 
+                last_name = :last_name, 
+                contact_number = :contact_number, 
+                street = :street,
+                district = :district,
+                province = :province
             WHERE user_id = :user_id";
     $this->db->query($sql);
 
@@ -258,18 +266,25 @@ public function updateSupplierProfile($data) {
     $this->db->bind(':first_name', $data['first_name']);
     $this->db->bind(':last_name', $data['last_name']);
     $this->db->bind(':contact_number', $data['contact_number']);
-    $this->db->bind(':address', $data['address']);
+    $this->db->bind(':street', $data['street']);
+    $this->db->bind(':district', $data['district']);
+    $this->db->bind(':province', $data['province']);
     $this->db->bind(':user_id', $data['user_id']);
     $this->db->execute();
 
     // Update supplier details
     $sql = "UPDATE suppliers
-            SET expertise = :expertise, service_areas = :service_areas
+            SET expertise = :expertise, 
+                description = :description,
+                NIC = :NIC,
+                bank_details = :bank_details
             WHERE user_id = :user_id";
     $this->db->query($sql);
 
     $this->db->bind(':expertise', $data['expertise']);
-    $this->db->bind(':service_areas', $data['service_areas']);
+    $this->db->bind(':description', $data['description']);
+    $this->db->bind(':NIC', $data['NIC']);
+    $this->db->bind(':bank_details', $data['bank_details']);
     $this->db->bind(':user_id', $data['user_id']);
 
     return $this->db->execute();

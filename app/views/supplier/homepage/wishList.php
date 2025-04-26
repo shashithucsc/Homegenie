@@ -174,6 +174,22 @@
             }
         </script>
 
+<script>
+        function toggleDropdown() {
+            const menu = document.getElementById("dropdownMenu");
+            menu.style.display = (menu.style.display === "block") ? "none" : "block";
+        }
+
+        // Optional: close dropdown when clicking outside
+        window.onclick = function (event) {
+            const dropdown = document.getElementById("dropdownMenu");
+            if (!event.target.closest('.user-dropdown')) {
+                dropdown.style.display = "none";
+            }
+        };
+    </script>
+
+
     </div>
 
     <?php require_once APPROOT . '/views/footer.php'; ?>

@@ -33,7 +33,11 @@
 
         <div class="user-dropdown">
             <div class="user-profile" onclick="toggleDropdown()">
-            <img src="data:image/jpeg;base64,<?php echo base64_encode($_SESSION['profile_pic']); ?>" alt="Profile Picture" class="profile-pic">
+                <?php if (isset($_SESSION['profile_pic'])): ?>
+                    <img src="data:image/jpeg;base64,<?php echo base64_encode($_SESSION['profile_pic']); ?>" alt="Profile Picture" class="profile-pic">
+                <?php else: ?>
+                    <img src="<?php echo URLROOT; ?>/public/img/profile.png" alt="Profile Picture" class="profile-pic">
+                <?php endif; ?>
                 <span class="user-name">
                     <?php echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest'; ?>
                 </span>

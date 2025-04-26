@@ -287,16 +287,26 @@ public function completedOrders()
                 'first_name' => trim($_POST['first_name']),
                 'last_name' => trim($_POST['last_name']),
                 'contact_number' => trim($_POST['contact_number']),
-                'address' => trim($_POST['address']),
+                'street' => trim($_POST['street']),
+                'district' => trim($_POST['district']),
+                'province' => trim($_POST['province']),
                 'expertise' => trim($_POST['expertise']),
-                'service_areas' => trim($_POST['service_areas']),
+                'description' => trim($_POST['description']),
+                'NIC' => trim($_POST['NIC']),
+                'bank_details' => trim($_POST['bank_details']),
                 'message' => '' // Message for the view
             ];
 
-            if ($this->SupplierModel->updateSupplierProfile($data)) {
-                $data['message'] = 'Profile updated successfully.';
+            // Validate required fields
+            if (empty($data['first_name']) || empty($data['last_name']) || empty($data['contact_number']) || 
+                empty($data['street']) || empty($data['district']) || empty($data['province'])) {
+                $data['message'] = 'Please fill in all required fields.';
             } else {
-                $data['message'] = 'Error updating profile.';
+                if ($this->SupplierModel->updateSupplierProfile($data)) {
+                    $data['message'] = 'Profile updated successfully.';
+                } else {
+                    $data['message'] = 'Error updating profile.';
+                }
             }
 
             // Reload the view with the message
@@ -347,7 +357,21 @@ public function completedOrders()
     }
 
     public function storeWithdraw(){
-        $this->view('supplier/admin/storeWithdraw');
+        $loggedUserId = $_SESSION['user_id'] ?? null;
+
+        if(!$loggedUserId){
+            header('Location: /HomeController/login');
+            exit;
+        }
+
+        // Get the supplier's earnings
+        $earnings = $this->SupplierModel->getYourEarnings($loggedUserId);
+        
+        $data = [
+            'getEarnings' => $earnings
+        ];
+        
+        $this->view('supplier/admin/storeWithdraw', $data);
     }
     
 }

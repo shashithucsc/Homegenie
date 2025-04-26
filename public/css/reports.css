@@ -1,24 +1,25 @@
 
 :root {
-    --primary-color: #2a3f9d;
-    --secondary-color: #4a5fc1;
-    --background-color: #f8f9ff;
-    --text-color: #2d3748;
-    --accent-color: #e2e8f0;
-    --hover-color: #1a2c6b;
-    --white-color: #ffffff;
-    --success-color: #38a169;
-    --border-radius: 12px;
-    --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --primary-color: #4a6cf7;
+    --secondary-color: #6a7aff;
+    --background-color: #f4f7ff;
+    --text-color: #ffffff;
+    --button-hover-color: #3a5bf1;
+    --border-radius: 8px;
   }
   
   body {
-    font-family: poppins;
+    font-family: "Arial", sans-serif;
     background-color: var(--background-color);
-    line-height: 1.6;
-    color: var(--text-color);
+    margin: 0;
+    padding: 0;
   }
-
+  
+  h2 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 20px;
+  }
   .reports-container {
     width: 80%;
     margin: 0 auto;

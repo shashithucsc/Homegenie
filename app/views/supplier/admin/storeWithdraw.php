@@ -26,7 +26,9 @@ require_once APPROOT . '/views/supplier/admin/sidebar.php';
     <div class="sales-summary">
         <div class="summary-box">
             <h3>Total Earnings</h3>
-            <div class="amount">Rs. 25,000.00</div> <!-- Replace with dynamic value -->
+            <div class="amount">
+            <?php echo htmlspecialchars($data['getEarnings']); ?>
+            </div>
         </div>
     </div>
 

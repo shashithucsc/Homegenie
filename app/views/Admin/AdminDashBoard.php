@@ -25,6 +25,21 @@
             </div>
         </div>
 
+        <div class="charts-container">
+            <div class="chart-card">
+                <div class="field title">
+                    User Growth
+                </div>
+                <canvas id="userGrowthChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <div class="field title">
+                    Revenue Chart
+                </div>
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
         <div class="dash-content">
             <div class="dash-card">
                 <div class="field title">
@@ -81,19 +96,16 @@
                     <span class="description">All</span>
                 </div>
             </div>
-        </div>
-        <div class="dash-card chart-card">
-            <div class="field title">
-                User Growth
+            
+            <div class="dash-card">
+                <div class="field title">
+                    Total Revenue
+                </div>
+                <div class="field">
+                    <span class="count">Rs. <?php echo number_format($data['totalRevenue'], 2); ?></span>
+                    <span class="description"></span>
+                </div>
             </div>
-            <canvas id="userGrowthChart"></canvas>
-        </div>
-
-        <div class="dash-card chart-card">
-            <div class="field title">
-                Revenue Chart
-            </div>
-            <canvas id="revenueChart"></canvas>
         </div>
     </section>
     <script src="<?php echo URLROOT; ?>/public/js/clock.js"></script>
@@ -119,6 +131,7 @@
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     y: {
                         beginAtZero: true
@@ -142,6 +155,7 @@
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     y: {
                         beginAtZero: true

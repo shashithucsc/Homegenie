@@ -16,10 +16,10 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
     <style>
         /* Payment Section */
         :root {
-            --primary-color: #4A90E2;
-            --secondary-color: #47B881;
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
             --accent-color: #E2574A;
-            --text-color: #333;
+            --text-color: #1f2937;
             --light-gray: #f5f5f5;
             --dark-gray: #666;
         }
@@ -113,7 +113,7 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
 <body>
     <?php require_once APPROOT . '/views/Customer/loggedNavBar.php'; ?>
     
-    <section id="payment" class="payment-section">
+    <section id="payment" class="payment-section" style="margin-top: 30px;">
         <div class="payment-container">
             <h2>Payment Details</h2>
             <div class="amount-display">

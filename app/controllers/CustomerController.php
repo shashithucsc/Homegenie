@@ -13,13 +13,13 @@ class CustomerController extends Controller {
 
     public function services(){
         $serviceProviders = $this->CustomerModel->getServiceProviders();
-        if (!$serviceProviders) {
-            die('No service providers found.');
-        }
+        // if (!$serviceProviders) {
+        //     die('No service providers found.');
+        // }
         $data = [
             'serviceProviders' => $serviceProviders
         ];
-        $this->view('Customer/services', $data);
+        $this->view('Customer/cu_services', $data);
     }
 
     public function about(){

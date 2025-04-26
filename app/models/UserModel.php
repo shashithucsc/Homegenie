@@ -201,4 +201,162 @@ class UserModel {
         $this->db->bind(':user_id', $id);
         return $this->db->execute();
     }
+    
+    // New methods for service provider verification
+    
+    public function getUnverifiedServiceProviders() {
+        $this->db->query('
+            SELECT 
+                u.user_id,
+                u.first_name,
+                u.last_name,
+                u.email,
+                u.contact_number,
+                u.street,
+                u.district,
+                u.province,
+                u.profile_image,
+                sp.provider_id,
+                sp.expertise,
+                sp.description,
+                sp.working_hours,
+                sp.service_areas,
+                sp.id_number,
+                sp.id_front,
+                sp.id_back,
+                sp.verified
+            FROM users u
+            JOIN service_providers sp ON u.user_id = sp.provider_id
+            WHERE sp.verified = 0
+        ');
+        
+        return $this->db->resultSet();
+    }
+    
+    public function verifyServiceProvider($provider_id) {
+        $this->db->query('UPDATE service_providers SET verified = 1 WHERE provider_id = :provider_id');
+        $this->db->bind(':provider_id', $provider_id);
+        return $this->db->execute();
+    }
+    
+    public function rejectServiceProvider($provider_id) {
+        try {
+            // Delete the service provider record
+            $this->db->query('DELETE FROM service_providers WHERE provider_id = :provider_id');
+            $this->db->bind(':provider_id', $provider_id);
+            $deleteResult = $this->db->execute();
+            
+            // Update user role to customer
+            $this->db->query('UPDATE users SET role = "customer" WHERE user_id = :user_id');
+            $this->db->bind(':user_id', $provider_id);
+            $updateResult = $this->db->execute();
+            
+            return ($deleteResult && $updateResult);
+        } catch (PDOException $e) {
+            error_log("Error rejecting service provider: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function getProviderDetails($provider_id) {
+        try {
+            $this->db->query('
+                SELECT 
+                    u.user_id,
+                    u.first_name,
+                    u.last_name,
+                    u.email,
+                    u.contact_number,
+                    u.street,
+                    u.district,
+                    u.province,
+                    sp.provider_id,
+                    sp.expertise,
+                    sp.description,
+                    sp.working_hours,
+                    sp.service_areas,
+                    sp.id_number,
+                    sp.id_front,
+                    sp.id_back
+                FROM users u
+                JOIN service_providers sp ON u.user_id = sp.provider_id
+                WHERE sp.provider_id = :provider_id
+            ');
+            
+            $this->db->bind(':provider_id', $provider_id);
+            $result = $this->db->single();
+            
+            if ($result) {
+                // Convert binary data to base64 for JSON
+                if ($result->id_front) {
+                    $result->id_front = base64_encode($result->id_front);
+                }
+                if ($result->id_back) {
+                    $result->id_back = base64_encode($result->id_back);
+                }
+                return $result;
+            }
+            
+            return false;
+        } catch (PDOException $e) {
+            error_log("Error retrieving provider details: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    public function getProviderImage($provider_id, $type) {
+        try {
+            // Determine which column to select based on the type parameter
+            $column = ($type === 'front') ? 'id_front' : 'id_back';
+            
+            // Query to get the image
+            $this->db->query("SELECT $column FROM service_providers WHERE provider_id = :provider_id");
+            $this->db->bind(':provider_id', $provider_id);
+            
+            $result = $this->db->single();
+            
+            if ($result && isset($result->$column)) {
+                return $result->$column;
+            }
+            
+            return false;
+        } catch (PDOException $e) {
+            error_log("Error retrieving provider image: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function getAllAppointments() {
+        try {
+            $this->db->query('
+                SELECT 
+                    a.appointment_id,
+                    a.customer_id,
+                    a.service_provider_id,
+                    a.description,
+                    a.appointment_date,
+                    a.appointment_time,
+                    a.location,
+                    a.status as appointment_status,
+                    a.finish_status,
+                    a.rating,
+                    a.created_at,
+                    a.updated_at,
+                    q.quotation_id,
+                    q.quotation_details,
+                    q.work_hours,
+                    q.cost,
+                    q.status as quotation_status,
+                    q.created_at as quotation_created_at
+                FROM appointments a
+                LEFT JOIN quotations q ON a.appointment_id = q.appointment_id
+                ORDER BY a.created_at DESC
+            ');
+            
+            return $this->db->resultSet();
+        } catch (PDOException $e) {
+            error_log("Error retrieving appointments: " . $e->getMessage());
+            return false;
+        }
+    }
 }

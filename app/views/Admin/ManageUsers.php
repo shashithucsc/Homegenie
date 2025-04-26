@@ -36,7 +36,7 @@ require_once APPROOT . '/views/Admin/AdminSideBar.php';
             <section class="table-header">
                 <h1>Users</h1>
                 <div class="input-group">
-                    <input type="search" placeholder="Search ...">
+                    <input type="search" placeholder="Search ..." id="searchInput">
                     <i class='bx bx-search'></i>
                 </div>
             </section>
@@ -86,6 +86,19 @@ require_once APPROOT . '/views/Admin/AdminSideBar.php';
     </section>
     <script src="<?php echo URLROOT; ?>/public/js/clock.js"></script>
     <script src="<?php echo URLROOT; ?>/public/js/script-users.js"></script>
+    
+    <!-- <script>
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            let searchText = this.value.toLowerCase();
+            let tableRows = document.querySelectorAll('tbody tr');
+            
+            tableRows.forEach(row => {
+                let text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchText) ? '' : 'none';
+            });
+        });
+    </script> -->
 </body>
 
 </html>

@@ -307,9 +307,19 @@ $spImagePath = URLROOT . '/public/register/uploads/' . $provider->profile_image;
                     <div class="info-item">
                         <i class='bx bx-map'></i>
                         <div>
-                            <label>Address</label>
-                            <p id="spAddress"><?php echo htmlspecialchars($provider->address); ?></p>
+                            <div style="display: flex">
+                                <p id="spStreet"><?php echo htmlspecialchars($provider->street); ?> , </p><p id="spDistrict"><?php echo htmlspecialchars($provider->district); ?> , </p><p id="spProvince"><?php echo htmlspecialchars($provider->province); ?> .</p>
+                            </div>
+                            <!-- <div>
+                                <label>Distric</label>
+                                <p id="spDistrict"><?php echo htmlspecialchars($provider->district); ?></p>
+                            </div>
+                            <div>
+                                <label>Province</label>
+                                <p id="spProvince"><?php echo htmlspecialchars($provider->province); ?></p>
+                            </div> -->
                         </div>
+                        
                     </div>
                 </div>
             </section>

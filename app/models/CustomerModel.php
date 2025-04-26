@@ -8,13 +8,17 @@ class CustomerModel {
     }
 
     public function getServiceProviders() {
-        $this->db->query("SELECT * FROM users WHERE role = 'service_provider'");
+        $sql = "SELECT u.*,
+                sp.*
+                FROM users u
+                JOIN service_providers sp ON u.user_id = sp.provider_id
+                WHERE u.role = 'service_provider'";
+        $this->db->query($sql);
         return $this->db->resultSet();
     }
 
     public function getCustomer($id) {
-        $sql = "SELECT u.user_id, u.first_name, u.last_name, u.contact_number, u.email, u.profile_image,
-                u.street, u.district, u.province
+        $sql = "SELECT u.*
                 FROM users u
                 WHERE u.user_id = :user_id";
         $this->db->query($sql);
@@ -23,7 +27,8 @@ class CustomerModel {
     }
 
     public function getServiceProviderById($id) {
-        $sql = "SELECT u.*, sp.expertise, sp.description, sp.work_photos, sp.working_hours, sp.service_areas 
+        $sql = "SELECT u.*, 
+                sp.*
                 FROM users u
                 LEFT JOIN service_providers sp ON u.user_id = sp.provider_id
                 WHERE u.user_id = :id AND u.role = 'service_provider'";

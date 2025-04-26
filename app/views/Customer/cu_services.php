@@ -97,11 +97,20 @@
 
         <section id="services" class="services-section">
             <div class="services-grid" id="servicesGrid">
+                <!-- <?php
+                print_r($data['serviceProviders']);
+                ?> -->
                 <?php foreach ($data['serviceProviders'] as $provider): ?>
                     <div class="service-card" id="<?php echo htmlspecialchars($provider->id ?? ''); ?>">
-                        <img src="<?php echo URLROOT; ?>/public/register/uploads/<?php echo htmlspecialchars($provider->profile_image ?? 'default.jpg'); ?>"
-                            alt="<?php echo htmlspecialchars(($provider->first_name ?? '') . ' ' . ($provider->last_name ?? '')); ?>"
-                            class="service-image">
+                        <?php if(!empty($provider->profile_image)): ?>
+                            <img src="data:image/jpeg;base64,<?php echo base64_encode($provider->profile_image); ?>"
+                                alt="<?php echo htmlspecialchars(($provider->first_name ?? '') . ' ' . ($provider->last_name ?? '')); ?>"
+                                class="service-image">
+                        <?php else: ?>
+                            <img src="<?php echo URLROOT; ?>/public/register/uploads/default.jpg"
+                                alt="<?php echo htmlspecialchars(($provider->first_name ?? '') . ' ' . ($provider->last_name ?? '')); ?>"
+                                class="service-image">
+                        <?php endif; ?>
                         <div class="service-content">
                             <h3><?php echo htmlspecialchars(($provider->first_name ?? '') . ' ' . ($provider->last_name ?? '')); ?>
                             </h3>

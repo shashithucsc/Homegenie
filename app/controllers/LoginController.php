@@ -46,6 +46,7 @@ class LoginController extends Controller
                     $_SESSION['email'] = $loggedInUser->email;
                     $_SESSION['role'] = $loggedInUser->role;
                     $_SESSION['username'] = $loggedInUser->first_name . ' ' . $loggedInUser->last_name;
+                    $_SESSION['profile_pic'] = $loggedInUser->profile_image;
 
                     // Redirect based on role
                     $redirectUrl = match ($loggedInUser->role) {

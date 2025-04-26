@@ -58,8 +58,8 @@ require_once APPROOT . '/views/Admin/AdminSideBar.php';
                             <?php foreach($data['users'] as $user) : ?>
                                 <tr>
                                     <td><?php echo $user->user_id; ?></td>
-                                    <td><?php echo $user->first_name . ' ' . $user->last_name; ?></td>
-                                    <td><?php echo $user->address; ?></td>
+                                    <td><?php echo "{$user->first_name} {$user->last_name}"; ?></td>
+                                    <td><?php echo "{$user->street}, {$user->district}, {$user->province} Province"; ?></td>
                                     <td><?php echo $user->email; ?></td>
                                     <td><?php echo $user->contact_number; ?></td>
                                     <td><?php echo ucfirst($user->role); ?></td>

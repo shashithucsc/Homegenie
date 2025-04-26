@@ -1,0 +1,361 @@
+:root {
+    --primary-color: #2563eb;
+    --secondary-color: #1e40af;
+    --text-color: #1f2937;
+    --light-bg: #f3f4f6;
+    --white: #ffffff;
+    --transition: all 0.3s ease;
+    --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--light-bg);
+    color: var(--text-color);
+    min-height: 100vh;
+}
+
+.appointments-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 5%;
+}
+
+.section-title {
+    color: var(--text-color);
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    text-align: center;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.section-title:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: var(--primary-color);
+}
+
+.tab-heading {
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+}
+
+.tabs {
+    display: flex;
+    margin-bottom: 2rem;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.tab {
+    padding: 0.8rem 1.5rem;
+    background-color: var(--white);
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+}
+
+.tab.active {
+    background-color: var(--primary-color);
+    color: var(--white);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.tab:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.tab-content {
+    display: none;
+    animation: slideIn 0.5s ease forwards;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.info-item {
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
+    padding: 1.5rem;
+    transition: var(--transition);
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+}
+
+.info-item:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-md);
+}
+
+.info-item i {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-right: 1rem;
+    margin-top: 0.5rem;
+}
+
+.info-item .content {
+    flex: 1;
+}
+
+.field {
+    margin-bottom: 0.8rem;
+}
+
+.field:last-child {
+    margin-bottom: 0;
+}
+
+.field label {
+    font-weight: 600;
+    color: var(--text-color);
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+.field span {
+    color: #666;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 1rem;
+}
+
+.btn,
+.edit-btn,
+.delete-btn {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    background-color: var(--primary-color);
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.btn i,
+.edit-btn i,
+.delete-btn i {
+    font-size: 1.1rem;
+}
+
+.delete-btn {
+    background-color: #ef4444;
+}
+
+form.payment-form {
+    margin: 0;
+    width: 100%;
+}
+
+.btn-pay {
+    width: 100%;
+}
+
+.no-appointments {
+    text-align: center;
+    padding: 3rem;
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
+    margin-top: 2rem;
+}
+
+.no-appointments p {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    color: #666;
+}
+
+.no-appointments a.btn {
+    display: inline-block;
+    margin-top: 1rem;
+    text-decoration: none;
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: var(--white);
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    padding: 2rem;
+    box-shadow: var(--shadow-lg);
+    animation: slideIn 0.3s ease forwards;
+}
+
+.close {
+    float: right;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #777;
+    transition: var(--transition);
+}
+
+.close:hover {
+    color: var(--text-color);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    transition: var(--transition);
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(60, 166, 166, 0.2);
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Simple Button Styles */
+.btn {
+    padding: 0.7rem 1.2rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn-pay {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+.btn-pay:hover {
+    background-color: var(--secondary-color);
+}
+
+.btn-secondary {
+    background-color: #6b7280;
+    color: var(--white);
+}
+
+.btn-secondary:hover {
+    background-color: #4b5563;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.edit-btn, .delete-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.edit-btn {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+.delete-btn {
+    background-color: #ef4444;
+    color: var(--white);
+}
+
+.edit-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+.delete-btn:hover {
+    background-color: #dc2626;
+}
+
+.edit-btn i, .delete-btn i {
+    font-size: 1.1rem;
+}

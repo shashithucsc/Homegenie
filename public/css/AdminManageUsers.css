@@ -196,3 +196,31 @@ thead th:hover {
 thead th.active,tbody td.active {
     color: #6c00bd;
 }
+
+/* Status colors */
+.status-pending {
+    color: #f0ad4e;
+}
+
+.status-approved {
+    color: #5cb85c;
+}
+
+.status-rejected {
+    color: #d9534f;
+}
+
+.status-completed {
+    color: #5bc0de;
+}
+
+/* Sort indicators */
+thead th.asc::after {
+    content: ' ↑';
+    color: #6c00bd;
+}
+
+thead th.desc::after {
+    content: ' ↓';
+    color: #6c00bd;
+}

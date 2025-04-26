@@ -3,11 +3,13 @@ Class AdminController extends Controller{
     private $userModel;
     private $issueModel;
     private $orderModel;
+    private $db;
     
     public function __construct() {
         $this->userModel = $this->model('UserModel');
         $this->issueModel = $this->model('IssueModel');
         $this->orderModel = $this->model('OrderModel');
+        // $this->db = new Database();
     }
     public function index(){
         $loggedUserId = $_SESSION['user_id'] ?? null;
@@ -53,8 +55,39 @@ Class AdminController extends Controller{
         }
     }
 
-    public function verifyUsers(){
-        $this->view('Admin/verifyUsers');   
+    public function verifyUsers() {
+        // Get unverified service providers using the UserModel
+        $unverifiedProviders = $this->userModel->getUnverifiedServiceProviders();
+        
+        $data = [
+            'unverifiedProviders' => $unverifiedProviders
+        ];
+        
+        $this->view('Admin/verifyUsers', $data);
+    }
+
+    public function verifyProvider($provider_id) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Use the UserModel to verify the provider
+            if ($this->userModel->verifyServiceProvider($provider_id)) {
+                header('Location: ' . URLROOT . '/AdminController/verifyUsers?success=Provider verified successfully');
+            } else {
+                header('Location: ' . URLROOT . '/AdminController/verifyUsers?error=Failed to verify provider');
+            }
+            exit();
+        }
+    }
+
+    public function rejectProvider($provider_id) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Use the UserModel to reject the provider
+            if ($this->userModel->rejectServiceProvider($provider_id)) {
+                header('Location: ' . URLROOT . '/AdminController/verifyUsers?success=Provider rejected successfully');
+            } else {
+                header('Location: ' . URLROOT . '/AdminController/verifyUsers?error=Failed to reject provider');
+            }
+            exit();
+        }
     }
 
     public function issues() {
@@ -124,7 +157,18 @@ Class AdminController extends Controller{
 
     public function viewOrders(){
         $this->view('Admin/viewOrders');   
-    } 
+    }
+    
+    public function viewAppointments(){
+        // Get all appointments with their related quotation data
+        $appointments = $this->userModel->getAllAppointments();
+        
+        $data = [
+            'appointments' => $appointments
+        ];
+        
+        $this->view('Admin/viewAppointments', $data);   
+    }
     
     public function faq(){
         // Initialize the FAQ model
@@ -196,6 +240,39 @@ Class AdminController extends Controller{
         // Redirect back to FAQ page
         header('Location: ' . URLROOT . '/AdminController/faq');
         exit;
+    }
+
+    public function getProviderDetails($provider_id) {
+        // Get provider details from the model
+        $provider = $this->userModel->getProviderDetails($provider_id);
+        
+        if ($provider) {
+            // Return JSON response
+            header('Content-Type: application/json');
+            echo json_encode($provider);
+        } else {
+            // Return error
+            http_response_code(404);
+            echo json_encode(['error' => 'Provider not found']);
+        }
+        exit();
+    }
+    
+    public function getProviderImage($provider_id, $type) {
+        // Get the image from the database
+        $image = $this->userModel->getProviderImage($provider_id, $type);
+        
+        if ($image) {
+            // Set the content type to image/jpeg
+            header('Content-Type: image/jpeg');
+            
+            // Output the image
+            echo $image;
+        } else {
+            // If no image is found, redirect to a default image
+            header('Location: ' . URLROOT . '/public/img/no-image.jpg');
+        }
+        exit();
     }
 }
 ?>

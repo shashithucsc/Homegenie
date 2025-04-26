@@ -20,8 +20,7 @@ class AppointmentSVPModel
     // Fetch all approved appointments for the logged-in service provider
     public function getApprovedAppointments($service_provider_id)
     {
-        $this->db->query('SELECT * FROM appointments WHERE service_provider_id = :service_provider_id AND status = "Approved" ORDER BY appointment_date DESC');
-
+        $this->db->query('SELECT * FROM appointments WHERE service_provider_id = :service_provider_id AND status = "Approved" ORDER BY appointment_date DESC, appointment_time DESC');
         $this->db->bind(':service_provider_id', $service_provider_id);
         return $this->db->resultSet();
     }
@@ -32,14 +31,7 @@ class AppointmentSVPModel
         $this->db->query($query);
         $this->db->bind(':appointment_id', $appointmentId);
         
-        if ($this->db->execute()) {
-            return [
-                'success' => true,
-                'updated_at' => date('Y-m-d H:i:s') // or fetch it back from DB if needed
-            ];
-        } else {
-            return ['success' => false];
-        }
+        return $this->db->execute();
     }
     
 
@@ -63,6 +55,14 @@ class AppointmentSVPModel
         
         $row = $this->db->single();
         return $row;
+    }
+
+    public function rejectAppointment($appointmentId) {
+        $query = "UPDATE appointments SET status = 'rejected', updated_at = NOW() WHERE appointment_id = :appointment_id";
+        $this->db->query($query);
+        $this->db->bind(':appointment_id', $appointmentId);
+        
+        return $this->db->execute();
     }
 }
 ?>

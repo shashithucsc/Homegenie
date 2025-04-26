@@ -169,8 +169,11 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null; ?>
                           <tr>
                               <th>Quotation ID</th>
                               <th>Appointment ID</th>
-                              <th>Details</th>
-                              <th>Price</th>
+                              <th>Appointment Description</th>
+                              <th>Location</th>
+                              <th>Quotation Details</th>
+                              <th>Work Hours</th>
+                              <th>Cost</th>
                               <th>Status</th>
                               <th>Created Date</th>
                               <th>Actions</th>
@@ -181,8 +184,11 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null; ?>
                               <tr>
                                   <td><?php echo htmlspecialchars($item->quotation_id); ?></td>
                                   <td><?php echo htmlspecialchars($item->appointment_id); ?></td>
+                                  <td><?php echo htmlspecialchars($item->appointment_description); ?></td>
+                                  <td><?php echo htmlspecialchars($item->appointment_location); ?></td>
                                   <td><?php echo htmlspecialchars($item->quotation_details); ?></td>
-                                  <td class="price-cell">$<?php echo htmlspecialchars($item->price); ?></td>
+                                  <td><?php echo htmlspecialchars($item->work_hours); ?> hours</td>
+                                  <td class="price-cell">$<?php echo htmlspecialchars($item->cost); ?></td>
                                   <td>
                                       <span class="status-badge" style="background-color: <?php 
                                           echo $item->status === 'Approved' ? 'rgba(40, 167, 69, 0.1)' : 
@@ -190,7 +196,7 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null; ?>
                                       ?>; color: <?php 
                                           echo $item->status === 'Approved' ? '#28a745' : 
                                               ($item->status === 'Rejected' ? '#dc3545' : '#ffc107'); 
-                                      ?>">
+                                      ?>;">
                                           <i class="fas <?php 
                                               echo $item->status === 'Approved' ? 'fa-check-circle' : 
                                                   ($item->status === 'Rejected' ? 'fa-times-circle' : 'fa-clock'); 
@@ -198,7 +204,7 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null; ?>
                                           <?php echo htmlspecialchars($item->status); ?>
                                       </span>
                                   </td>
-                                  <td><?php echo date('M d, Y', strtotime($item->created_at)); ?></td>
+                                  <td><?php echo date('F d, Y', strtotime($item->created_at)); ?></td>
                                   <td>
                                       <div class="action-buttons">
                                           <?php if ($item->status === 'Approved' || $item->status === 'Pending'): ?>

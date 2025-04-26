@@ -27,7 +27,8 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
       <form method="POST" action="<?php echo URLROOT . '/ServiceProviderController/quoteAdd'; ?>">
         <input type="hidden" name="appointment_id" id="appointment_id">
         <textarea name="quotation_details" placeholder="Enter quotation details" required></textarea>
-        <input type="number" name="price" placeholder="Enter price" step="0.01" required>
+        <input type="number" name="work_hours" placeholder="Enter work hours" required>
+        <input type="number" name="cost" placeholder="Enter cost" required>
         <button type="submit" class="btn" style="color: white;">Create Quotation</button>
         <p>Appointment ID: <span id="display-appointment-id"></span></p>
       </form>

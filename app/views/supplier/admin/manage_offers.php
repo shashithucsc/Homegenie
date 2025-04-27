@@ -14,15 +14,14 @@
     <div class="container">
         <header>
             <h1>Manage Seasonal Offers</h1>
-            <br>
-            <hr>
-            <a href="<?= URLROOT; ?>/StorePageController/index">
-                <button class="store-btn">Back to Store</button>
-            </a>
-            <a href="<?= URLROOT; ?>/SupplierController/inventory">
-                <button class="inventory-btn">Back to Inventory</button>
-            </a>
-
+            <div class="button-group">
+                <a href="<?= URLROOT; ?>/StorePageController/index">
+                    <button class="store-btn">Back to Store</button>
+                </a>
+                <a href="<?= URLROOT; ?>/SupplierController/inventory">
+                    <button class="inventory-btn">Back to Inventory</button>
+                </a>
+            </div>
         </header>
         <main>
             <section>

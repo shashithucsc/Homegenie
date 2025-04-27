@@ -25,9 +25,9 @@
                 <li><a href="<?php echo URLROOT; ?>/StorePageController/myOrders"><i
                             class="fas fa-box"></i>
                         My Orders</a></li>
-                <li><a href="<?php echo URLROOT; ?>/StorePageController/aboutUs"><i
+                <li><a href="<?php echo URLROOT; ?>/StorePageController/support"><i
                             class="fas fa-info-circle"></i>
-                        About Us</a></li>
+                        Support</a></li>
             </ul>
         </nav>
 

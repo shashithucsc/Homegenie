@@ -52,7 +52,7 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                                 <div class="issue-header">
                                     <span class="issue-title"><?php echo htmlspecialchars($issue->description); ?></span>
                                     <span class="status-badge <?php echo $issue->status == 'completed' ? 'status-resolved' : 'status-pending'; ?>">
-                                        <?php echo ucfirst($issue->status); ?>
+                                        <?php echo $issue->status == 'completed' ? 'Solved' : (!empty($issue->status) ? ucfirst($issue->status) : 'Pending'); ?>
                                     </span>
                                 </div>
                                 

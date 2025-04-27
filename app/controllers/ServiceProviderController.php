@@ -376,32 +376,6 @@ class ServiceProviderController extends Controller
         ]);
     }
 
-
-
-    // public function updateProfileFields()
-    // {
-    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //         $service_provider_id = $_SESSION['user_id'];
-
-    //         $expertise = trim($_POST['expertise']);
-    //         $service_areas = trim($_POST['service_areas']);
-    //         $working_hours = trim($_POST['working_hours']);
-
-    //         $data = [
-    //             'service_provider_id' => $service_provider_id,
-    //             'expertise' => $expertise,
-    //             'service_areas' => $service_areas,
-    //             'working_hours' => $working_hours
-    //         ];
-
-    //         if ($this->ProfileSVPModel->updateProfileFields($data)) {
-    //             header('Location: ' . URLROOT . '/ServiceProviderController/profile');
-    //             exit();
-    //         } else {
-    //             die("Failed to update profile fields.");
-    //         }
-    //     }
-    // }
     public function updateProfileFields()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {

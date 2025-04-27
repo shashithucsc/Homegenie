@@ -29,7 +29,6 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
             background-color: var(--background);
             color: var(--text);
             margin: 0;
-            padding: 20px;
         }
 
         .container {
@@ -499,8 +498,6 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
 <body>
     <div class="container">
         <div class="profile-header">
-            <h1>Service Provider Profile</h1>
-            <p>Manage your professional information and settings</p>
         </div>
 
         <div class="profile-sections">

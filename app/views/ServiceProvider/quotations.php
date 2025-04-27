@@ -9,122 +9,234 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null; ?>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quotations</title>
-  <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/SVP/SVP_quotations.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
+    /* Base Styles */
     .container {
-      padding: 20px;
       max-width: 1200px;
       margin: 0 auto;
-    }
-
-    .status-section {
-      margin-bottom: 30px;
+      padding-top: 50px;
+      /* padding: 2rem; */
       background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      padding: 20px;
     }
 
-    .status-header {
-      padding: 15px;
+    /* Status Section */
+    .status-section {
+      margin-bottom: 2rem;
+      background: #fff;
+      border: 1px solid #e5e7eb;
       border-radius: 8px;
-      margin-bottom: 20px;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    /* Status Header */
+    .status-header {
+      padding: 1rem 1.5rem;
+      font-size: 1.25rem;
+      font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 0.75rem;
+      border-bottom: 1px solid #e5e7eb;
     }
 
     .status-header i {
-      font-size: 1.2em;
+      font-size: 1.1em;
     }
 
+    .status-header.approved {
+      background: #f0fdf4;
+      color: #166534;
+    }
+
+    .status-header.rejected {
+      background: #fef2f2;
+      color: #991b1b;
+    }
+
+    .status-header.pending {
+      background: #fffbeb;
+      color: #92400e;
+    }
+
+    /* Table Styles */
     .quotations-table {
-      width: 100%;
+      width: 95%;
+      margin: 10px auto;
       border-collapse: collapse;
-      margin-top: 20px;
+      font-size: 0.95rem;
     }
 
-    .quotations-table th {
-      background-color: #f8f9fa;
-      padding: 12px;
-      text-align: left;
+    .quotations-table thead th {
+      background: #f9fafb;
+      color: #374151;
       font-weight: 600;
-      color: #495057;
-      border-bottom: 2px solid #dee2e6;
+      padding: 1rem 1.5rem;
+      text-align: left;
+      font-size: 0.9rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .quotations-table tbody tr {
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .quotations-table tbody tr:hover {
+      background: #f9fafb;
     }
 
     .quotations-table td {
-      padding: 12px;
-      border-bottom: 1px solid #dee2e6;
+      padding: 1rem 1.5rem;
       vertical-align: middle;
+      color: #374151;
     }
 
-    .quotations-table tr:hover {
-      background-color: #f8f9fa;
-    }
-
-    .status-badge {
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 0.85em;
+    /* ID Cells */
+    .quotations-table td:first-child,
+    .quotations-table td:nth-child(2) {
       font-weight: 500;
+      color: #4b5563;
+    }
+
+    /* Quotation Details */
+    .quotations-table td:nth-child(3) {
+      max-width: 300px;
+      word-break: break-word;
+      white-space: normal;
+      line-height: 1.5;
+    }
+
+    /* Work Hours */
+    .quotations-table td:nth-child(4) {
+      color: #4b5563;
+      font-weight: 500;
+    }
+
+    /* Price */
+    .quotations-table td:nth-child(5) {
+      color: #166534;
+      font-weight: 500;
+    }
+
+    /* Status Badge */
+    .status-badge {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-weight: 500;
+      font-size: 0.9rem;
     }
 
     .status-badge i {
-      font-size: 0.9em;
+      font-size: 1em;
     }
 
-    .price-cell {
-      font-weight: 600;
-      color: #28a745;
+    .status-badge.approved {
+      background: #f0fdf4;
+      color: #166534;
     }
 
+    .status-badge.rejected {
+      background: #fef2f2;
+      color: #991b1b;
+    }
+
+    .status-badge.pending {
+      background: #fffbeb;
+      color: #92400e;
+    }
+
+    /* Action Buttons */
     .action-buttons {
       display: flex;
-      gap: 10px;
+      gap: 0.75rem;
     }
 
     .action-btn {
-      padding: 6px 12px;
-      border: none;
+      padding: 0.5rem 1rem;
+      border: 1px solid #e5e7eb;
       border-radius: 4px;
+      font-weight: 500;
+      font-size: 0.9rem;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 5px;
-      font-size: 0.9em;
-      transition: all 0.3s ease;
+      gap: 0.5rem;
+      background: #fff;
+      color: #374151;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn i {
+      font-size: 1em;
     }
 
     .view-btn {
-      background-color: #007bff;
-      color: white;
+      border-color:rgb(20, 104, 221);
+      color: rgb(20, 104, 221);
     }
 
-    .edit-btn {
-      background-color: #ffc107;
-      color: #212529;
+    .view-btn:hover {
+      background: #f3f4f6;
     }
 
     .delete-btn {
-      background-color: #dc3545;
-      color: white;
+      border-color: #991b1b;
+      color: #991b1b;
     }
 
-    .action-btn:hover {
-      opacity: 0.9;
-      transform: translateY(-2px);
+    .delete-btn:hover {
+      background: #fef2f2;
     }
 
-    .no-quotations {
-      text-align: center;
-      padding: 30px;
-      color: #6c757d;
-      font-style: italic;
+    /* Created Date */
+    .quotations-table td:nth-child(7) {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+      
+      .quotations-table {
+        display: block;
+        overflow-x: auto;
+        width: 100%;
+      }
+      
+      .quotations-table td {
+        padding: 0.75rem 1rem;
+        min-width: 120px;
+      }
+      
+      .quotations-table thead th {
+        padding: 0.75rem 1rem;
+        min-width: 120px;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+      
+      .action-btn {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .status-badge {
+        padding: 0.5rem 0.75rem;
+      }
+      
+      .status-header {
+        padding: 0.75rem 1rem;
+        font-size: 1.1rem;
+      }
     }
   </style>
 </head>
@@ -133,127 +245,109 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null; ?>
   <div class="container">
     <div class="quotation-list">
       <?php
-      // Group quotations by status
+      // Group quotations by status in the desired order
       $groupedQuotations = [
-          'Approved' => [],
-          'Rejected' => [],
-          'Pending' => []
+        'Approved' => [],
+        'Pending' => [],
+        'Rejected' => []
       ];
-      
+
       if (!empty($data)) {
-          foreach ($data as $item) {
-              $groupedQuotations[$item->status][] = $item;
-          }
+        foreach ($data as $item) {
+          $groupedQuotations[$item->status][] = $item;
+        }
       }
-      
+
       // Display each status group only if it has quotations
-      foreach ($groupedQuotations as $status => $quotations): 
-          if (!empty($quotations)): ?>
-              <div class="status-section">
-                  <h2 class="status-header" style="background-color: <?php 
-                      echo $status === 'Approved' ? 'rgba(40, 167, 69, 0.1)' : 
-                          ($status === 'Rejected' ? 'rgba(220, 53, 69, 0.1)' : 'rgba(255, 193, 7, 0.1)'); 
-                  ?>; color: <?php 
-                      echo $status === 'Approved' ? '#28a745' : 
-                          ($status === 'Rejected' ? '#dc3545' : '#ffc107'); 
-                  ?>">
-                      <i class="fas <?php 
-                          echo $status === 'Approved' ? 'fa-check-circle' : 
-                              ($status === 'Rejected' ? 'fa-times-circle' : 'fa-clock'); 
-                      ?>"></i>
-                      <?php echo htmlspecialchars($status); ?> Quotations
-                  </h2>
-                  
-                  <table class="quotations-table">
-                      <thead>
-                          <tr>
-                              <th>Quotation ID</th>
-                              <th>Appointment ID</th>
-                              <th>Appointment Description</th>
-                              <th>Location</th>
-                              <th>Quotation Details</th>
-                              <th>Work Hours</th>
-                              <th>Cost</th>
-                              <th>Status</th>
-                              <th>Created Date</th>
-                              <th>Actions</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <?php foreach ($quotations as $item): ?>
-                              <tr>
-                                  <td><?php echo htmlspecialchars($item->quotation_id); ?></td>
-                                  <td><?php echo htmlspecialchars($item->appointment_id); ?></td>
-                                  <td><?php echo htmlspecialchars($item->appointment_description); ?></td>
-                                  <td><?php echo htmlspecialchars($item->appointment_location); ?></td>
-                                  <td><?php echo htmlspecialchars($item->quotation_details); ?></td>
-                                  <td><?php echo htmlspecialchars($item->work_hours); ?> hours</td>
-                                  <td class="price-cell">$<?php echo htmlspecialchars($item->cost); ?></td>
-                                  <td>
-                                      <span class="status-badge" style="background-color: <?php 
-                                          echo $item->status === 'Approved' ? 'rgba(40, 167, 69, 0.1)' : 
-                                              ($item->status === 'Rejected' ? 'rgba(220, 53, 69, 0.1)' : 'rgba(255, 193, 7, 0.1)'); 
-                                      ?>; color: <?php 
-                                          echo $item->status === 'Approved' ? '#28a745' : 
-                                              ($item->status === 'Rejected' ? '#dc3545' : '#ffc107'); 
-                                      ?>;">
-                                          <i class="fas <?php 
-                                              echo $item->status === 'Approved' ? 'fa-check-circle' : 
-                                                  ($item->status === 'Rejected' ? 'fa-times-circle' : 'fa-clock'); 
-                                          ?>"></i>
-                                          <?php echo htmlspecialchars($item->status); ?>
-                                      </span>
-                                  </td>
-                                  <td><?php echo date('F d, Y', strtotime($item->created_at)); ?></td>
-                                  <td>
-                                      <div class="action-buttons">
-                                          <?php if ($item->status === 'Approved' || $item->status === 'Pending'): ?>
-                                              <button class="action-btn view-btn" onclick="downloadQuotationPDF(<?php echo $item->quotation_id; ?>)">
-                                                  <i class="fas fa-print"></i> Print / Save
-                                              </button>
-                                          <?php endif; ?>
-                                          
-                                          <?php if ($item->status === 'Rejected'): ?>
-                                              <button class="action-btn delete-btn" onclick="deleteQuotation(<?php echo $item->quotation_id; ?>)">
-                                                  <i class="fas fa-trash"></i> Delete
-                                              </button>
-                                          <?php endif; ?>
-                                      </div>
-                                  </td>
-                              </tr>
-                          <?php endforeach; ?>
-                      </tbody>
-                  </table>
-              </div>
-          <?php endif;
+      foreach ($groupedQuotations as $status => $quotations):
+        if (!empty($quotations)): ?>
+          <div class="status-section">
+            <h2 class="status-header <?php echo strtolower($status); ?>">
+              <i class="fas <?php
+                            echo $status === 'Approved' ? 'fa-check-circle' : ($status === 'Rejected' ? 'fa-times-circle' : 'fa-clock');
+                            ?>"></i>
+              <?php echo htmlspecialchars($status); ?> Quotations
+            </h2>
+
+            <table class="quotations-table">
+              <thead>
+                <tr>
+                  <th>Quotation ID</th>
+                  <th>Appointment ID</th>
+                  <th>Quotation Details</th>
+                  <th>Work Hours</th>
+                  <th>Cost</th>
+                  <th>Status</th>
+                  <th>Created Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach ($quotations as $item): ?>
+                  <tr>
+                    <td><?php echo htmlspecialchars($item->quotation_id); ?></td>
+                    <td><?php echo htmlspecialchars($item->appointment_id); ?></td>
+                    <td><?php echo htmlspecialchars($item->quotation_details); ?></td>
+                    <td><?php echo htmlspecialchars($item->work_hours); ?> hours</td>
+                    <td class="price-cell">$<?php echo htmlspecialchars($item->cost); ?></td>
+                    <td>
+                      <span class="status-badge <?php echo strtolower($item->status); ?>">
+                        <i class="fas <?php
+                                      echo $item->status === 'Approved' ? 'fa-check-circle' : ($item->status === 'Rejected' ? 'fa-times-circle' : 'fa-clock');
+                                      ?>"></i>
+                        <?php echo htmlspecialchars($item->status); ?>
+                      </span>
+                    </td>
+                    <td><?php echo date('F d, Y', strtotime($item->created_at)); ?></td>
+                    <td>
+                      <div class="action-buttons">
+                        <?php if ($item->status === 'Approved' || $item->status === 'Pending'): ?>
+                          <button class="action-btn view-btn" onclick="downloadQuotationPDF(<?php echo $item->quotation_id; ?>)">
+                            <i class="fas fa-print"></i> Print / Save
+                          </button>
+                        <?php endif; ?>
+
+                        <?php if ($item->status === 'Rejected'): ?>
+                          <button class="action-btn delete-btn" onclick="deleteQuotation(<?php echo $item->quotation_id; ?>)">
+                            <i class="fas fa-trash"></i> Delete
+                          </button>
+                        <?php endif; ?>
+                      </div>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+          </div>
+      <?php endif;
       endforeach; ?>
     </div>
   </div>
 
   <script>
     function downloadQuotationPDF(quotationId) {
-        window.location.href = '<?php echo URLROOT; ?>/ServiceProviderController/generateQuotationPDF/' + quotationId;
+      window.location.href = '<?php echo URLROOT; ?>/ServiceProviderController/generateQuotationPDF/' + quotationId;
     }
 
     function deleteQuotation(quotationId) {
-        if (confirm('Are you sure you want to hide this quotation?')) {
-            // Find the row containing the quotation
-            const rows = document.querySelectorAll('tr');
-            for (const row of rows) {
-                const firstCell = row.querySelector('td:first-child');
-                if (firstCell && firstCell.textContent.trim() === quotationId.toString()) {
-                    // Hide the row with a fade-out animation
-                    row.style.transition = 'opacity 0.3s ease';
-                    row.style.opacity = '0';
-                    
-                    // Remove the row after the animation completes
-                    setTimeout(() => {
-                        row.style.display = 'none';
-                    }, 300);
-                    break;
-                }
-            }
+      if (confirm('Are you sure you want to hide this quotation?')) {
+        // Find the row containing the quotation
+        const rows = document.querySelectorAll('tr');
+        for (const row of rows) {
+          const firstCell = row.querySelector('td:first-child');
+          if (firstCell && firstCell.textContent.trim() === quotationId.toString()) {
+            // Hide the row with a fade-out animation
+            row.style.transition = 'opacity 0.3s ease';
+            row.style.opacity = '0';
+
+            // Remove the row after the animation completes
+            setTimeout(() => {
+              row.style.display = 'none';
+            }, 300);
+            break;
+          }
         }
+      }
     }
   </script>
 </body>

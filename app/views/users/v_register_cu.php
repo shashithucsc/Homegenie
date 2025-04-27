@@ -19,14 +19,9 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
 </head>
 
 <body>
-    <nav class="top-nav">
-        <a href="../index/index.php" class="nav-brand">Home<span>Genie</span></a>
-        <div class="nav-links">
-            <a href="../index/about.php">About</a>
-            <button onclick="document.location='../login/login.php'" class="login-btn">Login</button>
-        </div>
-    </nav>
-
+    <?php
+        require_once APPROOT . '/views/inc/components/logginNavbar.php';
+    ?>
     <div class="main-container">
         <h1>Register As Customer</h1>
         <form class="register-form" action="<?php echo URLROOT . '/SignUpController/registerUser'; ?>" method="POST"

@@ -4,6 +4,10 @@ class CustomerController extends Controller {
 
     private $CustomerModel;
     public function __construct(){
+        if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'customer') {
+            header('Location: ' . URLROOT . '/LoginController');
+            exit;
+        }
         $this->CustomerModel = $this->model('CustomerModel');
     }
 

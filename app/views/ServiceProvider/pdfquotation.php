@@ -163,7 +163,7 @@
             </tr>
             <tr>
                 <th>Cost</th>
-                <td class="price-cell">$<?php echo number_format($quotation->cost, 2); ?></td>
+                <td class="price-cell">Rs: <?php echo number_format($quotation->cost, 2); ?></td>
             </tr>
             <tr>
                 <th>Status</th>

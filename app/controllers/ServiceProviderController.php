@@ -10,6 +10,10 @@ class ServiceProviderController extends Controller
 
     public function __construct()
     {
+        if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'service_provider') {
+            header('Location: ' . URLROOT . '/LoginController');
+            exit;
+        }
         $this->QuotationSVPModel = $this->model('QuotationSVPModel');
         $this->ProfileSVPModel = $this->model('ProfileSVPModel');
         $this->AppointmentSVPModel = $this->model('AppointmentSVPModel');

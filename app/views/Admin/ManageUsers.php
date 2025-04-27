@@ -16,7 +16,7 @@ require_once APPROOT . '/views/Admin/AdminSideBar.php';
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/AdminManageUsers.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-    <title>Users</title>
+    <title>Manage Users</title>
 
 </head>
 
@@ -63,7 +63,6 @@ require_once APPROOT . '/views/Admin/AdminSideBar.php';
                                     <td><?php echo $user->email; ?></td>
                                     <td><?php echo $user->contact_number; ?></td>
                                     <td><?php echo ucfirst($user->role); ?></td>
-                                    <!-- Inside the table row for each user -->
                                     <td>
                                         <div class='faq-btn delete'>
                                             <form action="<?php echo URLROOT; ?>/AdminController/deleteUser" method="POST">
@@ -86,19 +85,6 @@ require_once APPROOT . '/views/Admin/AdminSideBar.php';
     </section>
     <script src="<?php echo URLROOT; ?>/public/js/clock.js"></script>
     <script src="<?php echo URLROOT; ?>/public/js/script-users.js"></script>
-    
-    <!-- <script>
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            let searchText = this.value.toLowerCase();
-            let tableRows = document.querySelectorAll('tbody tr');
-            
-            tableRows.forEach(row => {
-                let text = row.textContent.toLowerCase();
-                row.style.display = text.includes(searchText) ? '' : 'none';
-            });
-        });
-    </script> -->
 </body>
 
 </html>

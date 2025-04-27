@@ -4,7 +4,7 @@
 <body>
     <header class="top-nav">
         <div class="logo">
-            <a href="<?php echo URLROOT; ?>/CustomerController/index" target="main">
+            <a href="<?php echo URLROOT; ?>/CustomerController/index">
                 <img src="<?php echo URLROOT; ?>/public/img/logo.png" alt="HomeGenie Logo" class="circle-logo">
             </a>
             <h1>HomeGenie Store</h1>
@@ -12,22 +12,22 @@
 
         <nav>
             <ul>
-                <li><a href="<?php echo URLROOT; ?>/HomeController/index" target="main"><i class="fas fa-globe"></i>
+                <li><a href="<?php echo URLROOT; ?>/CustomerController/index"><i class="fas fa-globe"></i>
                     </a></li>
-                <li><a href="<?php echo URLROOT; ?>/StorePageController/index" target="main"><i class="fas fa-home"></i>
+                <li><a href="<?php echo URLROOT; ?>/StorePageController/index"><i class="fas fa-home"></i>
                         Home</a></li>
-                <li><a href="<?php echo URLROOT; ?>/StorePageController/wishList" target="main"><i
+                <li><a href="<?php echo URLROOT; ?>/StorePageController/wishList" ><i
                             class="fas fa-heart"></i>
                         WishList</a></li>
-                <li><a href="<?php echo URLROOT; ?>/StorePageController/viewCart" target="main"><i
+                <li><a href="<?php echo URLROOT; ?>/StorePageController/viewCart"><i
                             class="fas fa-shopping-cart"></i>
                         Your Cart</a></li>
-                <li><a href="<?php echo URLROOT; ?>/StorePageController/myOrders" target="main"><i
+                <li><a href="<?php echo URLROOT; ?>/StorePageController/myOrders"><i
                             class="fas fa-box"></i>
                         My Orders</a></li>
-                <li><a href="<?php echo URLROOT; ?>/StorePageController/aboutUs" target="main"><i
+                <li><a href="<?php echo URLROOT; ?>/StorePageController/support"><i
                             class="fas fa-info-circle"></i>
-                        About Us</a></li>
+                        Support</a></li>
             </ul>
         </nav>
 

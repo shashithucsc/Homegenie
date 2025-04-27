@@ -408,6 +408,24 @@ public function getAverageRating($item_id)
     return $this->db->single()->average_rating ?? 0;
 }
 
+    public function insertContactIssue($user_id, $title, $description) {
+        $sql = "INSERT INTO issues (user_id, title, description, status, created_at) 
+                VALUES (:user_id, :title, :description, 'pending', NOW())";
+        
+        $this->db->query($sql);
+        $this->db->bind(':user_id', $user_id);
+        $this->db->bind(':title', $title);
+        $this->db->bind(':description', $description);
+        
+        return $this->db->execute();
+    }
+
+    public function getFAQs() {
+        $sql = "SELECT * FROM faq ORDER BY faq_ID ASC";
+        $this->db->query($sql);
+        return $this->db->resultSet();
+    }
+
     
 
     

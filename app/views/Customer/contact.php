@@ -30,10 +30,10 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                 <div class="contact-grid">
                     <div class="contact-form-container">
                         <h2>Send us a Message</h2>
-                        <form id="contactForm" class="contact-form">
+                        <form id="contactForm" class="contact-form" method="POST" action="<?php echo URLROOT . '/CustomerController/contact';?>">
                             <div class="form-group">
                                 <label for="name">Full Name <span class="required">*</span></label>
-                                <input type="text" id="name" name="name" required>
+                                <input type="text" id="name" name="full_name" required>
                                 <span class="error-message" id="nameError"></span>
                             </div>
 

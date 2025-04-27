@@ -15,16 +15,16 @@
             <h3>Quick Links</h3>
             <div class="two-column-links">
                 <div>
-                    <a href="cu_home.php">Home</a>
-                    <a href="services.php">Services</a>
-                    <a href="../../../supplier/HomeController.php">Store</a>
-                    <a href="cu_about.php">About</a>
+                    <a href="<?php echo URLROOT; ?>/CustomerController">Home</a>
+                    <a href="<?php echo URLROOT; ?>/CustomerController/services">Services</a>
+                    <a href="<?php echo URLROOT; ?>/StorePageController">Store</a>
+                    <a href="<?php echo URLROOT; ?>/CustomerController/about">About</a>
                 </div>
                 <div>
                     <a href="#privacy">Privacy Policy</a>
                     <a href="#terms">Terms of Service</a>
-                    <a href="cu_faq.php">FAQ</a>
-                    <a href="cu_contact.php">Contact Us</a>
+                    <a href="<?php echo URLROOT; ?>/CustomerController/support">Support</a>
+                    <a href="<?php echo URLROOT; ?>/CustomerController/contact">Contact Us</a>
                 </div>
             </div>
         </div>

@@ -3,6 +3,10 @@ class InventoryController extends Controller {
     private $inventoryModel;
 
     public function __construct() {
+        if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'supplier') {
+            header('Location: ' . URLROOT . '/LoginController');
+            exit;
+        }
         $this->inventoryModel = $this->model('InventoryModel');
     }
 

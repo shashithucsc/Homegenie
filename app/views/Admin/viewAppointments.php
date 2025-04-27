@@ -16,7 +16,7 @@ require_once APPROOT . '/views/Admin/AdminSideBar.php';
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/AdminManageUsers.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-    <title>Users</title>
+    <title>View Appointments</title>
 
 </head>
 
@@ -26,7 +26,7 @@ require_once APPROOT . '/views/Admin/AdminSideBar.php';
         <div class="top">
             <div class="welcome">
                 <span class="text">
-                    <h3>Manage Users</h3>
+                    <h3>View Appointments</h3>
                 </span>
             </div>
             <div class="time" id="clock">
@@ -34,7 +34,7 @@ require_once APPROOT . '/views/Admin/AdminSideBar.php';
         </div>
         <div class="table" id="customers_table">
             <section class="table-header">
-                <h1>Users</h1>
+                <h1>Appointments</h1>
                 <div class="input-group">
                     <input type="search" placeholder="Search ..." id="searchInput">
                     <i class='bx bx-search'></i>

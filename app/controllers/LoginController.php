@@ -86,11 +86,4 @@ class LoginController extends Controller
         header('Location: ' . URLROOT . '/users/login');
         exit();
     }
-
-
-    
-
-
-
-
 }

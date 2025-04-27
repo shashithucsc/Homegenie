@@ -56,4 +56,9 @@ class OrderModel {
         $result = $this->db->single();
         return $result->total_revenue ?? 0;
     }
+
+    public function getOrders() {
+        $this->db->query("SELECT * FROM sales_orders");
+        return $this->db->resultSet();
+    }
 }

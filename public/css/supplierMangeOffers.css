@@ -1,31 +1,40 @@
-
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
 .container {
     padding: 30px;
     max-width: 1400px;
     margin: auto;
-    background: #fff;
+    background: var(--sidebar-background);
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     margin-left: 250px;
 }
 
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
 header h1 {
-    text-align: center;
-    color: #041f36;
+    color: var(--primary-color);
     font-size: 2.5rem;
-    margin-bottom: 20px;
+    margin: 0;
     font-weight: 600;
     text-transform: uppercase;
 }
 
+.button-group {
+    display: flex;
+    gap: 15px;
+}
 
 section {
     margin-bottom: 40px;
@@ -40,7 +49,6 @@ section h2 {
     color: #041f36;
     margin-bottom: 20px;
 }
-
 
 .offers-list {
     display: flex;
@@ -76,7 +84,6 @@ section h2 {
     transform: scale(1.05);
 }
 
-
 textarea {
     width: 100%;
     padding: 12px;
@@ -106,54 +113,49 @@ button {
     padding: 12px 20px;
     border: none;
     color: #fff;
-    background: #262b2a;
+    background: var(--primary-color);
     cursor: pointer;
     border-radius: 6px;
     font-size: 1.1rem;
     text-transform: uppercase;
-    transition: background 0.3s ease, transform 0.2s ease;
+    transition: all 0.3s ease;
+    min-width: 150px;
 }
 
 button:hover {
-    background: #1f3597;
+    background: var(--secondary-color);
     transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 button:active {
     transform: translateY(1px);
 }
 
-
 .update-btn {
-    background: #0275d8;
+    background: var(--primary-color);
 }
 
 .update-btn:hover {
-    background: #025aa5;
+    background: var(--secondary-color);
 }
 
 .remove-btn {
     background: #d9534f;
-    margin-left: 40px;
-    margin-bottom: 50px;
 }
 
 .remove-btn:hover {
     background: #c9302c;
 }
 
-.store-btn {
-    background: #000000;
-    margin-left: 40px;
-    margin-bottom: 50px;
+.store-btn, .inventory-btn {
+    background: var(--primary-color);
+    margin: 0;
 }
 
-.inventory-btn {
-    background: #000000;
-    margin-left: 900px;
-    margin-bottom: 50px;
+.store-btn:hover, .inventory-btn:hover {
+    background: var(--secondary-color);
 }
-
 
 @media (max-width: 768px) {
     .offers-list {

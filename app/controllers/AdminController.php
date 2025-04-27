@@ -9,6 +9,12 @@ Class AdminController extends Controller{
         $this->userModel = $this->model('UserModel');
         $this->issueModel = $this->model('IssueModel');
         $this->orderModel = $this->model('OrderModel');
+
+       
+        if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+            header('Location: ' . URLROOT . '/LoginController');
+            exit;
+        }
         // $this->db = new Database();
     }
     public function index(){
@@ -156,7 +162,11 @@ Class AdminController extends Controller{
     }
 
     public function viewOrders(){
-        $this->view('Admin/viewOrders');   
+        $orders = $this->orderModel->getOrders();   
+        $data = [
+            'orders' => $orders
+        ];
+        $this->view('Admin/viewOrders', $data);   
     }
     
     public function viewAppointments(){

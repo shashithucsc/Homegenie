@@ -24,10 +24,13 @@ class StorePageController extends Controller
     }
 
 
-   
-    public function aboutUs()
+
+    public function support()
     {
-        $this->view('supplier/homepage/about');
+        $data = [
+            'faqs' => $this->StorePagesModel->getFAQs() ?? []
+        ];
+        $this->view('supplier/homepage/support', $data);
     }
 
 
@@ -58,48 +61,49 @@ class StorePageController extends Controller
         $this->view('supplier/homepage/painting', ['items' => $items]);
     }
 
-  public function cleaning(){
-    $cleaningModel = $this->model('StorePagesModel');
-    $itmes = $cleaningModel->getCleaningItems();
-    $this->view('supplier/homepage/cleaning',['items'=>$itmes]);
-   
-  }
+    public function cleaning()
+    {
+        $cleaningModel = $this->model('StorePagesModel');
+        $itmes = $cleaningModel->getCleaningItems();
+        $this->view('supplier/homepage/cleaning', ['items' => $itmes]);
+
+    }
 
 
 
-  public function myOrders()
-  {
-      if (!isset($_SESSION['user_id'])) {
-          header("Location: " . URLROOT . "/StorePageController/index");
-      }
+    public function myOrders()
+    {
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: " . URLROOT . "/StorePageController/index");
+        }
 
-      $userId = $_SESSION['user_id'];
-      $orders = $this->StorePagesModel->getMyorders($userId);
+        $userId = $_SESSION['user_id'];
+        $orders = $this->StorePagesModel->getMyorders($userId);
 
-      $data = [
-          'orders' => $orders
-      ];
+        $data = [
+            'orders' => $orders
+        ];
 
-      $this->view('supplier/homepage/myOrders', $data);
-  }
-
-
+        $this->view('supplier/homepage/myOrders', $data);
+    }
 
 
 
-//   Wishlist function
+
+
+    //   Wishlist function
     public function wishlist()
     {
         if (!isset($_SESSION['user_id'])) {
-           header("Location: " . URLROOT . "/StorePageController/index");
-          
+            header("Location: " . URLROOT . "/StorePageController/index");
+
             return;
         }
 
         $user_id = $_SESSION['user_id'];
 
         $wishList = $this->model(model: 'StorePagesModel');
-        $items = $wishList->getSavedItem($user_id); 
+        $items = $wishList->getSavedItem($user_id);
 
 
         $this->view('supplier/homepage/wishList', ['items' => $items]);
@@ -133,7 +137,7 @@ class StorePageController extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (!isset($_SESSION['user_id'])) {
                 header("Location: " . URLROOT . "/LoginController/index");
-            return;
+                return;
             }
 
             if (!isset($_POST['item_id'])) {
@@ -170,25 +174,25 @@ class StorePageController extends Controller
         $cartItems = $this->cartModel->getCartItemsByUserId($customerId);
         $total = 0;
         $supplierIds = [];
-    
+
         foreach ($cartItems as $item) {
             $total += $item->quantity * $item->selling_price;
             $supplierIds[$item->supplier_id] = true;
         }
-    
-        $numSuppliers = count($supplierIds); 
-    
+
+        $numSuppliers = count($supplierIds);
+
         $this->view('supplier/homepage/cart', [
             'cartItems' => $cartItems,
             'total' => $total,
-            'numSuppliers' => $numSuppliers 
+            'numSuppliers' => $numSuppliers
         ]);
     }
 
     public function addToCart()
     {
         if (!isset($_SESSION['user_id'])) {
-           header("Location: " . URLROOT . "/LoginController/index");
+            header("Location: " . URLROOT . "/LoginController/index");
             return;
         }
 
@@ -201,7 +205,7 @@ class StorePageController extends Controller
             return;
         }
 
-       
+
         $supplierId = $this->cartModel->getSupplierIdByItemId($itemId);
 
         if (!$supplierId) {
@@ -301,7 +305,7 @@ class StorePageController extends Controller
             $totalItems += $item->quantity;
             $subtotal += $item->quantity * $item->selling_price;
             $supplierIds[$item->supplier_id] = true;
-            
+
             if (!isset($supplierTotals[$item->supplier_id])) {
                 $supplierTotals[$item->supplier_id] = 0;
             }
@@ -310,11 +314,11 @@ class StorePageController extends Controller
 
         $numSuppliers = count($supplierIds);
 
-        // Get overall grand_total and delivery_fee from POST data
+        // Get overall grand_total and delivery_fee 
         $grandTotal = isset($_POST['grand_total']) ? floatval($_POST['grand_total']) : $subtotal;
         $deliveryFee = isset($_POST['delivery_fee']) ? floatval($_POST['delivery_fee']) : 0;
 
-        // Get supplier-specific data from POST
+        // Get supplier specific data 
         $supplierData = json_decode($_POST['supplier_totals'], true);
         if ($supplierData) {
             $supplierTotals = $supplierData['totals'];
@@ -336,87 +340,87 @@ class StorePageController extends Controller
     }
 
 
-    
 
 
-public function confirmOrder()
-{
-    if (!isset($_SESSION['user_id'])) {
-        die('Error: User not logged in.');
-    }
 
-    $customerId = $_SESSION['user_id'];
-
-    $grandTotal = $_POST['grand_total'] ?? null;
-    $paymentMethod = $_POST['payment_method'] ?? null;
-    $deliveryAddress = $_POST['delivery_address'] ?? null;
-    $supplierIds = isset($_POST['supplier_ids']) ? json_decode($_POST['supplier_ids'], true) : [];
-    $supplierTotals = isset($_POST['supplier_totals']) ? json_decode($_POST['supplier_totals'], true) : [];
-    $supplierDeliveryFees = isset($_POST['supplier_delivery_fees']) ? json_decode($_POST['supplier_delivery_fees'], true) : [];
-    $supplierGrandTotals = isset($_POST['supplier_grand_totals']) ? json_decode($_POST['supplier_grand_totals'], true) : [];
-
-    if (!$grandTotal || !$paymentMethod || !$deliveryAddress || empty($supplierIds) || empty($supplierTotals)) {
-        $this->showPopup("Missing order details.", URLROOT . "/StorePageController/viewCart");
-        return;
-    }
-
-    if ($paymentMethod === 'cod') {
-        // Cash on Delivery
-        foreach ($supplierIds as $supplierId) {
-            if (!isset($supplierTotals[$supplierId]) || !isset($supplierDeliveryFees[$supplierId])) {
-                $this->showPopup("Missing totals for supplier ID $supplierId.", URLROOT . "/StorePageController/viewCart");
-                return;
-            }
-        
-            $itemTotal = (float)$supplierTotals[$supplierId];
-            $deliveryFee = (float)$supplierDeliveryFees[$supplierId];
-            $supplierGrandTotal = $itemTotal + $deliveryFee;
-        
-            // Create an order per supplier
-            $saleId = $this->cartModel->createOrder($customerId, $supplierGrandTotal, $paymentMethod, $deliveryAddress, $supplierId, $deliveryFee);
-        
-            if (!$saleId) {
-                $this->showPopup("Order creation failed for supplier ID $supplierId.", URLROOT . "/StorePageController/viewCart");
-                return;
-            }
-
-            // Get all cart items belonging to this supplier
-            $cartItems = $this->cartModel->getCartItemsByUserIdAndSupplierId($customerId, $supplierId);
-
-            if (empty($cartItems)) {
-                $this->showPopup("No cart items found for supplier ID $supplierId.", URLROOT . "/StorePageController/viewCart");
-                return;
-            }
-
-            foreach ($cartItems as $item) {
-                $this->cartModel->addOrderItem($saleId, $item->item_id, $item->quantity, $item->selling_price, $supplierId);
-            }
+    public function confirmOrder()
+    {
+        if (!isset($_SESSION['user_id'])) {
+            die('Error: User not logged in.');
         }
 
-        // Clear the cart
-        $this->cartModel->clearCart($customerId);
+        $customerId = $_SESSION['user_id'];
 
-        $this->showPopup("Order placed successfully!", URLROOT . "/StorePageController/index");
+        $grandTotal = $_POST['grand_total'] ?? null;
+        $paymentMethod = $_POST['payment_method'] ?? null;
+        $deliveryAddress = $_POST['delivery_address'] ?? null;
+        $supplierIds = isset($_POST['supplier_ids']) ? json_decode($_POST['supplier_ids'], true) : [];
+        $supplierTotals = isset($_POST['supplier_totals']) ? json_decode($_POST['supplier_totals'], true) : [];
+        $supplierDeliveryFees = isset($_POST['supplier_delivery_fees']) ? json_decode($_POST['supplier_delivery_fees'], true) : [];
+        $supplierGrandTotals = isset($_POST['supplier_grand_totals']) ? json_decode($_POST['supplier_grand_totals'], true) : [];
 
-    } elseif ($paymentMethod === 'card') {
-        // Card Payment
-        $_SESSION['pending_supplier_ids'] = $supplierIds;
-        $_SESSION['pending_supplier_totals'] = $supplierTotals;
-        $_SESSION['pending_supplier_delivery_fees'] = $supplierDeliveryFees;
-        $_SESSION['pending_supplier_grand_totals'] = $supplierGrandTotals;
-        $_SESSION['pending_grand_total'] = $grandTotal;
-        $_SESSION['pending_delivery_address'] = $deliveryAddress;
-        $_SESSION['pending_customer_id'] = $customerId;
+        if (!$grandTotal || !$paymentMethod || !$deliveryAddress || empty($supplierIds) || empty($supplierTotals)) {
+            $this->showPopup("Missing order details.", URLROOT . "/StorePageController/viewCart");
+            return;
+        }
 
-        $this->view('supplier/homepage/paymentGateway', [
-            'grand_total' => $grandTotal,
-            'delivery_address' => $deliveryAddress
-        ]);
+        if ($paymentMethod === 'cod') {
+            // Cash on Delivery
+            foreach ($supplierIds as $supplierId) {
+                if (!isset($supplierTotals[$supplierId]) || !isset($supplierDeliveryFees[$supplierId])) {
+                    $this->showPopup("Missing totals for supplier ID $supplierId.", URLROOT . "/StorePageController/viewCart");
+                    return;
+                }
+
+                $itemTotal = (float) $supplierTotals[$supplierId];
+                $deliveryFee = (float) $supplierDeliveryFees[$supplierId];
+                $supplierGrandTotal = $itemTotal + $deliveryFee;
+
+                // Create an order per supplier
+                $saleId = $this->cartModel->createOrder($customerId, $supplierGrandTotal, $paymentMethod, $deliveryAddress, $supplierId, $deliveryFee);
+
+                if (!$saleId) {
+                    $this->showPopup("Order creation failed for supplier ID $supplierId.", URLROOT . "/StorePageController/viewCart");
+                    return;
+                }
+
+                // Get all cart items belonging to this supplier
+                $cartItems = $this->cartModel->getCartItemsByUserIdAndSupplierId($customerId, $supplierId);
+
+                if (empty($cartItems)) {
+                    $this->showPopup("No cart items found for supplier ID $supplierId.", URLROOT . "/StorePageController/viewCart");
+                    return;
+                }
+
+                foreach ($cartItems as $item) {
+                    $this->cartModel->addOrderItem($saleId, $item->item_id, $item->quantity, $item->selling_price, $supplierId);
+                }
+            }
+
+            // Clear the cart
+            $this->cartModel->clearCart($customerId);
+
+            $this->showPopup("Order placed successfully!", URLROOT . "/StorePageController/index");
+
+        } elseif ($paymentMethod === 'card') {
+            // Card Payment
+            $_SESSION['pending_supplier_ids'] = $supplierIds;
+            $_SESSION['pending_supplier_totals'] = $supplierTotals;
+            $_SESSION['pending_supplier_delivery_fees'] = $supplierDeliveryFees;
+            $_SESSION['pending_supplier_grand_totals'] = $supplierGrandTotals;
+            $_SESSION['pending_grand_total'] = $grandTotal;
+            $_SESSION['pending_delivery_address'] = $deliveryAddress;
+            $_SESSION['pending_customer_id'] = $customerId;
+
+            $this->view('supplier/homepage/paymentGateway', [
+                'grand_total' => $grandTotal,
+                'delivery_address' => $deliveryAddress
+            ]);
+        }
     }
-}
 
 
-   
+
 
     public function search()
     {
@@ -438,95 +442,141 @@ public function confirmOrder()
 
 
     public function addReview()
-{
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $item_id = $_POST['item_id'];
-        $user_id = $_SESSION['user_id'];
-        $rating = $_POST['rating'];
-        $comment = trim($_POST['comment']);
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $item_id = $_POST['item_id'];
+            $user_id = $_SESSION['user_id'];
+            $rating = $_POST['rating'];
+            $comment = trim($_POST['comment']);
 
-        $this->StorePagesModel->insertReview($item_id, $user_id, $rating, $comment);
-        $this->showPopup("Thank you for your feedback!", URLROOT . "/StorePageController");
-    }
-}
-
-
-public function cardPaymentPage()
-{
-    if (!isset($_SESSION['user_id'])) {
-        die("Unauthorized access.");
+            $this->StorePagesModel->insertReview($item_id, $user_id, $rating, $comment);
+            $this->showPopup("Thank you for your feedback!", URLROOT . "/StorePageController");
+        }
     }
 
-    $total = $_GET['total'] ?? null;
-    $address = $_GET['address'] ?? null;
 
-    if (!$total || !$address) {
-        $this->showPopup("Missing payment data", URLROOT . "/StorePageController/viewCart");
-        return;
+    public function cardPaymentPage()
+    {
+        if (!isset($_SESSION['user_id'])) {
+            die("Unauthorized access.");
+        }
+
+        $total = $_GET['total'] ?? null;
+        $address = $_GET['address'] ?? null;
+
+        if (!$total || !$address) {
+            $this->showPopup("Missing payment data", URLROOT . "/StorePageController/viewCart");
+            return;
+        }
+
+       
+        $data = [
+            'grand_total' => $total,
+            'delivery_address' => $address
+        ];
+
+        $this->view('supplier/homepage/paymentGateway', $data);
     }
 
-    // Show a dummy card payment page (HTML form) with a confirm button
-    $data = [
-        'grand_total' => $total,
-        'delivery_address' => $address
-    ];
-
-    $this->view('supplier/homepage/paymentGateway', $data);
-}
-
-public function processPayment()
-{
-    if (!isset($_SESSION['user_id'])) {
-        die('Error: User not logged in.');
-    }
+    public function processPayment()
+    {
+        if (!isset($_SESSION['user_id'])) {
+            die('Error: User not logged in.');
+        }
 
     $customerId = $_SESSION['user_id'];
+    $grandTotal = $_SESSION['pending_grand_total'] ?? null;
+    $deliveryAddress = $_SESSION['pending_delivery_address'] ?? null;
+    $supplierIds = $_SESSION['pending_supplier_ids'] ?? [];
+    $supplierTotals = $_SESSION['pending_supplier_totals'] ?? [];
+    $supplierDeliveryFees = $_SESSION['pending_supplier_delivery_fees'] ?? [];
+    $supplierGrandTotals = $_SESSION['pending_supplier_grand_totals'] ?? [];
 
-    $grandTotal = $_POST['grand_total'] ?? null;
-    $deliveryAddress = $_POST['delivery_address'] ?? null;
-    
-    $supplierOrders = $_SESSION['pending_supplier_orders'] ?? null;
-
-    if (!$grandTotal || !$deliveryAddress || !$supplierOrders) {
+    if (!$grandTotal || !$deliveryAddress || empty($supplierIds) || empty($supplierTotals)) {
         $this->showPopup("Payment failed: missing session data.", URLROOT . "/StorePageController/viewCart");
         return;
     }
 
-    foreach ($supplierOrders as $supplierId => $items) {
-        // Create one order per supplier
-        $saleId = $this->cartModel->createOrder($customerId, $grandTotal, 'card', $deliveryAddress, $supplierId);
-
-        if ($saleId) {
-            foreach ($items as $item) {
-                $this->cartModel->addOrderItem($saleId, $item->item_id, $item->quantity, $item->selling_price, $supplierId);
-            }
-        } else {
-            $this->showPopup("Order failed for supplier ID $supplierId.", URLROOT . "/StorePageController/viewCart");
+    // Process payment for each supplier
+    foreach ($supplierIds as $supplierId) {
+        if (!isset($supplierTotals[$supplierId]) || !isset($supplierDeliveryFees[$supplierId])) {
+            $this->showPopup("Missing totals for supplier ID $supplierId.", URLROOT . "/StorePageController/viewCart");
             return;
+        }
+
+        $itemTotal = (float)$supplierTotals[$supplierId];
+        $deliveryFee = (float)$supplierDeliveryFees[$supplierId];
+        $supplierGrandTotal = $itemTotal + $deliveryFee;
+
+        // Create an order per supplier
+        $saleId = $this->cartModel->createOrder($customerId, $supplierGrandTotal, 'card', $deliveryAddress, $supplierId, $deliveryFee);
+
+        if (!$saleId) {
+            $this->showPopup("Order creation failed for supplier ID $supplierId.", URLROOT . "/StorePageController/viewCart");
+            return;
+        }
+
+        // Get all cart items belonging to this supplier
+        $cartItems = $this->cartModel->getCartItemsByUserIdAndSupplierId($customerId, $supplierId);
+
+        if (empty($cartItems)) {
+            $this->showPopup("No cart items found for supplier ID $supplierId.", URLROOT . "/StorePageController/viewCart");
+            return;
+        }
+
+        foreach ($cartItems as $item) {
+            $this->cartModel->addOrderItem($saleId, $item->item_id, $item->quantity, $item->selling_price, $supplierId);
         }
     }
 
-    // Clear the cart after successful payment
+    // Clear the cart
     $this->cartModel->clearCart($customerId);
 
     // Clear pending session data
     unset($_SESSION['pending_grand_total']);
     unset($_SESSION['pending_delivery_address']);
-    unset($_SESSION['pending_supplier_orders']);
+    unset($_SESSION['pending_supplier_ids']);
+    unset($_SESSION['pending_supplier_totals']);
+    unset($_SESSION['pending_supplier_delivery_fees']);
+    unset($_SESSION['pending_supplier_grand_totals']);
 
-    $this->showPopup("Payment Successful! Order placed.", URLROOT . "/StorePageController/index");
-}
+        $this->showPopup("Payment Successful! Order placed.", URLROOT . "/StorePageController/index");
+    }
 
 
 
 
-//popup messeage function
+    
     private function showPopup($message, $redirectUrl)
     {
-      
+
         $data = ['message' => $message, 'redirectUrl' => $redirectUrl];
         $this->view('supplier/homepage/cartElements/popup', $data);
     }
 
+    public function submitContactIssue() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (!isset($_SESSION['user_id'])) {
+                $this->showPopup("Please login to submit an issue.", URLROOT . "/StorePageController/support");
+                return;
+            }
+
+            $title = trim($_POST['issue-title']);
+            $description = trim($_POST['issue-description']);
+
+            if (empty($title) || empty($description)) {
+                $this->showPopup("Please fill in all fields.", URLROOT . "/StorePageController/support");
+                return;
+            }
+
+            if ($this->StorePagesModel->insertContactIssue($_SESSION['user_id'], $title, $description)) {
+                $this->showPopup("Issue submitted successfully!", URLROOT . "/StorePageController/support");
+            } else {
+                $this->showPopup("Failed to submit issue. Please try again.", URLROOT . "/StorePageController/support");
+            }
+        } else {
+            header("Location: " . URLROOT . "/StorePageController/support");
+        }
+    }
 
 }

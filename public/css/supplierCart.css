@@ -133,7 +133,7 @@
         
         .checkout-btn {
             display: block;
-            width: 100%;
+            width: 380px;
             padding: 1rem;
             background: var(--primary-color);
             color: #fff;

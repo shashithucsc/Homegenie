@@ -29,7 +29,6 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
             background-color: var(--background);
             color: var(--text);
             margin: 0;
-            padding: 20px;
         }
 
         .container {

@@ -25,9 +25,12 @@ class StorePageController extends Controller
 
 
 
-    public function aboutUs()
+    public function support()
     {
-        $this->view('supplier/homepage/about');
+        $data = [
+            'faqs' => $this->StorePagesModel->getFAQs() ?? []
+        ];
+        $this->view('supplier/homepage/support', $data);
     }
 
 
@@ -551,5 +554,29 @@ class StorePageController extends Controller
         $this->view('supplier/homepage/cartElements/popup', $data);
     }
 
+    public function submitContactIssue() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (!isset($_SESSION['user_id'])) {
+                $this->showPopup("Please login to submit an issue.", URLROOT . "/StorePageController/support");
+                return;
+            }
+
+            $title = trim($_POST['issue-title']);
+            $description = trim($_POST['issue-description']);
+
+            if (empty($title) || empty($description)) {
+                $this->showPopup("Please fill in all fields.", URLROOT . "/StorePageController/support");
+                return;
+            }
+
+            if ($this->StorePagesModel->insertContactIssue($_SESSION['user_id'], $title, $description)) {
+                $this->showPopup("Issue submitted successfully!", URLROOT . "/StorePageController/support");
+            } else {
+                $this->showPopup("Failed to submit issue. Please try again.", URLROOT . "/StorePageController/support");
+            }
+        } else {
+            header("Location: " . URLROOT . "/StorePageController/support");
+        }
+    }
 
 }

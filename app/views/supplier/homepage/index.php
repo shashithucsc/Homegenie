@@ -34,8 +34,8 @@
                 <img src="<?php echo URLROOT; ?>/public/img/neww.png" alt="Descriptive Image">
             </div>
             <div class="right-section">
-                <h2>HomeGenie වෙසක් වට්ටම්</h2>
-                <p>HomeGenie වෙසක් උළෙල අරඹමින් විශේෂ වට්ටම් ! ඔබට අවශ්‍ය සියලු නිවසේ උපකරණ හා සේවා දැන් විශේෂ මිල අඩුවෙන් ලබාගන්න. </p>
+                <h2>HomeGenie වෙසක් Discounts!!</h2>
+                <p>HomeGenie වෙසක් උළෙල අරඹමින් විශේෂ වට්ටම් !! ඔබට අවශ්‍ය සියලු නිවසේ උපකරණ හා සේවා දැන් විශේෂ මිල අඩුවෙන් ලබාගන්න. </p>
 
             </div>
         </div>

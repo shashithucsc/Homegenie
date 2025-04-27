@@ -128,7 +128,7 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                         <table class="approved-appointments-table">
                             <thead>
                                 <tr>
-                                    <th>Appointment ID</th>
+                                    <th>Appointment<br> ID</th>
                                     <th>Customer</th>
                                     <th>Date & Time & Place</th>
                                     <th>Details</th>

@@ -20,10 +20,31 @@ class AppointmentSVPModel
     // Fetch all approved appointments for the logged-in service provider
     public function getApprovedAppointments($service_provider_id)
     {
-        $this->db->query('SELECT * FROM appointments WHERE service_provider_id = :service_provider_id AND status = "Approved" ORDER BY appointment_date DESC, appointment_time DESC');
+        $this->db->query('
+            SELECT 
+                a.appointment_id,
+                a.customer_id,
+                a.description,
+                a.appointment_date,
+                a.appointment_time,
+                a.location,
+                CONCAT(u.first_name, " ", u.last_name) as customer_name,
+                u.contact_number,
+                q.quotation_details,
+                q.work_hours,
+                q.cost
+            FROM appointments a
+            JOIN quotations q ON a.appointment_id = q.appointment_id
+            JOIN users u ON a.customer_id = u.user_id
+            WHERE q.service_provider_id = :service_provider_id 
+            AND q.status = "Approved"
+            ORDER BY a.appointment_date DESC, a.appointment_time DESC
+        ');
         $this->db->bind(':service_provider_id', $service_provider_id);
         return $this->db->resultSet();
     }
+    
+    
 
     // Function to approve an appointment
     public function approveAppointment($appointmentId) {
@@ -64,5 +85,45 @@ class AppointmentSVPModel
         
         return $this->db->execute();
     }
+
+    public function getHourlyRate($service_provider_id)
+{
+    $this->db->query('SELECT hourly_rate FROM service_providers WHERE provider_id = :provider_id');
+    $this->db->bind(':provider_id', $service_provider_id);
+    return $this->db->single()->hourly_rate;
+}
+
+// public function getAppointmentById($appointment_id)
+// {
+//     $this->db->query('SELECT * FROM appointments WHERE appointment_id = :appointment_id');
+//     $this->db->bind(':appointment_id', $appointment_id);
+//     return $this->db->single();
+// }
+
+// public function rejectAppointment($appointment_id)
+// {
+//     $this->db->query('UPDATE appointments SET status = "Rejected" WHERE appointment_id = :appointment_id');
+//     $this->db->bind(':appointment_id', $appointment_id);
+//     return $this->db->execute();
+// }
+
+// public function approveAppointment($appointment_id)
+// {
+//     $this->db->query('UPDATE appointments SET status = "Approved" WHERE appointment_id = :appointment_id');
+//     $this->db->bind(':appointment_id', $appointment_id);
+//     return $this->db->execute();
+// }
+
+// public function cancelAppointment($appointment_id)
+// {
+//     $this->db->query('UPDATE appointments SET status = "Cancelled" WHERE appointment_id = :appointment_id');
+//     $this->db->bind(':appointment_id', $appointment_id);
+//     return $this->db->execute();
+// }
+
+
+
+
+
 }
 ?>

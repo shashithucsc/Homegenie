@@ -30,6 +30,45 @@ class SignUpController extends Controller {
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $role = trim($_POST['role']);
+            $district = trim($_POST['district']);
+            $province = '';
+            
+            // Western Province
+            if (in_array($district, ['Colombo', 'Gampaha', 'Kalutara'])) {
+                $province = 'Western Province';
+            }
+            // Central Province
+            else if (in_array($district, ['Kandy', 'Matale', 'Nuwara Eliya'])) {
+                $province = 'Central Province';
+            }
+            // Southern Province
+            else if (in_array($district, ['Galle', 'Matara', 'Hambantota'])) {
+                $province = 'Southern Province';
+            }
+            // Eastern Province
+            else if (in_array($district, ['Ampara', 'Batticaloa', 'Trincomalee'])) {
+                $province = 'Eastern Province';
+            }
+            // Northern Province
+            else if (in_array($district, ['Jaffna', 'Kilinochchi', 'Mullaitivu', 'Vavuniya', 'Mannar'])) {
+                $province = 'Northern Province';
+            }
+            // North Western Province
+            else if (in_array($district, ['Kurunegala', 'Puttalam'])) {
+                $province = 'North Western Province';
+            }
+            // North Central Province
+            else if (in_array($district, ['Anuradhapura', 'Polonnaruwa'])) {
+                $province = 'North Central Province';
+            }
+            // Sabaragamuwa Province
+            else if (in_array($district, ['Kegalle', 'Ratnapura'])) {
+                $province = 'Sabaragamuwa Province';
+            }
+            // Uva Province
+            else if (in_array($district, ['Badulla', 'Monaragala'])) {
+                $province = 'Uva Province';
+            }
     
             // Common fields
             $data = [
@@ -40,7 +79,7 @@ class SignUpController extends Controller {
                 'password' => trim($_POST['password']),
                 'confirm_password' => trim($_POST['confirm_password']),
                 'contact_number' => trim($_POST['contact_number']),
-                'province' => trim($_POST['province']),
+                'province' => $province,
                 'district' => trim($_POST['district']),
                 'street' => trim($_POST['street']),
                 'agree_terms' => isset($_POST['agree_terms']) ? 1 : 0,
@@ -90,22 +129,14 @@ class SignUpController extends Controller {
                     return;
                 }
             }
-    
-            // Validate passwords, email, etc.
-            if ($data['password'] !== $data['confirm_password']) {
-                $this->showPopup("Passwords do not match", URLROOT . '/LoginController/index');
-                return;
-            }
-    
-            if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-                $this->showPopup("Invalid email format", URLROOT . '/LoginController/index');
-                return;
-            }
-    
+        
+            error_log("Checking if email is taken: " . $data['email']);
             if ($this->UserModel->isEmailTaken($data['email'])) {
+                error_log("Email is already taken: " . $data['email']);
                 $this->showPopup("Email is already taken", URLROOT . '/LoginController/index');
                 return;
             }
+            error_log("Email is not taken, proceeding with registration");
     
             // Hash password
             $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
@@ -148,7 +179,13 @@ class SignUpController extends Controller {
                     $this->showPopup("Error registering customer details", URLROOT . '/LoginController/index');
                 }
         } else {
-            $this->view('register/index');
+            if($role === 'customer'){
+                $this->view('users/v_register_cu');
+            }elseif($role === 'supplier'){
+                $this->view('users/v_register_su');
+            }elseif($role === 'service_provider'){
+                $this->view('users/v_register_sp');
+            }
         }
     }
 }
@@ -257,10 +294,8 @@ class SignUpController extends Controller {
 
     private function showPopup($message, $redirectUrl)
     {
-
+        error_log("Showing popup with message: " . $message . " and redirect URL: " . $redirectUrl);
         $data = ['message' => $message, 'redirectUrl' => $redirectUrl];
         $this->view('users/v_login', $data);
     }
-
-
 }    

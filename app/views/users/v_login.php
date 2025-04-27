@@ -82,6 +82,15 @@
             }
         });
     </script>
+
+    <?php if (isset($data['message'])): ?>
+    <script>
+        alert("<?php echo $data['message']; ?>");
+        <?php if (isset($data['redirectUrl'])): ?>
+            window.location.href = "<?php echo $data['redirectUrl']; ?>";
+        <?php endif; ?>
+    </script>
+    <?php endif; ?>
 </body>
 
 </html>

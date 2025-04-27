@@ -7,7 +7,7 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="<?php echo URLROOT?>/public/css/register.css" rel="stylesheet">
+    <link href="<?php echo URLROOT ?>/public/css/register.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <style>
         a {
@@ -19,8 +19,6 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
 </head>
 
 <body>
-   
-
     <div class="main-container">
         <!-- <div class="logo">Home<span>Genie</span></div> -->
         <h1>Register As a Supplier</h1>
@@ -34,11 +32,11 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                 <div class="flex-row">
                     <div class="input-group">
                         <label for="first-name">First Name</label>
-                        <input type="text" id="first-name" name="first_name" required>
+                        <input type="text" id="first-name" name="first_name" required placeholder="John">
                     </div>
                     <div class="input-group">
                         <label for="last-name">Last Name</label>
-                        <input type="text" id="last-name" name="last_name" required>
+                        <input type="text" id="last-name" name="last_name" required placeholder="Doe">
                     </div>
                 </div>
                 <div class="flex-row">
@@ -49,32 +47,23 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                     </div>
                     <div class="input-group">
                         <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" required>
+                        <input type="email" id="email" name="email" required placeholder="john.doe@example.com">
                     </div>
                 </div>
 
-                <div class=""flex-row">
-                <div class="input-group">
-                    <label for="expertise">Expertise</label>
-                    <input type="text" id="expertise" name="expertise" required>
-            </div>
+                <div class="flex-row">
+                    <div class="input-group">
+                        <label for="expertise">Expertise</label>
+                        <input type="text" id="expertise" name="expertise" required
+                            placeholder="Plumbing, Electrical, etc.">
+                    </div>
+                </div>
 
 
                 <div class="flex-row">
                     <div class="input-group">
-                        <label for="province">Province</label>
-                        <select id="province" name="province" required>
-                            <option value="">-- Select Province --</option>
-                            <option value="Western">Western</option>
-                            <option value="Central">Central</option>
-                            <option value="Southern">Southern</option>
-                            <option value="Uva">Uva</option>
-                            <option value="Sabaragamuwa">Sabaragamuwa</option>
-                            <option value="North Western">North Western</option>
-                            <option value="North Central">North Central</option>
-                            <option value="Northern">Northern</option>
-                            <option value="Eastern">Eastern</option>
-                        </select>
+                        <label for="street">Street</label>
+                        <input type="text" id="street" name="street" required placeholder="No. 123, Main Street">
                     </div>
                     <div class="input-group">
                         <label for="district">District</label>
@@ -112,13 +101,6 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
 
                 <div class="flex-row">
                     <div class="input-group">
-                        <label for="street">Street</label>
-                        <input type="text" id="street" name="street" required>
-                    </div>
-                </div>
-
-                <div class="flex-row">
-                    <div class="input-group">
                         <label for="profile-image">Profile Image</label>
                         <input type="file" id="profile-image" name="profile_image" accept="image/*" required>
                     </div>
@@ -127,24 +109,24 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
 
             <!-- Verification Details -->
             <fieldset>
-    <legend>Verification Details</legend>
-    <div class="flex-row">
-        <div class="input-group">
-            <label for="id-number">National ID Number</label>
-            <input type="text" id="id-number" name="id_number" required> <!-- Keep as id_number -->
-        </div>
-    </div>
-    <div class="flex-row">
-        <div class="input-group">
-            <label for="id-front">Upload ID Front Photo</label>
-            <input type="file" id="id-front" name="id_front" accept="image/*" required> <!-- Keep as id_front -->
-        </div>
-        <div class="input-group">
-            <label for="id-back">Upload ID Back Photo</label>
-            <input type="file" id="id-back" name="id_back" accept="image/*" required> <!-- Keep as id_back -->
-        </div>
-    </div>
-</fieldset>
+                <legend>Verification Details</legend>
+                <div class="flex-row">
+                    <div class="input-group">
+                        <label for="id-number">National ID Number</label>
+                        <input type="text" id="id-number" name="id_number" required>
+                    </div>
+                </div>
+                <div class="flex-row">
+                    <div class="input-group">
+                        <label for="id-front">Upload ID Front Photo</label>
+                        <input type="file" id="id-front" name="id_front" accept="image/*" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="id-back">Upload ID Back Photo</label>
+                        <input type="file" id="id-back" name="id_back" accept="image/*" required>
+                    </div>
+                </div>
+            </fieldset>
 
             <!-- Login Credentials -->
             <fieldset>
@@ -194,36 +176,7 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
             <button type="submit" class="register-btn">Register</button>
         </form>
     </div>
-    <script>
-        document.querySelector('.register-form').addEventListener('submit', function (event) {
-            const contactNumber = document.getElementById('contact-number').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-
-            // Validate contact number
-            if (!/^07[0-9]{8}$/.test(contactNumber)) {
-                alert("Invalid contact number. It should follow the format '07XXXXXXXX'.");
-                event.preventDefault();
-                return;
-            }
-
-            // Validate email
-            if (!/^[a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-                alert("Invalid email format. Please use a valid '@gmail.com' email.");
-                event.preventDefault();
-                return;
-            }
-
-            // Validate password match
-            if (password !== confirmPassword) {
-                alert("Passwords do not match!");
-                event.preventDefault();
-                return;
-            }
-        });
-    </script>
-    <script src="register.js"></script>
+    <script src="<?php echo URLROOT ?>/public/js/register.js"></script>
 </body>
 
 </html>

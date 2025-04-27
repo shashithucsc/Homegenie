@@ -115,11 +115,14 @@ class UserModel {
 
     public function isEmailTaken($email)
 {
+    error_log("Checking if email is taken: " . $email);
     $this->db->query('SELECT * FROM users WHERE email = :email');
     $this->db->bind(':email', $email);
 
     $row = $this->db->single();
-    return $row ? true : false;
+    $result = $row ? true : false;
+    error_log("Email taken check result: " . ($result ? "true" : "false"));
+    return $result;
 }
 
 

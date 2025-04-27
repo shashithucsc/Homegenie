@@ -213,14 +213,3 @@ thead th.active,tbody td.active {
 .status-completed {
     color: #5bc0de;
 }
-
-/* Sort indicators */
-thead th.asc::after {
-    content: ' ↑';
-    color: #6c00bd;
-}
-
-thead th.desc::after {
-    content: ' ↓';
-    color: #6c00bd;
-}

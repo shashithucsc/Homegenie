@@ -85,25 +85,25 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                 <h2>Our Team</h2>
                 <div class="team-grid">
                     <div class="team-member">
-                        <img src="shakila.jpg" alt="SK">
+                        <img src="<?php echo URLROOT; ?>/public/images/shakila.jpg" alt="SK">
                         <h3>Shakila Thathsara</h3>
                         <p class="role">Admin</p>
                         <p class="bio">UCSC Undergraduate</p>
                     </div>
                     <div class="team-member">
-                        <img src="kavindi.jpg" alt="KB">
+                        <img src="<?php echo URLROOT; ?>/public/images/kavindi.jpg" alt="KB">
                         <h3>Kavindi Basnayaka</h3>
                         <p class="role">Customer</p>
                         <p class="bio">UCSC Undergraduate</p>
                     </div>
                     <div class="team-member">
-                        <img src="mandinu.jpg" alt="MM">
+                        <img src="<?php echo URLROOT; ?>/public/images/mandinu.jpg" alt="MM">
                         <h3>Mandinu Maneth</h3>
                         <p class="role">Service Provider</p>
                         <p class="bio">UCSC Undergraduate</p>
                     </div>
                     <div class="team-member">
-                        <img src="shashith.jpg" alt="SR">
+                        <img src="<?php echo URLROOT; ?>/public/images/shashith.jpg" alt="SR">
                         <h3>Shashith Rashmika</h3>
                         <p class="role">Supplier</p>
                         <p class="bio">UCSC Undergraduate</p>
@@ -119,7 +119,7 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                     community.</p>
                 <div class="cta-buttons">
                     <!-- <a href="#" class="primary-btn">Get Started</a> -->
-                    <a href="cu_contact.php" class="secondary-btn">Contact Us</a>
+                    <a href="<?php echo URLROOT; ?>/CustomerController/contact" class="secondary-btn">Contact Us</a>
                 </div>
             </div>
         </section>

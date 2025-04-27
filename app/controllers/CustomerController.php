@@ -29,7 +29,7 @@ class CustomerController extends Controller {
     }
 
     public function about(){
-        $this->view('Customer/about');
+        $this->view('Customer/cu_about');
     }
 
     public function appointment(){

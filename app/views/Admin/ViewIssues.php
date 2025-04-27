@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/AdminViewIssues.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-    <title>Manage Issues</title>
+    <title>View Issues</title>
 
     <style>
         .reply-textarea {
@@ -57,8 +57,11 @@
                     <?php foreach($pendingIssues as $issue) : ?>
                         <div class="issue">
                             <div class="issue-header">
-                                <span class="issue-title"><?php echo $issue->first_name . ' ' . $issue->last_name . ' | ' . $issue->email; ?></span>
-                                <span class="issue-date"><?php echo isset($issue->created_at) ? date('Y-m-d', strtotime($issue->created_at)) : 'N/A'; ?></span>
+                                <span class="issue-title"><?php echo $issue->title; ?></span>
+                                <span class="issue-customer-date">
+                                    <span class="issue-customer"><?php echo $issue->first_name . ' ' . $issue->last_name . ' | ' . $issue->email; ?></span>
+                                    <span class="issue-date"><?php echo isset($issue->created_at) ? date('Y-m-d', strtotime($issue->created_at)) : 'N/A'; ?></span>
+                                </span>
                             </div>
                             <div class="issue-body">
                                 <p><?php echo $issue->description; ?></p>

@@ -162,7 +162,11 @@ Class AdminController extends Controller{
     }
 
     public function viewOrders(){
-        $this->view('Admin/viewOrders');   
+        $orders = $this->orderModel->getOrders();   
+        $data = [
+            'orders' => $orders
+        ];
+        $this->view('Admin/viewOrders', $data);   
     }
     
     public function viewAppointments(){

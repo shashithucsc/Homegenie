@@ -16,17 +16,16 @@ require_once APPROOT . '/views/Admin/AdminSideBar.php';
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/AdminManageUsers.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-    <title>Users</title>
+    <title>View Orders</title>
 
 </head>
 
 <body>
-    
     <section class="main">
         <div class="top">
             <div class="welcome">
                 <span class="text">
-                    <h3>Manage Users</h3>
+                    <h3>View Orders</h3>
                 </span>
             </div>
             <div class="time" id="clock">
@@ -34,7 +33,7 @@ require_once APPROOT . '/views/Admin/AdminSideBar.php';
         </div>
         <div class="table" id="customers_table">
             <section class="table-header">
-                <h1>Users</h1>
+                <h1>Orders</h1>
                 <div class="input-group">
                     <input type="search" placeholder="Search ..." id="searchInput">
                     <i class='bx bx-search'></i>
@@ -58,14 +57,14 @@ require_once APPROOT . '/views/Admin/AdminSideBar.php';
                         <?php if(isset($data['orders']) && count($data['orders']) > 0) : ?>
                             <?php foreach($data['orders'] as $order) : ?> 
                                 <tr>
-                                    <td><?php echo $order->order_id; ?></td>
+                                    <td><?php echo $order->id; ?></td>
                                     <td><?php echo $order->customer_id; ?></td>
                                     <td><?php echo $order->supplier_id; ?></td>
-                                    <td><?php echo $order->total; ?></td>
+                                    <td><?php echo $order->total_amount; ?></td>
                                     <td><?php echo $order->payment_method; ?></td>
                                     <td><?php echo $order->delivery_address; ?></td>
                                     <td><?php echo $order->status; ?></td>
-                                    <td><?php echo $order->timestamp; ?></td>
+                                    <td><?php echo $order->created_at; ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else : ?>

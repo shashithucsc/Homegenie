@@ -460,6 +460,7 @@ tr:hover {
             padding: 16px;
             text-align: left;
             font-size: 0.85rem;
+            text-align: center;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             white-space: nowrap;
@@ -473,8 +474,7 @@ tr:hover {
         /* Add specific width for Appointment ID column */
         .approved-appointments-table thead th:first-child {
             width: 60px;
-            min-width: 40px;
-            max-width: 40px;
+            
             white-space: normal;
             line-height: 1.2;
             padding: 8px 4px;
@@ -511,9 +511,7 @@ tr:hover {
         }
 
         .approved-appointments-table .id-cell {
-            width: 60px;
-            min-width: 60px;
-            max-width: 60px;
+            width: auto;
             font-weight: 600;
             color: #2563eb;
             font-size: 0.9rem;

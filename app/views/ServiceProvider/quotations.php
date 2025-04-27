@@ -303,7 +303,7 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null; ?>
                       <div class="action-buttons">
                         <?php if ($item->status === 'Approved' || $item->status === 'Pending'): ?>
                           <button class="action-btn view-btn" onclick="downloadQuotationPDF(<?php echo $item->quotation_id; ?>)">
-                            <i class="fas fa-print"></i> Print / Save
+                            <i class="fas fa-print"></i> Print
                           </button>
                         <?php endif; ?>
 

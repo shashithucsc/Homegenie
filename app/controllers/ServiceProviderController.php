@@ -5,6 +5,7 @@ class ServiceProviderController extends Controller
     private $QuotationSVPModel;
     private $ProfileSVPModel;
     private $AppointmentSVPModel;
+    private $SupportSVPModel;
     private $db;
 
 
@@ -17,6 +18,7 @@ class ServiceProviderController extends Controller
         $this->QuotationSVPModel = $this->model('QuotationSVPModel');
         $this->ProfileSVPModel = $this->model('ProfileSVPModel');
         $this->AppointmentSVPModel = $this->model('AppointmentSVPModel');
+        $this->SupportSVPModel = $this->model('SupportSVPModel');
         $this->db = new Database();
     }
 
@@ -146,112 +148,50 @@ class ServiceProviderController extends Controller
 
     public function support()
     {
-        $this->view('ServiceProvider/support');
+        $user_id = $_SESSION['user_id'];
+        
+        // Get FAQs and issues
+        $faqs = $this->SupportSVPModel->getAllFAQs();
+        $issues = $this->SupportSVPModel->getUserIssues($user_id);
+        
+        $this->view('ServiceProvider/support', [
+            'faqs' => $faqs,
+            'issues' => $issues
+        ]);
     }
 
+    public function createIssue()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $data = [
+                'user_id' => $_SESSION['user_id'],
+                'description' => trim($_POST['description'])
+            ];
 
-    // public function quotation()
-    // {
-    //     $service_provider_id = $_SESSION['user_id'];
-    //     // Fetch all quotations for the service provider
-    //     $results = $this->QuotationSVPModel->getAllQuotationslist($service_provider_id);
-    //     $this->view('ServiceProvider/quotations', data: $results);
-    // }
+            if ($this->SupportSVPModel->createIssue($data)) {
+                header('Location: ' . URLROOT . '/ServiceProviderController/support?success=Issue reported successfully');
+            } else {
+                header('Location: ' . URLROOT . '/ServiceProviderController/support?error=Failed to report issue');
+            }
+            exit();
+        }
+    }
 
-    // public function quotationAdd()
-    // {
-    //     $this->view('ServiceProvider/quotationAdd');
-    // }
+    public function updateIssueStatus()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $id = $_POST['id'];
+            $status = $_POST['status'];
 
-    // public function SubmittedQuotations()
-    // {
-    //     $service_provider_id = $_SESSION['user_id'];
-    //     $results = $this->QuotationSVPModel->getAllQuotationslist($service_provider_id);
-    //     $this->view('ServiceProvider/SubmittedQuotations', data: $results);
-    // }
+            if ($this->SupportSVPModel->updateIssueStatus($id, $status)) {
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false]);
+            }
+            exit();
+        }
+    }
 
-    // public function quoteAdd()
-    // {
-    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //         // Sanitize and trim input
-    //         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-
-    //         // Get form data
-    //         $appointment_id = trim($_POST['appointment_id']);
-    //         $quotation_details = trim($_POST['quotation_details']);
-    //         $work_hours = trim($_POST['work_hours']);
-    //         $cost = trim($_POST['cost']);
-
-    //         // Get the service_provider_id from the appointment
-    //         $appointment = $this->QuotationSVPModel->getAppointmentById($appointment_id);
-
-    //         // Check if the appointment was found
-    //         if (!$appointment) {
-    //             die("Appointment not found.");
-    //         }
-
-    //         $service_provider_id = $appointment->service_provider_id;
-
-    //         // Prepare the data for the quotation
-    //         $data = [
-    //             'appointment_id' => $appointment_id,
-    //             'service_provider_id' => $service_provider_id,
-    //             'quotation_details' => $quotation_details,
-    //             'work_hours' => $work_hours,
-    //             'cost' => $cost,
-    //             'status' => 'Pending'
-    //         ];
-
-    //         // Call the model to add the quotation
-    //         if ($this->QuotationSVPModel->addQuotation($data)) {
-    //             // Update the appointment status to 'approved'
-    //             $this->AppointmentSVPModel->approveAppointment($appointment_id);
-                
-    //             // Clear the session variable
-    //             unset($_SESSION['pending_quotation_appointment_id']);
-                
-    //             // On success, redirect to quotations page
-    //             header('Location: ' . URLROOT . '/ServiceProviderController/quotation');
-    //             exit();
-    //         } else {
-    //             die("Error: Unable to add quotation.");
-    //         }
-    //     }
-    // }
-
-    // public function updateQuotation($id): void
-    // {
-    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //         $quotation_details = trim($_POST['quotation_details']);
-    //         $work_hours = trim($_POST['work_hours']);
-    //         $cost = trim($_POST['cost']);
-
-    //         $quotationModel = $this->model('QuotationSVPModel');
-
-    //         if ($quotationModel->updateQuotation($id, $quotation_details, $work_hours, $cost)) {
-    //             echo json_encode(['success' => true]);
-    //         } else {
-    //             echo json_encode(['success' => false]);
-    //         }
-    //     }
-    // }
-
-
-    // public function deleteQuotation($quotation_id)
-    // {
-    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //         if ($this->QuotationSVPModel->deleteQuotation($quotation_id)) {
-    //             header('Location: ' . URLROOT . '/ServiceProviderController/SubmittedQuotations?message=Quotation deleted successfully');
-    //             exit();
-    //         } else {
-    //             header('Location: ' . URLROOT . '/ServiceProviderController/SubmittedQuotations?error=Failed to delete quotation');
-    //             exit();
-    //         }
-    //     } else {
-    //         header('Location: ' . URLROOT . '/ServiceProviderController/SubmittedQuotations?error=Invalid request');
-    //         exit();
-    //     }
-    // }
 
 
     public function quotation()
@@ -264,10 +204,7 @@ class ServiceProviderController extends Controller
     $this->view('ServiceProvider/quotations', data: $results);
 }
 
-// public function quotationAdd()
-// {
-//     $this->view('ServiceProvider/quotationAdd');
-// }
+
 
 public function SubmittedQuotations()
 {
@@ -340,233 +277,21 @@ public function SubmittedQuotations()
 
     public function generateQuotationPDF($quotation_id)
     {
-        // Get quotation details
-        $quotation = $this->QuotationSVPModel->getQuotationById($quotation_id);
+        // Get all quotation details from the model
+        $data = $this->QuotationSVPModel->getQuotationDetailsForPDF($quotation_id);
         
-        if (!$quotation) {
-            die("Quotation not found.");
-        }
-        
-        // Get appointment details
-        $appointment = $this->AppointmentSVPModel->getAppointmentById($quotation->appointment_id);
-        
-        if (!$appointment) {
-            die("Appointment not found.");
-        }
-        
-        // Get customer details from users table
-        $this->db->query('SELECT first_name, last_name, email, contact_number FROM users WHERE user_id = :customer_id');
-        $this->db->bind(':customer_id', $appointment->customer_id);
-        $customer = $this->db->single();
-        
-        if (!$customer) {
-            die("Customer not found.");
-        }
-        
-        // Get service provider details from users table
-        $this->db->query('SELECT first_name, last_name, email, contact_number FROM users WHERE user_id = :provider_id');
-        $this->db->bind(':provider_id', $quotation->service_provider_id);
-        $service_provider = $this->db->single();
-        
-        if (!$service_provider) {
-            die("Service provider not found.");
+        if (!$data) {
+            die("Quotation details not found.");
         }
 
-        // Generate HTML for the quotation
-        $html = '
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Quotation #' . $quotation->quotation_id . '</title>
-            <style>
-                @page {
-                    size: A4;
-                    margin: 0;
-                }
-                body {
-                    font-family: Arial, sans-serif;
-                    line-height: 1.4;
-                    color: #333;
-                    margin: 0;
-                    padding: 20px;
-                    font-size: 12px;
-                }
-                .header {
-                    text-align: center;
-                    margin-bottom: 15px;
-                    padding-bottom: 10px;
-                    border-bottom: 2px solid #2563eb;
-                }
-                .company-name {
-                    font-size: 20px;
-                    color: #2563eb;
-                    margin: 0;
-                }
-                .quotation-title {
-                    color: #374151;
-                    margin: 10px 0;
-                    font-size: 16px;
-                }
-                .details-grid {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 15px;
-                    margin-bottom: 15px;
-                }
-                .details-section {
-                    background: #f8fafc;
-                    padding: 10px;
-                    border-radius: 4px;
-                }
-                .details-section h2 {
-                    margin: 0 0 8px 0;
-                    font-size: 14px;
-                    color: #2563eb;
-                }
-                .detail-item {
-                    margin-bottom: 5px;
-                    display: flex;
-                }
-                .detail-label {
-                    font-weight: bold;
-                    color: #666;
-                    width: 80px;
-                }
-                .quotation-details {
-                    background-color: white;
-                    padding: 10px;
-                    border-radius: 4px;
-                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-                }
-                .quotation-table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin: 10px 0;
-                    font-size: 12px;
-                }
-                .quotation-table th {
-                    background-color: #2563eb;
-                    color: white;
-                    padding: 8px;
-                    text-align: left;
-                }
-                .quotation-table td {
-                    padding: 8px;
-                    border-bottom: 1px solid #ddd;
-                }
-                .quotation-table tr:last-child td {
-                    border-bottom: none;
-                }
-                .price-cell {
-                    font-weight: bold;
-                    color: #2563eb;
-                }
-                .footer {
-                    margin-top: 20px;
-                    text-align: center;
-                    color: #666;
-                    font-size: 10px;
-                    padding-top: 10px;
-                    border-top: 1px solid #ddd;
-                }
-                @media print {
-                    .no-print { display: none; }
-                    body { padding: 15px; }
-                }
-            </style>
-        </head>
-        <body>
-            <div class="header">
-                <div class="company-name">HomeGenie</div>
-                <p style="color: #666; margin: 5px 0;">Your Trusted Service Provider</p>
-            </div>
+        // Extract the data for the view
+        $quotation = $data['quotation'];
+        $appointment = $data['appointment'];
+        $customer = $data['customer'];
+        $service_provider = $data['service_provider'];
 
-            <h1 class="quotation-title">Quotation #' . $quotation->quotation_id . '</h1>
-            <p style="text-align: center; color: #666; margin: 0 0 15px 0;">Generated on: ' . date('F d, Y', strtotime($quotation->created_at)) . '</p>
-
-            <div class="details-grid">
-                <div class="details-section">
-                    <h2>Service Provider</h2>
-                    <div class="detail-item">
-                        <div class="detail-label">Name:</div>
-                        <div>' . htmlspecialchars($service_provider->first_name . ' ' . $service_provider->last_name) . '</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Email:</div>
-                        <div>' . htmlspecialchars($service_provider->email) . '</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Phone:</div>
-                        <div>' . htmlspecialchars($service_provider->contact_number) . '</div>
-                    </div>
-                </div>
-
-                <div class="details-section">
-                    <h2>Customer</h2>
-                    <div class="detail-item">
-                        <div class="detail-label">Name:</div>
-                        <div>' . htmlspecialchars($customer->first_name . ' ' . $customer->last_name) . '</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Email:</div>
-                        <div>' . htmlspecialchars($customer->email) . '</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Phone:</div>
-                        <div>' . htmlspecialchars($customer->contact_number) . '</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="quotation-details">
-                <h2 style="color: #2563eb; margin: 0 0 10px 0; font-size: 14px;">Quotation Details</h2>
-                <table class="quotation-table">
-                    <tr>
-                        <th>Appointment Description</th>
-                        <td>' . htmlspecialchars($appointment->description) . '</td>
-                    </tr>
-                    <tr>
-                        <th>Location</th>
-                        <td>' . htmlspecialchars($appointment->location) . '</td>
-                    </tr>
-                    <tr>
-                        <th>Quotation Details</th>
-                        <td>' . htmlspecialchars($quotation->quotation_details) . '</td>
-                    </tr>
-                    <tr>
-                        <th>Work Hours</th>
-                        <td>' . htmlspecialchars($quotation->work_hours) . ' hours</td>
-                    </tr>
-                    <tr>
-                        <th>Cost</th>
-                        <td class="price-cell">$' . number_format($quotation->cost, 2) . '</td>
-                    </tr>
-                    <tr>
-                        <th>Status</th>
-                        <td>
-                            <span style="color: ' . ($quotation->status === 'Approved' ? '#28a745' : ($quotation->status === 'Rejected' ? '#dc3545' : '#ffc107')) . ';">
-                                ' . htmlspecialchars($quotation->status) . '
-                            </span>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="footer">
-                <p>This is a computer-generated quotation from HomeGenie</p>
-                <p>Generated on: ' . date('F d, Y H:i:s') . '</p>
-            </div>
-
-            <div class="no-print" style="text-align: center; margin-top: 15px;">
-                <button onclick="window.print()" style="padding: 8px 16px; background-color: #2563eb; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
-                    Print / Save as PDF
-                </button>
-            </div>
-        </body>
-        </html>';
-
-        // Output the HTML
-        echo $html;
+        // Load the view with the data
+        require_once APPROOT . '/views/ServiceProvider/pdfquotation.php';
         exit;
     }
 

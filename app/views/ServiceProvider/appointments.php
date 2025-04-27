@@ -16,8 +16,6 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
 <body>
     <div class="container">
         <div class="page-header">
-            <h1>Appointments Dashboard</h1>
-            <p>Manage your service appointments efficiently</p>
         </div>
 
         <!-- Tab Buttons -->

@@ -327,39 +327,39 @@ class CustomerController extends Controller {
             
             // Western Province
             if (in_array($district, ['Colombo', 'Gampaha', 'Kalutara'])) {
-                $province = 'Western';
+                $province = 'Western Province';
             }
             // Central Province
             else if (in_array($district, ['Kandy', 'Matale', 'Nuwara Eliya'])) {
-                $province = 'Central';
+                $province = 'Central Province';
             }
             // Southern Province
             else if (in_array($district, ['Galle', 'Matara', 'Hambantota'])) {
-                $province = 'Southern';
+                $province = 'Southern Province';
             }
             // Eastern Province
             else if (in_array($district, ['Ampara', 'Batticaloa', 'Trincomalee'])) {
-                $province = 'Eastern';
+                $province = 'Eastern Province';
             }
             // Northern Province
             else if (in_array($district, ['Jaffna', 'Kilinochchi', 'Mullaitivu', 'Vavuniya', 'Mannar'])) {
-                $province = 'Northern';
+                $province = 'Northern Province';
             }
             // North Western Province
             else if (in_array($district, ['Kurunegala', 'Puttalam'])) {
-                $province = 'North Western';
+                $province = 'North Western Province';
             }
             // North Central Province
             else if (in_array($district, ['Anuradhapura', 'Polonnaruwa'])) {
-                $province = 'North Central';
+                $province = 'North Central Province';
             }
             // Sabaragamuwa Province
             else if (in_array($district, ['Kegalle', 'Ratnapura'])) {
-                $province = 'Sabaragamuwa';
+                $province = 'Sabaragamuwa Province';
             }
             // Uva Province
             else if (in_array($district, ['Badulla', 'Monaragala'])) {
-                $province = 'Uva';
+                $province = 'Uva Province';
             }
             
             $data['province'] = $province;

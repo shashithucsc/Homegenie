@@ -30,8 +30,9 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
     <div class="main-container">
         <!-- <div class="logo">Home<span>Genie</span></div> -->
         <h1>Register As Service Provider</h1>
-        <form class="register-form" action="<?php echo URLROOT . '/SignUpController/registerUser'; ?>" method="POST" enctype="multipart/form-data">
-            
+        <form class="register-form" action="<?php echo URLROOT . '/SignUpController/registerUser'; ?>" method="POST"
+            enctype="multipart/form-data">
+
             <!-- Personal Information -->
             <input type="hidden" name="role" id="role" value="service_provider">
             <fieldset>
@@ -39,11 +40,11 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                 <div class="flex-row">
                     <div class="input-group">
                         <label for="first-name">First Name</label>
-                        <input type="text" id="first-name" name="first_name" required>
+                        <input type="text" id="first-name" name="first_name" required placeholder="John">
                     </div>
                     <div class="input-group">
                         <label for="last-name">Last Name</label>
-                        <input type="text" id="last-name" name="last_name" required>
+                        <input type="text" id="last-name" name="last_name" required placeholder="Doe">
                     </div>
                 </div>
                 <div class="flex-row">
@@ -54,24 +55,13 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                     </div>
                     <div class="input-group">
                         <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" required>
+                        <input type="email" id="email" name="email" required placeholder="john.doe@example.com">
                     </div>
                 </div>
                 <div class="flex-row">
                     <div class="input-group">
-                        <label for="province">Province</label>
-                        <select id="province" name="province" required>
-                            <option value="">-- Select Province --</option>
-                            <option value="Western">Western</option>
-                            <option value="Central">Central</option>
-                            <option value="Southern">Southern</option>
-                            <option value="Uva">Uva</option>
-                            <option value="Sabaragamuwa">Sabaragamuwa</option>
-                            <option value="North Western">North Western</option>
-                            <option value="North Central">North Central</option>
-                            <option value="Northern">Northern</option>
-                            <option value="Eastern">Eastern</option>
-                        </select>
+                        <label for="street">Street</label>
+                        <input type="text" id="street" name="street" required placeholder="No. 123, Main Street">
                     </div>
                     <div class="input-group">
                         <label for="district">District</label>
@@ -102,15 +92,7 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                             <option value="Ratnapura">Ratnapura</option>
                             <option value="Trincomalee">Trincomalee</option>
                             <option value="Vavuniya">Vavuniya</option>
-                            <!-- Add more districts -->
                         </select>
-                    </div>
-                </div>
-
-                <div class="flex-row">
-                    <div class="input-group">
-                        <label for="street">Street</label>
-                        <input type="text" id="street" name="street" required>
                     </div>
                 </div>
                 <div class="flex-row">
@@ -162,11 +144,13 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                 <div class="flex-row">
                     <div class="input-group">
                         <label for="working-hours">Working Hours</label>
-                        <input type="text" id="working-hours" name="working_hours" required>
+                        <input type="text" id="working-hours" name="working_hours" required
+                            placeholder="9:00 AM - 5:00 PM">
                     </div>
                     <div class="input-group">
                         <label for="service-areas">Preferred Service Areas</label>
-                        <input type="text" id="service-areas" name="service_areas" required>
+                        <input type="text" id="service-areas" name="service_areas" required
+                            placeholder="Colombo, Gampaha, etc.">
                     </div>
                 </div>
             </fieldset>
@@ -240,36 +224,7 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
             <button type="submit" class="register-btn">Register</button>
         </form>
     </div>
-    <script>
-        document.querySelector('.register-form').addEventListener('submit', function (event) {
-            const contactNumber = document.getElementById('contact-number').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-
-            // Validate contact number
-            if (!/^07[0-9]{8}$/.test(contactNumber)) {
-                alert("Invalid contact number. It should follow the format '07XXXXXXXX'.");
-                event.preventDefault();
-                return;
-            }
-
-            // Validate email
-            if (!/^[a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-                alert("Invalid email format. Please use a valid '@gmail.com' email.");
-                event.preventDefault();
-                return;
-            }
-
-            // Validate password match
-            if (password !== confirmPassword) {
-                alert("Passwords do not match!");
-                event.preventDefault();
-                return;
-            }
-        });
-    </script>
-    <script src="register.js"></script>
+    <script src="<?php echo URLROOT ?>/public/js/register.js"></script>
 </body>
 
 </html>

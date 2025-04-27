@@ -93,33 +93,6 @@ class AppointmentSVPModel
     return $this->db->single()->hourly_rate;
 }
 
-// public function getAppointmentById($appointment_id)
-// {
-//     $this->db->query('SELECT * FROM appointments WHERE appointment_id = :appointment_id');
-//     $this->db->bind(':appointment_id', $appointment_id);
-//     return $this->db->single();
-// }
-
-// public function rejectAppointment($appointment_id)
-// {
-//     $this->db->query('UPDATE appointments SET status = "Rejected" WHERE appointment_id = :appointment_id');
-//     $this->db->bind(':appointment_id', $appointment_id);
-//     return $this->db->execute();
-// }
-
-// public function approveAppointment($appointment_id)
-// {
-//     $this->db->query('UPDATE appointments SET status = "Approved" WHERE appointment_id = :appointment_id');
-//     $this->db->bind(':appointment_id', $appointment_id);
-//     return $this->db->execute();
-// }
-
-// public function cancelAppointment($appointment_id)
-// {
-//     $this->db->query('UPDATE appointments SET status = "Cancelled" WHERE appointment_id = :appointment_id');
-//     $this->db->bind(':appointment_id', $appointment_id);
-//     return $this->db->execute();
-// }
 
 
 

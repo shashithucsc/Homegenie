@@ -1,6 +1,3 @@
-<?php
-require_once APPROOT . '/views/inc/components/logginNavbar.php';
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,6 +16,9 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
 </head>
 
 <body>
+    <?php
+        require_once APPROOT . '/views/inc/components/logginNavbar.php';
+    ?>
     <div class="main-container">
         <!-- <div class="logo">Home<span>Genie</span></div> -->
         <h1>Register As a Supplier</h1>

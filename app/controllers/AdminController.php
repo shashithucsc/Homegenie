@@ -9,6 +9,12 @@ Class AdminController extends Controller{
         $this->userModel = $this->model('UserModel');
         $this->issueModel = $this->model('IssueModel');
         $this->orderModel = $this->model('OrderModel');
+
+       
+        if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+            header('Location: ' . URLROOT . '/LoginController');
+            exit;
+        }
         // $this->db = new Database();
     }
     public function index(){

@@ -481,39 +481,61 @@ class StorePageController extends Controller
             die('Error: User not logged in.');
         }
 
-        $customerId = $_SESSION['user_id'];
+    $customerId = $_SESSION['user_id'];
+    $grandTotal = $_SESSION['pending_grand_total'] ?? null;
+    $deliveryAddress = $_SESSION['pending_delivery_address'] ?? null;
+    $supplierIds = $_SESSION['pending_supplier_ids'] ?? [];
+    $supplierTotals = $_SESSION['pending_supplier_totals'] ?? [];
+    $supplierDeliveryFees = $_SESSION['pending_supplier_delivery_fees'] ?? [];
+    $supplierGrandTotals = $_SESSION['pending_supplier_grand_totals'] ?? [];
 
-        $grandTotal = $_POST['grand_total'] ?? null;
-        $deliveryAddress = $_POST['delivery_address'] ?? null;
+    if (!$grandTotal || !$deliveryAddress || empty($supplierIds) || empty($supplierTotals)) {
+        $this->showPopup("Payment failed: missing session data.", URLROOT . "/StorePageController/viewCart");
+        return;
+    }
 
-        $supplierOrders = $_SESSION['pending_supplier_orders'] ?? null;
-
-        if (!$grandTotal || !$deliveryAddress || !$supplierOrders) {
-            $this->showPopup("Payment failed: missing session data.", URLROOT . "/StorePageController/viewCart");
+    // Process payment for each supplier
+    foreach ($supplierIds as $supplierId) {
+        if (!isset($supplierTotals[$supplierId]) || !isset($supplierDeliveryFees[$supplierId])) {
+            $this->showPopup("Missing totals for supplier ID $supplierId.", URLROOT . "/StorePageController/viewCart");
             return;
         }
 
-        foreach ($supplierOrders as $supplierId => $items) {
-            // Create one order per supplier
-            $saleId = $this->cartModel->createOrder($customerId, $grandTotal, 'card', $deliveryAddress, $supplierId);
+        $itemTotal = (float)$supplierTotals[$supplierId];
+        $deliveryFee = (float)$supplierDeliveryFees[$supplierId];
+        $supplierGrandTotal = $itemTotal + $deliveryFee;
 
-            if ($saleId) {
-                foreach ($items as $item) {
-                    $this->cartModel->addOrderItem($saleId, $item->item_id, $item->quantity, $item->selling_price, $supplierId);
-                }
-            } else {
-                $this->showPopup("Order failed for supplier ID $supplierId.", URLROOT . "/StorePageController/viewCart");
-                return;
-            }
+        // Create an order per supplier
+        $saleId = $this->cartModel->createOrder($customerId, $supplierGrandTotal, 'card', $deliveryAddress, $supplierId, $deliveryFee);
+
+        if (!$saleId) {
+            $this->showPopup("Order creation failed for supplier ID $supplierId.", URLROOT . "/StorePageController/viewCart");
+            return;
         }
 
-        // Clear the cart after successful payment
-        $this->cartModel->clearCart($customerId);
+        // Get all cart items belonging to this supplier
+        $cartItems = $this->cartModel->getCartItemsByUserIdAndSupplierId($customerId, $supplierId);
 
-        // Clear pending session data
-        unset($_SESSION['pending_grand_total']);
-        unset($_SESSION['pending_delivery_address']);
-        unset($_SESSION['pending_supplier_orders']);
+        if (empty($cartItems)) {
+            $this->showPopup("No cart items found for supplier ID $supplierId.", URLROOT . "/StorePageController/viewCart");
+            return;
+        }
+
+        foreach ($cartItems as $item) {
+            $this->cartModel->addOrderItem($saleId, $item->item_id, $item->quantity, $item->selling_price, $supplierId);
+        }
+    }
+
+    // Clear the cart
+    $this->cartModel->clearCart($customerId);
+
+    // Clear pending session data
+    unset($_SESSION['pending_grand_total']);
+    unset($_SESSION['pending_delivery_address']);
+    unset($_SESSION['pending_supplier_ids']);
+    unset($_SESSION['pending_supplier_totals']);
+    unset($_SESSION['pending_supplier_delivery_fees']);
+    unset($_SESSION['pending_supplier_grand_totals']);
 
         $this->showPopup("Payment Successful! Order placed.", URLROOT . "/StorePageController/index");
     }

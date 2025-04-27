@@ -26,10 +26,11 @@
                 <div class="contact-grid">
                     <div class="contact-form-container">
                         <h2>Send us a Message</h2>
-                        <form id="contactForm" class="contact-form">
+                        <form id="contactForm" class="contact-form" method="POST" action="<?php echo URLROOT . '/HomeController/contact';?>">
+        
                             <div class="form-group">
                                 <label for="name">Full Name <span class="required">*</span></label>
-                                <input type="text" id="name" name="name" required>
+                                <input type="text" id="name" name="full_name" required>
                                 <span class="error-message" id="nameError"></span>
                             </div>
 
@@ -144,6 +145,7 @@
     </footer>
 
     <script type="module" src="src/js/contact.js"></script>
+    <script src="<?php echo URLROOT ?>/public/js/register.js"></script>
 </body>
 
 </html>

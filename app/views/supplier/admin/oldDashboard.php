@@ -43,13 +43,13 @@ require_once APPROOT . '/views/supplier/admin/sidebar.php';
             </div>
         </div>
 
-        <div class="notifications">
+        <!-- <div class="notifications">
             <h3>Notifications</h3>
             <ul class="notifications-list">
                 <li>New customer message received</li>
                 <li>New order placed by customer</li>
             </ul>
-        </div>
+        </div> -->
 
 
         <div class="sales-summary">
@@ -96,7 +96,7 @@ require_once APPROOT . '/views/supplier/admin/sidebar.php';
             </div>
         </div>
 
-        <div class="bar-chart">
+        <!-- <div class="bar-chart">
             <h3>Sales Overview</h3>
             <div class="bar-container">
                 <div class="bar" style="height: 50%;">Jan</div>
@@ -105,7 +105,7 @@ require_once APPROOT . '/views/supplier/admin/sidebar.php';
                 <div class="bar" style="height: 80%;">Apr</div>
                 <div class="bar" style="height: 90%;">May</div>
             </div>
-        </div>
+        </div> -->
 
         <div class="buttons">
             <a class="btn" href="<?php echo URLROOT; ?>/SupplierController/storeWithdraw">Withdraw Money</a>

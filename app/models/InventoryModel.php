@@ -15,8 +15,8 @@ class InventoryModel {
 
     public function addItem($data) {
         $this->db->query(
-            "INSERT INTO inventory (item_name, quantity, selling_price, category, added_date, image_path) 
-            VALUES (:item_name, :quantity, :selling_price, :category, :added_date, :image)"
+            "INSERT INTO inventory (item_name, quantity, selling_price, category, added_date, image_path,user_id) 
+            VALUES (:item_name, :quantity, :selling_price, :category, :added_date, :image, :user_id)"
         );
         $this->db->bind(':item_name', $data['item_name']);
         $this->db->bind(':quantity', $data['quantity']);
@@ -24,6 +24,7 @@ class InventoryModel {
         $this->db->bind(':category', $data['category']);
         $this->db->bind(':added_date', $data['added_date']);
         $this->db->bind(':image', $data['image']);
+        $this->db->bind(':user_id', $data['user_id']);
         
         return $this->db->execute();
     }

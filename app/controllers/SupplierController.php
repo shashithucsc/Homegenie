@@ -35,6 +35,8 @@ class SupplierController extends Controller
         $totalCustomers = $this->SupplierModel->getTotalCustomers($loggedUserId);
         $totalProducts = $this->SupplierModel->getTotalProducts($loggedUserId);
         $topProduct = $this->SupplierModel->getTopProduct($loggedUserId);
+        $pendingOrdersCount = $this->SupplierModel->getPendingOrdersCount($loggedUserId);
+        $completedOrdersCount = $this->SupplierModel->getCompletedOrdersCount($loggedUserId);
 
 
         $data = [
@@ -43,27 +45,26 @@ class SupplierController extends Controller
             'totalCustomers' => isset($totalCustomers[0]) ? $totalCustomers[0]->total_customers : 0,
             'totalProducts' => isset($totalProducts[0]) ? $totalProducts[0]->total_products : 0,
             'topProduct' => isset($topProduct[0]) ? $topProduct[0]->item_name : 'N/A',
+            'pendingOrdersCount' => $pendingOrdersCount,
+            'completedOrdersCount' => $completedOrdersCount
         ];
 
 
 
-        $this->view('supplier/admin/index', $data);
+        $this->view('supplier/admin/dashboard', $data);
     }
 
     public function pendingOrders()
     {
-
         $loggedUserId = $_SESSION['user_id'] ?? null;
 
         if (!$loggedUserId) {
             die('User not logged in.');
         }
 
-
         $pendingOrders = $this->SupplierModel->getPendingOrders($loggedUserId);
-
-
         $orders = [];
+
         foreach ($pendingOrders as $row) {
             $orderId = $row->order_id;
 
@@ -81,8 +82,6 @@ class SupplierController extends Controller
                     'items' => []
                 ];
             }
-
-
             $orders[$orderId]->items[] = (object) [
                 'item_id' => $row->item_id,
                 'item_name' => $row->item_name,
@@ -90,8 +89,6 @@ class SupplierController extends Controller
                 'price' => $row->price
             ];
         }
-
-
 
         $data = [
             'pendingOrders' => array_values($orders)
@@ -109,10 +106,7 @@ class SupplierController extends Controller
         if (!$loggedUserId) {
             die('User not logged in.');
         }
-
-
         $completedOrders = $this->SupplierModel->getCompletedOrders($loggedUserId);
-
 
         $orders = [];
         foreach ($completedOrders as $row) {
@@ -132,8 +126,6 @@ class SupplierController extends Controller
                     'items' => []
                 ];
             }
-
-
             $orders[$orderId]->items[] = (object) [
                 'item_id' => $row->item_id,
                 'item_name' => $row->item_name,
@@ -141,11 +133,8 @@ class SupplierController extends Controller
                 'price' => $row->price
             ];
         }
-
-
-       
         $data = [
-            'completedOrders' => array_values($orders) // Convert associative array to indexed array
+            'completedOrders' => array_values($orders) 
         ];
 
         $this->view('supplier/admin/completedOrders/completedOrders', $data);
@@ -157,18 +146,14 @@ class SupplierController extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $orderId = $_POST['order_id'];
             $status = $_POST['status'];
-
-            
             $this->SupplierModel->updateOrderStatus($orderId, $status);
-
-          
             header('Location: ' . URLROOT . '/SupplierController/payments');
             exit();
         }
     }
 
 
-//offers banner management
+
     public function manageOffers()
     {
         $model = $this->model('StorePagesModel');
@@ -220,16 +205,15 @@ class SupplierController extends Controller
             exit;
         }
 
-        // Fetch reports data
         $inventoryReport = $this->SupplierModel->getInventoryReport($loggedUserId);
         $salesReport = $this->SupplierModel->getSalesReport($loggedUserId);
-        $reorderSuggestions = $this->SupplierModel->getReorderSuggestions($loggedUserId);
+       
 
         
         $data = [
             'inventoryReport' => $inventoryReport,
             'salesReport' => $salesReport,
-            'reorderSuggestions' => $reorderSuggestions
+          
         ];
 
         $this->view('supplier/admin/inventory/reports', $data);
@@ -265,7 +249,6 @@ class SupplierController extends Controller
             exit;
         }
 
-       
         $supplier = $this->SupplierModel->getSupplierById($loggedUserId);
         $products = $this->SupplierModel->getProductsBySupplier($loggedUserId);
 
@@ -274,7 +257,6 @@ class SupplierController extends Controller
             die('Supplier not found.');
         }
 
-       
         $data = [
             'supplier' => $supplier,
             'products' => $products,
@@ -284,7 +266,7 @@ class SupplierController extends Controller
         $this->view('supplier/admin/profile/Profile', $data);
     }
 
-    // Update profile details
+    
     public function updateProfile()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -378,10 +360,10 @@ class SupplierController extends Controller
         }
 
         
-        $earnings = $this->SupplierModel->getYourEarnings($loggedUserId);
+        $yourEarnings = $this->SupplierModel->getYourEarnings($loggedUserId);
 
         $data = [
-            'getEarnings' => $earnings
+            'yourEarnings' => isset($yourEarnings) && isset($yourEarnings->yourEarnings) ? $yourEarnings->yourEarnings : 'N/A',
         ];
 
         $this->view('supplier/admin/storeWithdraw', $data);

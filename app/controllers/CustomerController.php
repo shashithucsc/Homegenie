@@ -48,6 +48,10 @@ class CustomerController extends Controller {
     }
 
     public function contact(){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Sanitize POST data
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            
             $data = [
                 'full_name' => trim($_POST['full_name']),
                 'email' => trim($_POST['email']),

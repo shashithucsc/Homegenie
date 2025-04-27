@@ -48,6 +48,27 @@ class CustomerController extends Controller {
     }
 
     public function contact(){
+            $data = [
+                'full_name' => trim($_POST['full_name']),
+                'email' => trim($_POST['email']),
+                'phone' => trim($_POST['phone']),
+                'subject' => trim($_POST['subject']),
+                'message' => trim($_POST['message'])
+            ];
+            
+            // Validate data
+            if (empty($data['full_name']) || empty($data['email']) || empty($data['subject']) || empty($data['message'])) {
+                die('Please fill in all required fields.');
+            }
+            
+            // Send message to the database
+            if ($this->ContactModel->createContact($data)) {
+                flash('contact_success', 'Your message has been sent successfully!');
+                header('Location: ' . URLROOT . '/HomeController/contact');
+            } else {
+                die('Something went wrong. Please try again later.');
+            }
+        }
         $this->view('Customer/contact');
     }
 

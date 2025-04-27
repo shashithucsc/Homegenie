@@ -472,7 +472,7 @@ tr:hover {
 
         /* Add specific width for Appointment ID column */
         .approved-appointments-table thead th:first-child {
-            width: 40px;
+            width: 60px;
             min-width: 40px;
             max-width: 40px;
             white-space: normal;
@@ -511,9 +511,9 @@ tr:hover {
         }
 
         .approved-appointments-table .id-cell {
-            width: 40px;
-            min-width: 40px;
-            max-width: 40px;
+            width: 60px;
+            min-width: 60px;
+            max-width: 60px;
             font-weight: 600;
             color: #2563eb;
             font-size: 0.9rem;
@@ -549,36 +549,6 @@ tr:hover {
             font-size: 0.9rem;
         }
 
-        /* .approved-appointments-table .datetime-cell {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            min-width: 150px;
-            background: #f8fafc;
-            padding: 12px;
-            border-radius: 8px;
-        }
-
-        .approved-appointments-table .date,
-        .approved-appointments-table .time {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .approved-appointments-table .date {
-            font-weight: 600;
-            color: #1e293b;
-            font-size: 0.9rem;
-        }
-
-        .approved-appointments-table .time {
-            color: #64748b;
-            font-size: 0.85rem;
-            background: rgba(37, 99, 235, 0.1);
-            padding: 6px 10px;
-            border-radius: 6px;
-        } */
 
         .approved-appointments-table .details-cell {
             display: flex;
@@ -650,7 +620,7 @@ tr:hover {
         }
 
         .approved-appointments-table .work-details-cell {
-            width: 60px;
+            width: 100px;
             display: flex;
             flex-direction: column;
             gap: 8px;
@@ -663,7 +633,7 @@ tr:hover {
 
         .approved-appointments-table .hours,
         .approved-appointments-table .cost {
-            width: 50px;
+            width: 100px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -680,7 +650,7 @@ tr:hover {
         }
 
         .approved-appointments-table .cost {
-            width: 50px;
+            width: 100px;
             background: rgba(34, 197, 94, 0.1);
             color: #22c55e;
             box-shadow: 0 2px 4px rgba(34, 197, 94, 0.1);
@@ -688,7 +658,7 @@ tr:hover {
 
         .approved-appointments-table .hours i,
         .approved-appointments-table .cost i {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
 
         /* Scrollbar Styling */

@@ -38,7 +38,7 @@ class AppointmentSVPModel
             JOIN users u ON a.customer_id = u.user_id
             WHERE q.service_provider_id = :service_provider_id 
             AND q.status = "Approved"
-            ORDER BY a.appointment_date DESC, a.appointment_time DESC
+            ORDER BY a.appointment_date ASC, a.appointment_time ASC
         ');
         $this->db->bind(':service_provider_id', $service_provider_id);
         return $this->db->resultSet();

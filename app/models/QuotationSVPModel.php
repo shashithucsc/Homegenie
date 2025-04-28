@@ -37,46 +37,18 @@ class QuotationSVPModel
     return $this->db->resultset();
   }
 
-// public function getAllQuotationslist($service_provider_id)
-// {
-//     // Updated query to join with appointments table
-//     $query = "
-//         SELECT 
-//             q.quotation_id, 
-//             q.appointment_id, 
-//             q.service_provider_id, 
-//             q.quotation_details, 
-//             q.work_hours, 
-//             q.cost, 
-//             q.status, 
-//             q.created_at,
-//             a.description as appointment_description,
-//             a.location as appointment_location
-//         FROM quotations q
-//         LEFT JOIN appointments a ON q.appointment_id = a.appointment_id
-//         WHERE q.service_provider_id = :service_provider_id
-//         ORDER BY q.created_at DESC
-//     ";
-
-//     // Prepare and bind
-//     $this->db->query($query);
-//     $this->db->bind(':service_provider_id', $service_provider_id);
-
-//     // Execute and return results
-//     return $this->db->resultSet();
-// }
 
 public function getAllQuotationslist($service_provider_id)
 {
     $this->db->query('
         SELECT 
             q.quotation_id,
-            q.appointment_id,      -- already added earlier
+            q.appointment_id,      
             q.quotation_details,
             q.work_hours,
             q.cost,
             q.status,
-            q.created_at,          -- 🛠️ Add this line!
+            q.created_at,          
             a.appointment_date,
             a.appointment_time,
             a.location,
@@ -94,9 +66,6 @@ public function getAllQuotationslist($service_provider_id)
 }
 
 
-
-
-  
 
   public function getAllAppointmentsById($service_provider_id)
 {
@@ -189,6 +158,50 @@ public function getAllQuotationslist($service_provider_id)
     $this->db->query('SELECT * FROM quotations WHERE appointment_id = :appointment_id');
     $this->db->bind(':appointment_id', $appointment_id);
     return $this->db->single();
+  }
+
+  public function getQuotationDetailsForPDF($quotation_id)
+  {
+    // Get quotation details
+    $quotation = $this->getQuotationById($quotation_id);
+    
+    if (!$quotation) {
+        return false;
+    }
+    
+    // Get appointment details
+    $this->db->query('SELECT * FROM appointments WHERE appointment_id = :appointment_id');
+    $this->db->bind(':appointment_id', $quotation->appointment_id);
+    $appointment = $this->db->single();
+    
+    if (!$appointment) {
+        return false;
+    }
+    
+    // Get customer details from users table
+    $this->db->query('SELECT first_name, last_name, email, contact_number FROM users WHERE user_id = :customer_id');
+    $this->db->bind(':customer_id', $appointment->customer_id);
+    $customer = $this->db->single();
+    
+    if (!$customer) {
+        return false;
+    }
+    
+    // Get service provider details from users table
+    $this->db->query('SELECT first_name, last_name, email, contact_number FROM users WHERE user_id = :provider_id');
+    $this->db->bind(':provider_id', $quotation->service_provider_id);
+    $service_provider = $this->db->single();
+    
+    if (!$service_provider) {
+        return false;
+    }
+
+    return [
+        'quotation' => $quotation,
+        'appointment' => $appointment,
+        'customer' => $customer,
+        'service_provider' => $service_provider
+    ];
   }
 
 }

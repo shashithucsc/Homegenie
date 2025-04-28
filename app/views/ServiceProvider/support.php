@@ -26,16 +26,13 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                 </h2>
             </div>
             <div class="card-body">
-                <form class="issue-form" id="report-form">
+                <?php flash('issue_message'); ?>
+                <form class="issue-form" action="<?php echo URLROOT; ?>/ServiceProviderController/createIssue" method="POST">
                     <div class="form-group">
-                        <label for="issue-title">Issue Title</label>
-                        <input type="text" id="issue-title" class="form-control"
-                            placeholder="Brief description of the issue" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="issue-description">Description</label>
-                        <textarea id="issue-description" class="form-control" rows="4"
-                            placeholder="Provide detailed information about your issue" required></textarea>
+                        <label for="issue-description">Describe your issue</label>
+                        <textarea id="issue-description" name="description" class="form-control <?php echo (!empty($data['description_err'])) ? 'is-invalid' : ''; ?>" rows="4"
+                            placeholder="Please provide detailed information about your issue" required><?php echo isset($data['description']) ? $data['description'] : ''; ?></textarea>
+                        <span class="invalid-feedback"><?php echo isset($data['description_err']) ? $data['description_err'] : ''; ?></span>
                     </div>
                     <button type="submit" class="btn btn-primary">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -49,26 +46,26 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                 </form>
 
                 <div class="issue-list">
-                    <div class="issue-item">
-                        <div class="issue-header">
-                            <span class="issue-title">Unable to update profile</span>
-                            <span class="status-badge status-resolved">Resolved</span>
+                    <?php if (!empty($data['issues'])) : ?>
+                        <?php foreach ($data['issues'] as $issue) : ?>
+                            <div class="issue-item">
+                                <div class="issue-header">
+                                    <span class="issue-title"><?php echo htmlspecialchars($issue->description); ?></span>
+                                    <span class="status-badge <?php echo $issue->status == 'completed' ? 'status-resolved' : 'status-pending'; ?>">
+                                        <?php echo $issue->status == 'completed' ? 'Solved' : (!empty($issue->status) ? ucfirst($issue->status) : 'Pending'); ?>
+                                    </span>
+                                </div>
+                                
+                                <div class="issue-date">
+                                    <?php echo date('F d, Y', strtotime($issue->created_at)); ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else : ?>
+                        <div class="no-issues">
+                            <p>No issues reported yet.</p>
                         </div>
-                        <p class="admin-response">The issue has been fixed. Please try again.</p>
-                    </div>
-                    <div class="issue-item">
-                        <div class="issue-header">
-                            <span class="issue-title">Payment not processed</span>
-                            <span class="status-badge status-progress">In Progress</span>
-                        </div>
-                    </div>
-                    <div class="issue-item">
-                        <div class="issue-header">
-                            <span class="issue-title">Appointment not appearing</span>
-                            <span class="status-badge status-resolved">Resolved</span>
-                        </div>
-                        <p class="admin-response">Please refresh your dashboard.</p>
-                    </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </main>
@@ -86,63 +83,31 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
             </div>
             <div class="card-body">
                 <div class="faq-list">
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            How do I update my profile?
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
+                    <?php if (!empty($data['faqs'])) : ?>
+                        <?php foreach ($data['faqs'] as $faq) : ?>
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <?php echo htmlspecialchars($faq->topic); ?>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="faq-answer">
+                                    <?php echo htmlspecialchars($faq->content); ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else : ?>
+                        <div class="no-faqs">
+                            <p>No FAQs available at the moment.</p>
                         </div>
-                        <div class="faq-answer">
-                            Go to the profile section and click on "Edit Profile". Ensure all details are correct before
-                            saving changes.
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            Why can't I see my appointments?
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </div>
-                        <div class="faq-answer">
-                            Check if you are logged into the correct account. If the issue persists, refresh your
-                            dashboard or contact support.
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            How do I report a problem?
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </div>
-                        <div class="faq-answer">
-                            Use the "Report an Issue" form on this page. Provide a clear title and detailed description
-                            of your problem.
-                        </div>
-                    </div>
+                    <?php endif; ?>
                 </div>
-
             </div>
         </aside>
     </div>
 
     <script>
-        // Handle form submission
-        document.getElementById('report-form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const title = document.getElementById('issue-title').value;
-            const description = document.getElementById('issue-description').value;
-
-            // Here you would typically send the data to a server
-            alert('Issue submitted successfully!');
-            this.reset();
-        });
-
         // Handle FAQ toggles
         document.querySelectorAll('.faq-question').forEach(question => {
             question.addEventListener('click', () => {

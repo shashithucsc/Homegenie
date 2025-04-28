@@ -1,7 +1,4 @@
 <?php
-
-
-
 require_once APPROOT . '/views/supplier/admin/sidebar.php';
 ?>
 <html lang="en">
@@ -9,12 +6,12 @@ require_once APPROOT . '/views/supplier/admin/sidebar.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Sales Dashboard</title>
+    <title>Withdraw Earnings</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/supplierDashboard.css">
-   
-    
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/storeWithdraw.css">
 </head>
+
+<body>
 <div class="dashboard-container">
     <div class="header1">
         <div class="welcome-container">
@@ -22,33 +19,31 @@ require_once APPROOT . '/views/supplier/admin/sidebar.php';
         </div>
     </div>
 
-    <!-- Total Earnings Summary -->
     <div class="sales-summary">
         <div class="summary-box">
             <h3>Total Earnings</h3>
             <div class="amount">
-            <?php echo htmlspecialchars($data['getEarnings']); ?>
+            <?php echo isset($data['yourEarnings']) ? '$' . number_format($data['yourEarnings'], 2) : '$0.00'; ?>
             </div>
         </div>
     </div>
 
-    <!-- Withdraw Section -->
     <div class="notifications">
         <h3>Withdrawal Request</h3>
         <form action="process_withdrawal.php" method="POST">
-            <div style="margin-bottom: 15px;">
-                <label for="bankName">Bank Name</label><br>
-                <input type="text" id="bankName" name="bankName" required style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;">
+            <div class="form-group">
+                <label for="bankName">Bank Name</label>
+                <input type="text" id="bankName" name="bankName" required>
             </div>
 
-            <div style="margin-bottom: 15px;">
-                <label for="accountNumber">Account Number</label><br>
-                <input type="text" id="accountNumber" name="accountNumber" required style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;">
+            <div class="form-group">
+                <label for="accountNumber">Account Number</label>
+                <input type="text" id="accountNumber" name="accountNumber" required>
             </div>
 
-            <div style="margin-bottom: 15px;">
-                <label for="amount">Withdraw Amount (Rs)</label><br>
-                <input type="number" id="amount" name="amount" min="100" required style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;">
+            <div class="form-group">
+                <label for="amount">Withdraw Amount (Rs)</label>
+                <input type="number" id="amount" name="amount" min="100" required>
             </div>
 
             <div class="buttons">
@@ -57,3 +52,6 @@ require_once APPROOT . '/views/supplier/admin/sidebar.php';
         </form>
     </div>
 </div>
+</body>
+
+</html>

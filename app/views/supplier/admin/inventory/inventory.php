@@ -1,10 +1,11 @@
 <?php
-$user_name = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest'; 
-$profile_pic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'default.png'; 
+$user_name = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
+$profile_pic = isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'default.png';
 $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,7 +29,8 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
             <div class="user-info">
                 <div class="user-greeting">Hello, <?php echo htmlspecialchars($user_name); ?></div>
                 <div class="user-avatar">
-                <img src="data:image/jpeg;base64,<?php echo base64_encode($_SESSION['profile_pic']); ?>" alt="Profile Picture" class="profile-pic">
+                    <img src="data:image/jpeg;base64,<?php echo base64_encode($_SESSION['profile_pic']); ?>"
+                        alt="Profile Picture" class="profile-pic">
                 </div>
             </div>
         </div>
@@ -39,7 +41,7 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                     <h2><i class="fas fa-boxes"></i> Inventory List</h2>
                     <div class="total-items"><?php echo count($data); ?> Items Found</div>
                 </div>
-                
+
                 <table>
                     <thead>
                         <tr>
@@ -63,15 +65,11 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                                     <td><span class="category-tag"><?php echo $item->category; ?></span></td>
                                     <td><?php echo date('M d, Y', strtotime($item->added_date)); ?></td>
                                     <td>
-                                    <button 
-    class="action-btn update-btn" 
-    data-id="<?php echo $item->item_id; ?>"
-    data-price="<?php echo $item->selling_price; ?>"
-    data-quantity="<?php echo $item->quantity; ?>"
-    style="margin-right: 10px;"
->
-    <i class="fas fa-edit"></i> Update
-</button>
+                                        <button class="action-btn update-btn" data-id="<?php echo $item->item_id; ?>"
+                                            data-price="<?php echo $item->selling_price; ?>"
+                                            data-quantity="<?php echo $item->quantity; ?>" style="margin-right: 10px;">
+                                            <i class="fas fa-edit"></i> Update
+                                        </button>
 
                                         <button class="action-btn remove-btn" data-id="<?php echo $item->item_id; ?>">
                                             <i class="fas fa-trash"></i> Delete
@@ -90,7 +88,7 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                     </tbody>
                 </table>
 
-                <!-- Update Modal -->
+
                 <div id="updateModal" class="modal">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -98,33 +96,33 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                             <span class="close-modal">&times;</span>
                         </div>
                         <form id="updateForm" action="<?php echo URLROOT; ?>/InventoryController/update" method="POST">
-    <input type="hidden" name="item_id" id="updateItemId">
+                            <input type="hidden" name="item_id" id="updateItemId">
 
-    <div class="form-group" style="margin-bottom: 15px;">
-        <label for="updateQuantity">New Quantity</label>
-        <input type="number" name="quantity" id="updateQuantity" min="0" required>
-    </div>
+                            <div class="form-group" style="margin-bottom: 15px;">
+                                <label for="updateQuantity">New Quantity</label>
+                                <input type="number" name="quantity" id="updateQuantity" min="0" required>
+                            </div>
 
-    <div class="form-group">
-        <label for="updatePrice">New Price (LKR)</label>
-        <input type="number" name="price" id="updatePrice" step="0.01" required>
-    </div>
+                            <div class="form-group">
+                                <label for="updatePrice">New Price (LKR)</label>
+                                <input type="number" name="price" id="updatePrice" step="0.01" required>
+                            </div>
 
-    <div class="modal-actions">
-        <button type="submit" class="confirm-btn">
-            <i class="fas fa-check"></i> Confirm
-        </button>
-        <button type="button" class="cancel-btn">
-            <i class="fas fa-times"></i> Cancel
-        </button>
-    </div>
-</form>
+                            <div class="modal-actions">
+                                <button type="submit" class="confirm-btn">
+                                    <i class="fas fa-check"></i> Confirm
+                                </button>
+                                <button type="button" class="cancel-btn">
+                                    <i class="fas fa-times"></i> Cancel
+                                </button>
+                            </div>
+                        </form>
 
 
                     </div>
                 </div>
 
-                <!-- Delete Modal -->
+
                 <div id="deleteModal" class="modal">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -153,23 +151,23 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                     <div class="filter-group">
                         <label class="filter-label">Category</label>
                         <select id="category" class="modern-select">
-    <option value="all">All Categories</option>
-    <option value="Cleaning">Cleaning</option>
-    <option value="Electricity">Electricity</option>
-    <option value="Painting">Painting</option>
-    <option value="Masonary">Masonary</option>
-    <option value="Carpentary">Carpentary</option>
-    <option value="Plumbing">Plumbing</option>
-</select>
+                            <option value="all">All Categories</option>
+                            <option value="Cleaning">Cleaning</option>
+                            <option value="Electricity">Electricity</option>
+                            <option value="Painting">Painting</option>
+                            <option value="Masonary">Masonary</option>
+                            <option value="Carpentary">Carpentary</option>
+                            <option value="Plumbing">Plumbing</option>
+                        </select>
                     </div>
                     <div class="filter-group">
                         <label class="filter-label">Price Range</label>
                         <select id="price" class="modern-select">
-    <option value="all">All Prices</option>
-    <option value="1000+">1000+</option>
-    <option value="5000+">5000+</option>
-    <option value="0-999">0-999</option>
-</select>
+                            <option value="all">All Prices</option>
+                            <option value="1000+">1000+</option>
+                            <option value="5000+">5000+</option>
+                            <option value="0-999">0-999</option>
+                        </select>
                     </div>
                 </div>
 
@@ -210,7 +208,7 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            // Modal Handling
+
             const modals = {
                 update: document.getElementById('updateModal'),
                 delete: document.getElementById('deleteModal')
@@ -226,17 +224,17 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                 document.body.style.overflow = 'auto';
             };
 
-            // Update Modal
-            document.querySelectorAll('.update-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.getElementById('updateItemId').value = btn.dataset.id;
-        document.getElementById('updatePrice').value = btn.dataset.price;
-        document.getElementById('updateQuantity').value = btn.dataset.quantity;
-        openModal(modals.update);
-    });
-});
 
-            // Delete Modal
+            document.querySelectorAll('.update-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.getElementById('updateItemId').value = btn.dataset.id;
+                    document.getElementById('updatePrice').value = btn.dataset.price;
+                    document.getElementById('updateQuantity').value = btn.dataset.quantity;
+                    openModal(modals.update);
+                });
+            });
+
+
             document.querySelectorAll('.remove-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     document.getElementById('deleteItemId').value = btn.dataset.id;
@@ -244,7 +242,7 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                 });
             });
 
-            // Close Modals
+
             document.querySelectorAll('.close-modal, .cancel-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     closeModal(modals.update);
@@ -252,7 +250,7 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                 });
             });
 
-            // Close on outside click
+
             window.addEventListener('click', (e) => {
                 if (e.target.classList.contains('modal')) {
                     closeModal(modals.update);
@@ -260,7 +258,7 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
                 }
             });
 
-            // Price Validation
+
             document.getElementById('updateForm').addEventListener('submit', (e) => {
                 const price = parseFloat(document.getElementById('updatePrice').value);
                 if (price <= 0 || isNaN(price)) {
@@ -272,74 +270,75 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
         });
     </script>
 
-<!-- this javascript use for implement search bar work -->
-<script>
-function searchInventory() {
-    const input = document.querySelector('.search-box');
-    const filter = input.value.toLowerCase();
-    const rows = document.querySelectorAll('.inventory-list table tbody tr');
 
-    rows.forEach(row => {
-        const itemName = row.querySelector('td:nth-child(1)');
-        if (!itemName) return; // skip if no itemName (e.g., "No items" row)
+    <script>
+        function searchInventory() {
+            const input = document.querySelector('.search-box');
+            const filter = input.value.toLowerCase();
+            const rows = document.querySelectorAll('.inventory-list table tbody tr');
 
-        const text = itemName.textContent.toLowerCase();
-        if (text.includes(filter)) {
-            row.style.display = '';
-        } else {
-            row.style.display = 'none';
+            rows.forEach(row => {
+                const itemName = row.querySelector('td:nth-child(1)');
+                if (!itemName) return;
+
+                const text = itemName.textContent.toLowerCase();
+                if (text.includes(filter)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
         }
-    });
-}
-</script>
+    </script>
 
-<!-- filters javascript -->
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const categoryFilter = document.getElementById('category');
-    const priceFilter = document.getElementById('price');
 
-    categoryFilter.addEventListener('change', filterInventory);
-    priceFilter.addEventListener('change', filterInventory);
-});
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const categoryFilter = document.getElementById('category');
+            const priceFilter = document.getElementById('price');
 
-function filterInventory() {
-    const selectedCategory = document.getElementById('category').value;
-    const selectedPrice = document.getElementById('price').value;
+            categoryFilter.addEventListener('change', filterInventory);
+            priceFilter.addEventListener('change', filterInventory);
+        });
 
-    const rows = document.querySelectorAll('.inventory-list table tbody tr');
+        function filterInventory() {
+            const selectedCategory = document.getElementById('category').value;
+            const selectedPrice = document.getElementById('price').value;
 
-    rows.forEach(row => {
-        const categoryCell = row.querySelector('td:nth-child(5)');
-        const priceCell = row.querySelector('td:nth-child(4)');
+            const rows = document.querySelectorAll('.inventory-list table tbody tr');
 
-        if (!categoryCell || !priceCell) return;
+            rows.forEach(row => {
+                const categoryCell = row.querySelector('td:nth-child(5)');
+                const priceCell = row.querySelector('td:nth-child(4)');
 
-        const categoryText = categoryCell.textContent.trim();
-        const priceValue = parseFloat(priceCell.textContent.replace('Rs.', '').replace(',', ''));
+                if (!categoryCell || !priceCell) return;
 
-        let categoryMatch = selectedCategory === 'all' || categoryText === selectedCategory;
+                const categoryText = categoryCell.textContent.trim();
+                const priceValue = parseFloat(priceCell.textContent.replace('Rs.', '').replace(',', ''));
 
-        let priceMatch = false;
-        if (selectedPrice === 'all') {
-            priceMatch = true;
-        } else if (selectedPrice === '1000+') {
-            priceMatch = priceValue >= 1000;
-        } else if (selectedPrice >= '5000+') {
-            priceMatch = priceValue >= 500 && priceValue <= 999;
-        } else if (selectedPrice === '0-999') {
-            priceMatch = priceValue >= 0 && priceValue <= 499;
+                let categoryMatch = selectedCategory === 'all' || categoryText === selectedCategory;
+
+                let priceMatch = false;
+                if (selectedPrice === 'all') {
+                    priceMatch = true;
+                } else if (selectedPrice === '1000+') {
+                    priceMatch = priceValue >= 1000;
+                } else if (selectedPrice >= '5000+') {
+                    priceMatch = priceValue >= 5000 && priceValue <= 1000;
+                } else if (selectedPrice === '0-999') {
+                    priceMatch = priceValue >= 0 && priceValue <= 999;
+                }
+
+                if (categoryMatch && priceMatch) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
         }
-
-        if (categoryMatch && priceMatch) {
-            row.style.display = '';
-        } else {
-            row.style.display = 'none';
-        }
-    });
-}
-</script>
+    </script>
 
 
 </body>
+
 </html>

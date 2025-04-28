@@ -3,15 +3,10 @@ class SupplierModel {
     private $db;
 
     public function __construct() {
-        $this->db = new Database(); // Assumes a Database class exists for handling DB operations
+        $this->db = new Database(); 
     }
 
 
-    // public function getProfileImage($userId) {
-    //     $this->db->query("SELECT * FROM users WHERE user_id = :user_id");
-    //     $this->db->bind(':user_id', $userId);
-    //     return $this->db->single();
-    // }
 
     public function getTotalSales($userId) {
         $this->db->query("SELECT SUM(total_amount) AS total_sales 
@@ -66,6 +61,26 @@ class SupplierModel {
         $results = $this->db->resultSet();
         return $results;
     }
+
+    public function getPendingOrdersCount($userId) {
+        $this->db->query("SELECT COUNT(*) AS pending_orders_count 
+                          FROM sales_orders 
+                          WHERE supplier_id = :supplier_id 
+                          AND status = 'Pending'");
+        $this->db->bind(':supplier_id', $userId); 
+        $result = $this->db->single();
+        return $result ? $result->pending_orders_count : 0;
+    }
+
+    public function getCompletedOrdersCount($userId) {
+        $this->db->query("SELECT COUNT(*) AS completed_orders_count 
+                          FROM sales_orders 
+                          WHERE supplier_id = :supplier_id 
+                          AND status = 'Accepted'");
+        $this->db->bind(':supplier_id', $userId); 
+        $result = $this->db->single();
+        return $result ? $result->completed_orders_count : 0;
+    }
     
     
 
@@ -105,21 +120,6 @@ class SupplierModel {
         return $this->db->resultSet();
     }
     
-
-    public function getReorderSuggestions($userId) {
-        $this->db->query("
-            SELECT 
-                i.item_name,
-                i.quantity AS current_stock,
-                :default_threshold - i.quantity AS reorder_quantity,
-                (:default_threshold - i.quantity) * i.selling_price AS suggested_order_value
-            FROM inventory i
-            WHERE i.user_id = :user_id AND i.quantity < :default_threshold
-        ");
-        $this->db->bind(':user_id', $userId);
-        $this->db->bind(':default_threshold', 50);  // Example threshold
-        return $this->db->resultSet();
-    }
 
    
 

@@ -11,494 +11,11 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
     <title>Profile - Service Provider</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --background: #f9fafb;
-            --card-background: #ffffff;
-            --text: #111827;
-            --text-secondary: #6b7280;
-            --border: #e5e7eb;
-            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-            --shadow-hover: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--background);
-            color: var(--text);
-            margin: 0;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* Profile Header */
-        .profile-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .profile-header h1 {
-            color: var(--primary);
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        .profile-header p {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-        }
-
-        /* Profile Sections */
-        .profile-sections {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 30px;
-        }
-
-        /* Profile Card */
-        .profile-card {
-            background: var(--card-background);
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            padding: 30px;
-            text-align: center;
-        }
-
-        .profile-image {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            margin: 0 auto 20px;
-            overflow: hidden;
-            border: 4px solid var(--primary);
-        }
-
-        .profile-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .rating {
-            color: #ffc107;
-            font-size: 1.2rem;
-            margin: 15px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
-
-        .rating i {
-            margin: 0 2px;
-        }
-
-        .rating .rating-number {
-            color: var(--text);
-            font-size: 1rem;
-            margin-left: 8px;
-            font-weight: 500;
-        }
-
-        .rating .fa-star,
-        .rating .fa-star-half-alt {
-            color: #ffc107;
-        }
-
-        .rating .far.fa-star {
-            color: #e4e5e9;
-        }
-
-        /* Details Card */
-        .details-card {
-            background: var(--card-background);
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            padding: 30px;
-        }
-
-        .section-title {
-            color: var(--primary);
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .details-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
-        .detail-item {
-            margin-bottom: 15px;
-        }
-
-        .detail-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-        }
-
-        .detail-value {
-            font-weight: 500;
-            font-size: 1.1rem;
-        }
-
-        /* ID Verification Section */
-        .id-verification {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px solid var(--border);
-        }
-
-        .id-images {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .id-image {
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-
-        .id-image img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        /* Work Photos Section */
-        .work-photos {
-            margin-top: 30px;
-        }
-
-        .photos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .photo-item {
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: transform 0.3s ease;
-        }
-
-        .photo-item:hover {
-            transform: translateY(-5px);
-        }
-
-        .photo-item img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        /* Edit Button */
-        .edit-button {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: var(--primary);
-            color: var(--card-background);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: var(--shadow-hover);
-            transition: all 0.3s ease;
-        }
-
-        .edit-button:hover {
-            background: var(--primary-hover);
-            transform: scale(1.1);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .profile-sections {
-                grid-template-columns: 1fr;
-            }
-
-            .details-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .id-images {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Add these styles to your existing CSS */
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .edit-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .edit-btn:hover {
-            background: var(--primary-hover);
-        }
-
-        .edit-mode {
-            display: block !important;
-        }
-
-        .view-mode {
-            display: block;
-        }
-
-        .edit-mode + .view-mode {
-            display: none;
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .save-btn, .cancel-btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .save-btn {
-            background: var(--primary);
-            color: white;
-        }
-
-        .cancel-btn {
-            background: var(--text-secondary);
-            color: white;
-        }
-
-        .photo-upload {
-            margin-bottom: 20px;
-            padding: 20px;
-            border: 2px dashed var(--border);
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .upload-btn {
-            margin-top: 10px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .delete-photo {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(255, 0, 0, 0.8);
-            color: white;
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .photo-item:hover .delete-photo {
-            opacity: 1;
-        }
-
-        .quotation-stats {
-            margin-top: 20px;
-            padding: 15px;
-            border-top: 1px solid var(--border);
-            background-color: rgba(37, 99, 235, 0.1); /* Semi-transparent dark blue */
-            border-radius: 8px;
-            margin: 20px 15px;
-        }
-
-        .stats-title {
-            text-align: center;
-            color: var(--primary);
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .stats-container {
-            display: flex;
-            justify-content: space-around;
-        }
-
-        .stat-item {
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            padding: 10px;
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 6px;
-            min-width: 80px;
-        }
-
-        .stat-number {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--primary);
-        }
-
-        .stat-label {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        /* Job Status Statistics */
-        .job-stats {
-            margin-top: 20px;
-            padding: 15px;
-            border-top: 1px solid var(--border);
-            background-color: rgba(37, 99, 235, 0.1); /* Semi-transparent dark blue */
-            border-radius: 8px;
-            margin: 20px 15px;
-        }
-
-        .job-stats .stats-title {
-            text-align: center;
-            color: var(--primary);
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .job-stats .stats-container {
-            display: flex;
-            justify-content: space-around;
-        }
-
-        .job-stats .stat-item {
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            padding: 10px;
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 6px;
-            min-width: 80px;
-        }
-
-        .job-stats .stat-number {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--primary);
-        }
-
-        .job-stats .stat-label {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        /* Professional Information Highlight */
-        .details-grid .detail-item {
-            background-color: rgba(37, 99, 235, 0.1);
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .details-grid .detail-label {
-            color: var(--primary);
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .details-grid .detail-value {
-            color: var(--text);
-            font-weight: 500;
-        }
-
-        .details-grid input,
-        .details-grid select,
-        .details-grid textarea {
-            background-color: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(37, 99, 235, 0.2);
-            border-radius: 6px;
-            padding: 8px 12px;
-            width: 100%;
-            color: var(--text);
-        }
-
-        .details-grid input:focus,
-        .details-grid select:focus,
-        .details-grid textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
-        }
-
-        /* Remove the specific hourly rate styles since they're now part of the general styles */
-        .hourly-rate-value,
-        .hourly-rate-input {
-            background-color: transparent;
-            padding: 0;
-            border-radius: 0;
-            font-weight: inherit;
-            color: inherit;
-        }
-
-        .hourly-rate-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
-        }
-    </style>
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/SVP/SVP_profile.css">
 </head>
 
 <body>
     <div class="container">
-        <div class="profile-header">
-        </div>
 
         <div class="profile-sections">
             <!-- Profile Card -->
@@ -619,13 +136,13 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Hourly Rate</div>
-                                <input type="number" name="hourly_rate" value="<?php echo htmlspecialchars($data['provider']->hourly_rate); ?>" min="0" step="0.01" class="hourly-rate-input">
+                                <input type="number" name="hourly_rate" value="<?php echo htmlspecialchars($data['provider']->hourly_rate); ?>" min="0" step="0.01">
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Service Areas</div>
                                 <select name="service_areas[]" multiple>
-                            <?php
-                            $districts = [
+                                    <?php
+                                    $districts = [
                                         "Colombo", "Gampaha", "Kalutara", "Kandy", "Matale",
                                         "Nuwara Eliya", "Galle", "Matara", "Hambantota", "Jaffna",
                                         "Kilinochchi", "Mannar", "Vavuniya", "Mullaitivu", "Batticaloa",
@@ -633,12 +150,12 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                                         "Polonnaruwa", "Badulla", "Monaragala", "Ratnapura", "Kegalle"
                                     ];
                                     $selected_districts = explode(',', $data['provider']->service_areas);
-                            foreach ($districts as $district) {
-                                $selected = in_array(trim($district), $selected_districts) ? 'selected' : '';
-                                echo "<option value=\"$district\" $selected>$district</option>";
-                            }
-                            ?>
-                        </select>
+                                    foreach ($districts as $district) {
+                                        $selected = in_array(trim($district), $selected_districts) ? 'selected' : '';
+                                        echo "<option value=\"$district\" $selected>$district</option>";
+                                    }
+                                    ?>
+                                </select>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Description</div>
@@ -668,7 +185,7 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Hourly Rate</div>
-                                <div class="hourly-rate-value">Rs. <?php echo number_format($data['provider']->hourly_rate, 2); ?></div>
+                                <div class="detail-value">Rs. <?php echo number_format($data['provider']->hourly_rate, 2); ?></div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Service Areas</div>
@@ -680,22 +197,8 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                             </div>
                         </div>
                     </div>
-                    </div>
+                </div>
 
-                <!-- ID Verification Section -->
-                <div class="id-verification">
-                    <h3 class="section-title">ID Verification</h3>
-                    <div class="id-images">
-                        <div class="id-image">
-                            <img src="data:image/jpeg;base64,<?php echo base64_encode($data['provider']->id_front); ?>" alt="ID Front">
-                            <p class="detail-label">Front</p>
-                        </div>
-                        <div class="id-image">
-                            <img src="data:image/jpeg;base64,<?php echo base64_encode($data['provider']->id_back); ?>" alt="ID Back">
-                            <p class="detail-label">Back</p>
-                        </div>
-                    </div>
-                    </div>
 
                 <!-- Work Photos Section -->
                 <div class="work-photos">
@@ -712,8 +215,8 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                             <button type="submit" class="upload-btn">
                                 <i class="fas fa-upload"></i> Upload New Photos
                             </button>
-                </div>
-            </form>
+                        </div>
+                    </form>
 
                     <div id="photos-view">
                         <div class="photos-grid">
@@ -777,7 +280,7 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                 });
             }
         }
-</script>
+    </script>
 </body>
 
 </html>

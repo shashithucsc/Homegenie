@@ -8,9 +8,10 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Appointments Dashboard</title>
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/SVP/SVP_appointments.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/SVP/SVP_appointments.css">
+    
 
 </head>
 <body>
@@ -128,7 +129,7 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                         <table class="approved-appointments-table">
                             <thead>
                                 <tr>
-                                    <th>Appointment<br> ID</th>
+                                    <th>App<br> ID</th>
                                     <th>Customer</th>
                                     <th>Date & Time & Place</th>
                                     <th>Details</th>

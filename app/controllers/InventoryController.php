@@ -21,7 +21,12 @@ class InventoryController extends Controller {
     }
 
     public function add() {
+        if (!isset($_SESSION['user_id'])) {
+            die("User not logged in.");
+        }
+        $user_id = $_SESSION['user_id'];
         $this->view('supplier/admin/inventory/add');
+        
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
@@ -31,7 +36,8 @@ class InventoryController extends Controller {
                 'selling_price' => $_POST['selling_price'],
                 'category' => $_POST['category'],
                 'added_date' => $_POST['date'],
-                'image' => file_get_contents($_FILES["image"]["tmp_name"])
+                'image' => file_get_contents($_FILES["image"]["tmp_name"]),
+                'user_id' => $user_id
             ];
 
             if ($this->inventoryModel->addItem($data)) {

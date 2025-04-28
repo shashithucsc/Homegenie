@@ -199,20 +199,6 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                     </div>
                 </div>
 
-                <!-- ID Verification Section -->
-                <div class="id-verification">
-                    <h3 class="section-title">ID Verification</h3>
-                    <div class="id-images">
-                        <div class="id-image">
-                            <img src="data:image/jpeg;base64,<?php echo base64_encode($data['provider']->id_front); ?>" alt="ID Front">
-                            <p class="detail-label">Front</p>
-                        </div>
-                        <div class="id-image">
-                            <img src="data:image/jpeg;base64,<?php echo base64_encode($data['provider']->id_back); ?>" alt="ID Back">
-                            <p class="detail-label">Back</p>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Work Photos Section -->
                 <div class="work-photos">

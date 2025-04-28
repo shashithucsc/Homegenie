@@ -21,7 +21,8 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
             <!-- Profile Card -->
             <div class="profile-card">
                 <div class="profile-image">
-                    <img src="data:image/jpeg;base64,<?php echo base64_encode($data['user']->profile_image); ?>" alt="Profile Image">
+                    <img src="data:image/jpeg;base64,<?php echo base64_encode($data['user']->profile_image); ?>"
+                        alt="Profile Image">
                 </div>
                 <div class="rating">
                     <?php
@@ -93,7 +94,9 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                 <div class="details-grid">
                     <div class="detail-item">
                         <div class="detail-label">Full Name</div>
-                        <div class="detail-value"><?php echo htmlspecialchars($data['user']->first_name . ' ' . $data['user']->last_name); ?></div>
+                        <div class="detail-value">
+                            <?php echo htmlspecialchars($data['user']->first_name . ' ' . $data['user']->last_name); ?>
+                        </div>
                     </div>
                     <div class="detail-item">
                         <div class="detail-label">Email</div>
@@ -106,12 +109,12 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                     <div class="detail-item">
                         <div class="detail-label">Address</div>
                         <div class="detail-value"><?php
-                                                    echo htmlspecialchars(
-                                                        $data['user']->street . ', ' .
-                                                            $data['user']->district . ', ' .
-                                                            $data['user']->province
-                                                    );
-                                                    ?></div>
+                        echo htmlspecialchars(
+                            $data['user']->street . ', ' .
+                            $data['user']->district . ', ' .
+                            $data['user']->province
+                        );
+                        ?></div>
                     </div>
                 </div>
 
@@ -124,19 +127,24 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                         </button>
                     </div>
 
-                    <form id="professional-form" action="<?php echo URLROOT; ?>/ServiceProviderController/updateProfessionalInfo" method="POST" style="display: none;">
+                    <form id="professional-form"
+                        action="<?php echo URLROOT; ?>/ServiceProviderController/updateProfessionalInfo" method="POST"
+                        style="display: none;">
                         <div class="details-grid">
-                            <div class="detail-item">
+                            <!-- <div class="detail-item">
                                 <div class="detail-label">Expertise</div>
                                 <input type="text" name="expertise" value="<?php echo htmlspecialchars($data['provider']->expertise); ?>">
-                            </div>
+                            </div> -->
                             <div class="detail-item">
                                 <div class="detail-label">Working Hours</div>
-                                <input type="text" name="working_hours" value="<?php echo htmlspecialchars($data['provider']->working_hours); ?>">
+                                <input type="text" name="working_hours"
+                                    value="<?php echo htmlspecialchars($data['provider']->working_hours); ?>">
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Hourly Rate</div>
-                                <input type="number" name="hourly_rate" value="<?php echo htmlspecialchars($data['provider']->hourly_rate); ?>" min="0" step="0.01">
+                                <input type="number" name="hourly_rate"
+                                    value="<?php echo htmlspecialchars($data['provider']->hourly_rate); ?>" min="0"
+                                    step="0.01">
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Service Areas</div>
@@ -179,7 +187,8 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Description</div>
-                                <textarea name="description"><?php echo htmlspecialchars($data['provider']->description); ?></textarea>
+                                <textarea
+                                    name="description"><?php echo htmlspecialchars($data['provider']->description); ?></textarea>
                             </div>
                         </div>
 
@@ -195,32 +204,36 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
 
                     <div id="professional-view">
                         <div class="details-grid">
-                            <div class="detail-item">
+                            <!-- <div class="detail-item">
                                 <div class="detail-label">Expertise</div>
                                 <div class="detail-value"><?php echo htmlspecialchars($data['provider']->expertise); ?></div>
-                            </div>
+                            </div> -->
                             <div class="detail-item">
                                 <div class="detail-label">Working Hours</div>
-                                <div class="detail-value"><?php echo htmlspecialchars($data['provider']->working_hours); ?></div>
+                                <div class="detail-value">
+                                    <?php echo htmlspecialchars($data['provider']->working_hours); ?></div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Hourly Rate</div>
-                                <div class="detail-value">Rs. <?php echo number_format($data['provider']->hourly_rate, 2); ?></div>
+                                <div class="detail-value">Rs.
+                                    <?php echo number_format($data['provider']->hourly_rate, 2); ?></div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Service Areas</div>
-                                <div class="detail-value"><?php echo htmlspecialchars($data['provider']->service_areas); ?></div>
+                                <div class="detail-value">
+                                    <?php echo htmlspecialchars($data['provider']->service_areas); ?></div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Description</div>
-                                <div class="detail-value"><?php echo htmlspecialchars($data['provider']->description); ?></div>
+                                <div class="detail-value">
+                                    <?php echo htmlspecialchars($data['provider']->description); ?></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
 
-                
+
             </div>
         </div>
     </div>
@@ -242,7 +255,7 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
             }
         }
 
-        
+
     </script>
 </body>
 

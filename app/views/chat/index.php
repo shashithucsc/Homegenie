@@ -167,11 +167,11 @@
     <div class="chat-container">
         <div class="chat-header">
             <div class="user-info">
-                <img src="<?php echo URLROOT; ?>/public/img/profile/<?php echo $data['other_user']->profile_pic; ?>"
+                <img src="data:image/jpeg;base64,<?php echo base64_encode($data['other_user']->profile_image); ?>"
                     alt="Profile Picture" class="profile-pic">
                 <h2><?php echo $data['other_user']->first_name . ' ' . $data['other_user']->last_name; ?></h2>
             </div>
-            <a href="<?php echo URLROOT; ?>/CustomerController/cu_appointment" class="back-btn"><i
+            <a href="<?php echo URLROOT; ?>/CustomerController/appointment" class="back-btn"><i
                     class='bx bx-arrow-back'></i> Back to Appointments</a>
         </div>
 
@@ -195,12 +195,12 @@
         </form>
     </div>
     <script>
-        // Scroll to bottom of chat
         document.addEventListener('DOMContentLoaded', function () {
             const chatMessages = document.getElementById('chat-messages');
             chatMessages.scrollTop = chatMessages.scrollHeight;
         });
     </script>
+    <script src="<?php echo URLROOT; ?>/public/js/script-index.js"></script>
 </body>
 
 </html>

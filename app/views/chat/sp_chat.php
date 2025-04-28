@@ -163,13 +163,11 @@
 </head>
 
 <body>
-
     <?php require_once APPROOT . '/views/ServiceProvider/navbar_svp.php'; ?>
-
     <div class="chat-container">
         <div class="chat-header">
             <div class="user-info">
-                <img src="<?php echo URLROOT; ?>/public/img/profile/<?php echo $data['other_user']->profile_pic; ?>"
+                <img src="data:image/jpeg;base64,<?php echo base64_encode($data['other_user']->profile_image); ?>"
                     alt="Profile Picture" class="profile-pic">
                 <h2><?php echo $data['other_user']->first_name . ' ' . $data['other_user']->last_name; ?></h2>
             </div>
@@ -196,9 +194,7 @@
             </div>
         </form>
     </div>
-
     <script>
-        // Scroll to bottom of chat
         document.addEventListener('DOMContentLoaded', function () {
             const chatMessages = document.getElementById('chat-messages');
             chatMessages.scrollTop = chatMessages.scrollHeight;

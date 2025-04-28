@@ -115,8 +115,8 @@
                             <h3><?php echo htmlspecialchars(($provider->first_name ?? '') . ' ' . ($provider->last_name ?? '')); ?>
                             </h3>
                             <span class="service-type"><?php echo htmlspecialchars($provider->expertise ?? ''); ?></span>
-                            <div class="rating" aria-label="4.8 out of 5 stars">
-                                <span class="rating-number">4.8</span>
+                            <div class="rating" aria-label="Star Rating">
+                                <span class="rating-number"><?php echo htmlspecialchars($provider->average_rating ?? ''); ?> <i class='bx bxs-star' style="color: #FFD700;"></i> </span>
                             </div>
                             <p><?php echo htmlspecialchars($provider->description ?? ''); ?></p>
                             <a href="<?php echo URLROOT; ?>/CustomerController/SPProfile/<?php echo htmlspecialchars($provider->user_id ?? ''); ?>">
@@ -132,6 +132,8 @@
     </main>
 
     <script src="<?php echo URLROOT; ?>/public/js/script-index.js"></script>
+    <script src="<?php echo URLROOT; ?>/public/js/services.js"></script>
+
 </body>
 
 </html>

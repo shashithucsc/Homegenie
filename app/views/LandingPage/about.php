@@ -78,28 +78,28 @@
                 <h2>Our Team</h2>
                 <div class="team-grid">
                     <div class="team-member">
-                        <img src="shakila.jpg"
+                        <img src="<?php echo URLROOT; ?>/public/img/shakila.jpg"
                             alt="SK">
                         <h3>Shakila Thathsara</h3>
                         <p class="role">Admin</p>
                         <p class="bio">UCSC Undergraduate</p>
                     </div>
                     <div class="team-member">
-                        <img src="kavindi.jpg"
+                        <img src="<?php echo URLROOT; ?>/public/img/kavindi.jpg"
                             alt="KB">
                         <h3>Kavindi Basnayaka</h3>
                         <p class="role">Customer</p>
                         <p class="bio">UCSC Undergraduate</p>
                     </div>
                     <div class="team-member">
-                        <img src="mandinu.jpg"
+                        <img src="<?php echo URLROOT; ?>/public/img/mandinu.jpg"
                             alt="MM">
                         <h3>Mandinu Maneth</h3>
                         <p class="role">Service Provider</p>
                         <p class="bio">UCSC Undergraduate</p>
                     </div>
                     <div class="team-member">
-                        <img src="shashith.jpg"
+                        <img src="<?php echo URLROOT; ?>/public/img/shashith.jpg"
                             alt="SR">
                         <h3>Shashith Rashmika</h3>
                         <p class="role">Supplier</p>

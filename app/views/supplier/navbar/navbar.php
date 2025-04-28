@@ -12,8 +12,21 @@
 
         <nav>
             <ul>
-                <li><a href="<?php echo URLROOT; ?>/CustomerController/index"><i class="fas fa-globe"></i>
-                    </a></li>
+                <li>
+                    <?php if (isset($_SESSION['role'])): ?>
+                        <?php if ($_SESSION['role'] === 'guest'): ?>
+                            <a href="<?php echo URLROOT; ?>/HomeController/index"><i class="fas fa-globe"></i></a>
+                        <?php elseif ($_SESSION['role'] === 'customer'): ?>
+                            <a href="<?php echo URLROOT; ?>/CustomerController/index"><i class="fas fa-globe"></i></a>
+                        <?php elseif ($_SESSION['role'] === 'supplier'): ?>
+                            <a href="<?php echo URLROOT; ?>/SupplierController/index"><i class="fas fa-globe"></i></a>
+                        <?php elseif ($_SESSION['role'] === 'service_provider'): ?>
+                            <a href="<?php echo URLROOT; ?>/ServiceProviderController/index"><i class="fas fa-globe"></i></a>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <a href="<?php echo URLROOT; ?>/GuestController/index"><i class="fas fa-globe"></i></a>
+                    <?php endif; ?>
+                </li>
                 <li><a href="<?php echo URLROOT; ?>/StorePageController/index"><i class="fas fa-home"></i>
                         Home</a></li>
                 <li><a href="<?php echo URLROOT; ?>/StorePageController/wishList" ><i

@@ -141,12 +141,12 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
                     </div>
                     <div class="form-group">
                         <label>CVV</label>
-                        <input type="text" name="cvv" placeholder="123" maxlength="3" required>
+                        <input type="text" name="cvv" placeholder="678" maxlength="3" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label>Cardholder Name</label>
-                    <input type="text" name="cardholder_name" placeholder="John Doe" required>
+                    <input type="text" name="cardholder_name" placeholder="shashith rashmika" required>
                 </div>
                 <button type="submit" class="pay-button">Pay Now</button>
                 <div class="secure-badge">

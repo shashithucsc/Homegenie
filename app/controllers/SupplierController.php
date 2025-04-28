@@ -41,12 +41,13 @@ class SupplierController extends Controller
 
         $data = [
             'totalSales' => isset($totalSales[0]) ? $totalSales[0]->total_sales : 0,
-            'yourEarnings' => isset($yourEarnings) && isset($yourEarnings->yourEarnings) ? $yourEarnings->yourEarnings : 'N/A',
+            'yourEarnings' => isset($yourEarnings) && isset($yourEarnings->yourEarnings) ? (float) $yourEarnings->yourEarnings : 0,
+
             'totalCustomers' => isset($totalCustomers[0]) ? $totalCustomers[0]->total_customers : 0,
             'totalProducts' => isset($totalProducts[0]) ? $totalProducts[0]->total_products : 0,
             'topProduct' => isset($topProduct[0]) ? $topProduct[0]->item_name : 'N/A',
-            'pendingOrdersCount' => $pendingOrdersCount,
-            'completedOrdersCount' => $completedOrdersCount
+            'pendingOrdersCount' => $pendingOrdersCount ?? 0,
+            'completedOrdersCount' => $completedOrdersCount ?? 0
         ];
 
 

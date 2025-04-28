@@ -9,6 +9,7 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="<?php echo URLROOT ?>/public/css/register.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/password-toggle.css">
     <title>Register as Customer</title>
     <style>
         a {
@@ -129,6 +130,7 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
     </div>
 
     <script src="<?php echo URLROOT ?>/public/js/register.js"></script>
+    <script src="<?php echo URLROOT; ?>/public/js/password-toggle.js"></script>
 </body>
 
 </html>

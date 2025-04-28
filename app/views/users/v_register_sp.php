@@ -9,6 +9,7 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="<?php echo URLROOT ?>/public/css/register.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/password-toggle.css">
     <style>
         a {
             text-decoration: none;
@@ -138,7 +139,10 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                 <div class="flex-row">
                     <div class="input-group">
                         <label for="id-number">National ID Number</label>
-                        <input type="text" id="id-number" name="id_number" required>
+                        <input type="text" id="id-number" name="id_number" required 
+                               pattern="^(?:[0-9]{9}[vVxX]|[0-9]{12})$"
+                               title="Enter a validNIC number. For old format: 9 digits followed by V or X (e.g., 000000000V). For new format: 12 digits (e.g., 197412345678)."
+                               placeholder="Enter NIC number">
                     </div>
                 </div>
                 <div class="flex-row">
@@ -199,6 +203,7 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
         </form>
     </div>
     <script src="<?php echo URLROOT ?>/public/js/register.js"></script>
+    <script src="<?php echo URLROOT; ?>/public/js/password-toggle.js"></script>
 </body>
 
 </html>

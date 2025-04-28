@@ -18,10 +18,11 @@ class SupportSVPModel
     // Create a new issue
     public function createIssue($data)
     {
-        $this->db->query('INSERT INTO issues (user_id, description, status) VALUES (:user_id, :description, "pending")');
+        $this->db->query('INSERT INTO issues (user_id, title, description, status) VALUES (:user_id, :title, :description, "pending")');
         
         // Bind values
         $this->db->bind(':user_id', $data['user_id']);
+        $this->db->bind(':title', $data['title']);
         $this->db->bind(':description', $data['description']);
 
         // Execute

@@ -173,9 +173,10 @@ public function updateAppointmentStatus($appointment_id, $status) {
     return $this->db->execute();
 }
 
-public function updateAppointmentWithRating($appointment_id, $rating) {
-    $this->db->query("UPDATE appointments SET finish_status = 'complete', rating = :rating, updated_at = NOW() WHERE appointment_id = :appointment_id");
+public function updateAppointmentWithRating($appointment_id, $rating, $comment) {
+    $this->db->query("UPDATE appointments SET finish_status = 'complete', rating = :rating, comment = :comment, updated_at = NOW() WHERE appointment_id = :appointment_id");
     $this->db->bind(':rating', $rating);
+    $this->db->bind(':comment', $comment);
     $this->db->bind(':appointment_id', $appointment_id);
     return $this->db->execute();
 }

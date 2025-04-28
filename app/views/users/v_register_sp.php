@@ -19,39 +19,34 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
 </head>
 
 <body>
-    <?php
-        require_once APPROOT . '/views/inc/components/logginNavbar.php';
-    ?>
+    <?php require_once APPROOT . '/views/inc/components/logginNavbar.php'; ?>
 
     <div class="main-container">
-        <!-- <div class="logo">Home<span>Genie</span></div> -->
         <h1>Register As Service Provider</h1>
         <form class="register-form" action="<?php echo URLROOT . '/SignUpController/registerUser'; ?>" method="POST"
             enctype="multipart/form-data">
 
-            <!-- Personal Information -->
             <input type="hidden" name="role" id="role" value="service_provider">
             <fieldset>
                 <legend>Personal Information</legend>
                 <div class="flex-row">
                     <div class="input-group">
                         <label for="first-name">First Name</label>
-                        <input type="text" id="first-name" name="first_name" required placeholder="John">
+                        <input type="text" id="first-name" name="first_name" required placeholder="Sandun">
                     </div>
                     <div class="input-group">
                         <label for="last-name">Last Name</label>
-                        <input type="text" id="last-name" name="last_name" required placeholder="Doe">
+                        <input type="text" id="last-name" name="last_name" required placeholder="Sahiru">
                     </div>
                 </div>
                 <div class="flex-row">
                     <div class="input-group">
                         <label for="contact-number">Contact Number</label>
-                        <input type="tel" id="contact-number" name="contact_number" pattern="[0-9]{10}"
-                            placeholder="07XXXXXXXX" required>
+                        <input type="tel" id="contact-number" name="contact_number" pattern="07[0-9]{8}" placeholder="07XXXXXXXX" title="Invalid Phone Number Format" required>
                     </div>
                     <div class="input-group">
                         <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" required placeholder="john.doe@example.com">
+                        <input type="email" id="email" name="email" required placeholder="sahiru@gmail.com">
                     </div>
                 </div>
                 <div class="flex-row">
@@ -99,7 +94,6 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                 </div>
             </fieldset>
 
-            <!-- Professional Information -->
             <fieldset>
                 <legend>Professional Information</legend>
                 <div class="flex-row">
@@ -123,18 +117,6 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                 </div>
             </fieldset>
 
-            <!-- Portfolio Details -->
-            <fieldset>
-                <legend>Portfolio Details (optional)</legend>
-                <div class="flex-row">
-                    <div class="input-group">
-                        <label for="work-photos">Upload Work Photos</label>
-                        <input type="file" id="work-photos" name="work_photos[]" multiple accept="image/*">
-                    </div>
-                </div>
-            </fieldset>
-
-            <!-- Availability Details -->
             <fieldset>
                 <legend>Availability Details</legend>
                 <div class="flex-row">
@@ -151,7 +133,6 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                 </div>
             </fieldset>
 
-            <!-- Verification Details -->
             <fieldset>
                 <legend>Verification Details</legend>
                 <div class="flex-row">
@@ -172,7 +153,6 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                 </div>
             </fieldset>
 
-            <!-- Login Credentials -->
             <fieldset>
                 <legend>Login Credentials</legend>
                 <div class="flex-row">
@@ -193,7 +173,6 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                 </div>
             </fieldset>
 
-            <!-- Banking and Payment Information -->
             <fieldset>
                 <legend>Banking and Payment Information</legend>
                 <div class="flex-row">
@@ -204,7 +183,6 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                 </div>
             </fieldset>
 
-            <!-- Terms and Conditions -->
             <fieldset>
                 <legend>Terms and Conditions</legend>
                 <div class="flex-row">

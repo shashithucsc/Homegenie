@@ -106,7 +106,6 @@ class SignUpController extends Controller {
                     'bank_details' => trim($_POST['bank_details']),
                     'id_front' => $this->processImageUpload($_FILES['id_front']),
                     'id_back' => $this->processImageUpload($_FILES['id_back']),
-                    'work_photos' => $this->processMultipleImages($_FILES['work_photos'])
                 ];
     
                 $missingProviderFields = $this->validateServiceProviderFields($serviceProviderData);

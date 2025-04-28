@@ -32,22 +32,21 @@
                 <div class="flex-row">
                     <div class="input-group">
                         <label for="first-name">First Name</label>
-                        <input type="text" id="first-name" name="first_name" required placeholder="John">
+                        <input type="text" id="first-name" name="first_name" required placeholder="Sandun">
                     </div>
                     <div class="input-group">
                         <label for="last-name">Last Name</label>
-                        <input type="text" id="last-name" name="last_name" required placeholder="Doe">
+                        <input type="text" id="last-name" name="last_name" required placeholder="Sahiru">
                     </div>
                 </div>
                 <div class="flex-row">
                     <div class="input-group">
                         <label for="contact-number">Contact Number</label>
-                        <input type="tel" id="contact-number" name="contact_number" pattern="[0-9]{10}"
-                            placeholder="07XXXXXXXX" required>
+                        <input type="tel" id="contact-number" name="contact_number" pattern="07[0-9]{8}" placeholder="07XXXXXXXX" title="Invalid Phone Number Format" required>
                     </div>
                     <div class="input-group">
                         <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" required placeholder="john.doe@example.com">
+                        <input type="email" id="email" name="email" required placeholder="sandun@example.com">
                     </div>
                 </div>
 
@@ -94,7 +93,6 @@
                             <option value="Ratnapura">Ratnapura</option>
                             <option value="Trincomalee">Trincomalee</option>
                             <option value="Vavuniya">Vavuniya</option>
-                            <!-- Add more districts -->
                         </select>
                     </div>
                 </div>
@@ -107,7 +105,6 @@
                 </div>
             </fieldset>
 
-            <!-- Verification Details -->
             <fieldset>
                 <legend>Verification Details</legend>
                 <div class="flex-row">
@@ -128,7 +125,6 @@
                 </div>
             </fieldset>
 
-            <!-- Login Credentials -->
             <fieldset>
                 <legend>Login Credentials</legend>
                 <div class="flex-row">

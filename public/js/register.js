@@ -5,8 +5,8 @@ document.querySelector('.register-form').addEventListener('submit', function (ev
     const confirmPassword = document.getElementById('confirm-password').value;
 
     // Validate contact number
-    if (!/^07[0-9]{8}$/.test(contactNumber)) {
-        alert("Invalid contact number. It should follow the format '07XXXXXXXX'.");
+    if (!/^+94[0-9]{9}$/.test(contactNumber)) {
+        alert("Invalid contact number. It should follow the format '+94XXXXXXXX'.");
         event.preventDefault();
         return;
     }

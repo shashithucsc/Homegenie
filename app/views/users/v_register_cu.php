@@ -44,8 +44,7 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                 <div class="flex-row">
                     <div class="input-group">
                         <label for="contact-number">Contact Number</label>
-                        <input type="tel" id="contact-number" name="contact_number" pattern="\+94[0-9]{9}"
-                            placeholder="+94XXXXXXXXX" required>
+                        <input type="tel" id="contact-number" name="contact_number" pattern="07[0-9]{8}" placeholder="07XXXXXXXX" title="Invalid Phone Number Format" required>
                     </div>
                     <div class="input-group">
                         <label for="email">Email Address</label>

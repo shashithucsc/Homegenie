@@ -228,7 +228,7 @@ class StorePagesModel {
     
     
     
-    //seasonal offers section
+   
     public function getSeasonalOffers() {
         $query = "SELECT id, description, image FROM seasonal_offers";
         $this->db->query($query);
@@ -265,7 +265,7 @@ class StorePagesModel {
     }
     public function saveItem($user_id, $item_id)
     {
-        // First, check if item already exists in wishlist
+       
         $this->db->query('SELECT * FROM saved_items WHERE user_id = :user_id AND item_id = :item_id');
         $this->db->bind(':user_id', $user_id);
         $this->db->bind(':item_id', $item_id);
@@ -275,7 +275,7 @@ class StorePagesModel {
             return 'exists';
         }
     
-        // If not exists, insert the item
+        
         $this->db->query('INSERT INTO saved_items (user_id, item_id) VALUES (:user_id, :item_id)');
         $this->db->bind(':user_id', $user_id);
         $this->db->bind(':item_id', $item_id);
@@ -371,7 +371,7 @@ class StorePagesModel {
         $this->db->bind(':searchQuery', '%' . $searchQuery . '%');
         $results = $this->db->resultSet();
     
-        // Attach comments to each item
+       
         foreach ($results as &$item) {
             $item->comments = $this->getReviewsByItemId($item->item_id);
         }

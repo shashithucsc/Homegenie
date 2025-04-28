@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/supplierProfile.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/supplierSidebar.css">
 
-    <!-- Add Font Awesome for icons -->
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   
 </head>
@@ -15,7 +15,7 @@
 <?php require APPROOT . '/views/supplier/admin/sidebar.php'; ?>
     
     <div class="profile-container">
-        <!-- Profile Header -->
+       
         <div class="profile-header">
             <div class="profile-cover">
                 <div class="profile-image-wrapper">

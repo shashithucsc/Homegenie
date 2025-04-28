@@ -271,7 +271,7 @@ class SupplierController extends Controller
     public function updateProfile()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Sanitize POST data
+           
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
             $data = [
@@ -289,7 +289,7 @@ class SupplierController extends Controller
                 'message' => '' 
             ];
 
-            // Validate required fields
+            
             if (
                 empty($data['first_name']) || empty($data['last_name']) || empty($data['contact_number']) ||
                 empty($data['street']) || empty($data['district']) || empty($data['province'])
@@ -312,7 +312,7 @@ class SupplierController extends Controller
         }
     }
 
-    // Update profile picture
+   
     public function updateProfilePicture()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {

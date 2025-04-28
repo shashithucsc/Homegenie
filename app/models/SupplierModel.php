@@ -22,7 +22,7 @@ class SupplierModel {
 
     public function getTotalCustomers($userId) {
         $this->db->query("SELECT COUNT(DISTINCT customer_id) AS total_customers FROM sales_orders WHERE supplier_id = :user_id");
-        $this->db->bind(':user_id', $userId); // Make sure you use supplier_id here
+        $this->db->bind(':user_id', $userId); 
         $results = $this->db->resultSet();
         return $results;
     }
@@ -131,7 +131,7 @@ class SupplierModel {
 
     public function getPendingOrders($supplierId)
 {
-    // Query to fetch pending orders with item details
+    
     $this->db->query(
         "SELECT 
             so.id AS order_id,
@@ -143,7 +143,7 @@ class SupplierModel {
             si.item_id,
             si.quantity,
             si.price,
-            i.item_name, -- Include the item name from the inventory table
+            i.item_name, 
             u.first_name AS customer_name,
             u.contact_number,
             u.email
@@ -152,7 +152,7 @@ class SupplierModel {
          JOIN 
             sales_items si ON so.id = si.sale_id
          JOIN 
-            inventory i ON si.item_id = i.item_id -- Join with inventory table to get item details
+            inventory i ON si.item_id = i.item_id 
          JOIN 
             users u ON so.customer_id = u.user_id
          WHERE 
@@ -161,37 +161,37 @@ class SupplierModel {
             so.created_at DESC"
     );
 
-    // Bind the supplier ID
+    
     $this->db->bind(':supplier_id', $supplierId);
 
-    // Return the result set, defaulting to an empty array if null
+   
     return $this->db->resultSet() ?? [];
 }
 
 
 public function updateOrderStatus($orderId, $status)
 {
-    // Update the status of the sales order
+   
     $this->db->query("UPDATE sales_orders SET status = :status WHERE id = :order_id");
     $this->db->bind(':status', $status);
     $this->db->bind(':order_id', $orderId);
 
-    // Execute the update for the sales_orders table
+  
     $this->db->execute();
 
-    // Update the status of the sales items associated with the order
+   
     $this->db->query("UPDATE sales_items SET status = :status WHERE sale_id = :order_id");
     $this->db->bind(':status', $status);
     $this->db->bind(':order_id', $orderId);
 
-    // Execute the update for the sales_items table
+   
     return $this->db->execute();
 }
 
 
 public function getCompletedOrders($supplierId)
 {
-    // Query to fetch pending orders with item details
+   
     $this->db->query(
         "SELECT 
             so.id AS order_id,
@@ -203,7 +203,7 @@ public function getCompletedOrders($supplierId)
             si.item_id,
             si.quantity,
             si.price,
-            i.item_name, -- Include the item name from the inventory table
+            i.item_name, 
             u.first_name AS customer_name,
             u.contact_number,
             u.email
@@ -212,7 +212,7 @@ public function getCompletedOrders($supplierId)
          JOIN 
             sales_items si ON so.id = si.sale_id
          JOIN 
-            inventory i ON si.item_id = i.item_id -- Join with inventory table to get item details
+            inventory i ON si.item_id = i.item_id 
          JOIN 
             users u ON so.customer_id = u.user_id
          WHERE 
@@ -221,10 +221,10 @@ public function getCompletedOrders($supplierId)
             so.created_at DESC"
     );
 
-    // Bind the supplier ID
+    
     $this->db->bind(':supplier_id', $supplierId);
 
-    // Return the result set, defaulting to an empty array if null
+  
     return $this->db->resultSet() ?? [];
 }
 
@@ -241,7 +241,7 @@ public function getSupplierById($userId) {
     return $this->db->single();
 }
 
-// Fetch supplier's products
+
 public function getProductsBySupplier($userId) {
     $sql = "SELECT * FROM inventory WHERE user_id = :user_id";
     $this->db->query($sql);
@@ -249,9 +249,9 @@ public function getProductsBySupplier($userId) {
     return $this->db->resultSet();
 }
 
-// Update supplier profile
+
 public function updateSupplierProfile($data) {
-    // Update users table
+   
     $sql = "UPDATE users
             SET first_name = :first_name, 
                 last_name = :last_name, 
@@ -262,7 +262,7 @@ public function updateSupplierProfile($data) {
             WHERE user_id = :user_id";
     $this->db->query($sql);
 
-    // Bind user details
+   
     $this->db->bind(':first_name', $data['first_name']);
     $this->db->bind(':last_name', $data['last_name']);
     $this->db->bind(':contact_number', $data['contact_number']);
@@ -272,7 +272,7 @@ public function updateSupplierProfile($data) {
     $this->db->bind(':user_id', $data['user_id']);
     $this->db->execute();
 
-    // Update supplier details
+    
     $sql = "UPDATE suppliers
             SET expertise = :expertise, 
                 description = :description,
@@ -290,7 +290,7 @@ public function updateSupplierProfile($data) {
     return $this->db->execute();
 }
 
-// Update profile picture
+
 public function updateProfilePicture($userId, $profileImage) {
     $sql = "UPDATE users SET profile_image = :profile_image WHERE user_id = :user_id";
     $this->db->query($sql);

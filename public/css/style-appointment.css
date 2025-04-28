@@ -87,34 +87,48 @@ body {
     display: block;
 }
 
+.info-gridb {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
 .info-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
     margin-top: 2rem;
 }
-
 .info-item {
     background-color: var(--white);
-    border-radius: 10px;
+    border-radius: 15px;
     box-shadow: var(--shadow-sm);
     padding: 1.5rem;
     transition: var(--transition);
     display: flex;
     align-items: flex-start;
     position: relative;
+    border: 1px solid #e5e7eb;
 }
 
 .info-item:hover {
-    transform: translateY(-10px);
+    transform: translateY(-5px);
     box-shadow: var(--shadow-md);
 }
 
 .info-item i {
-    font-size: 2rem;
+    font-size: 1.8rem;
     color: var(--primary-color);
-    margin-right: 1rem;
-    margin-top: 0.5rem;
+    margin-right: 1.2rem;
+    margin-top: 0.2rem;
+    background-color: rgba(37, 99, 235, 0.1);
+    padding: 0.8rem;
+    border-radius: 10px;
+    height: 3.5rem;
+    width: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .info-item .content {
@@ -122,59 +136,28 @@ body {
 }
 
 .field {
-    margin-bottom: 0.8rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
 }
 
-.field:last-child {
-    margin-bottom: 0;
+.field:not(:last-child) {
+    border-bottom: 1px solid #f0f0f0;
 }
 
 .field label {
     font-weight: 600;
-    color: var(--text-color);
+    color: #4b5563;
     display: block;
     margin-bottom: 0.3rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .field span {
-    color: #666;
-}
-
-.action-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-top: 1rem;
-    border-top: 1px solid #e5e7eb;
-    padding-top: 1rem;
-}
-
-.btn,
-.edit-btn,
-.delete-btn {
-    width: 100%;
-    padding: 0.6rem 1rem;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    font-weight: 500;
-    background-color: var(--primary-color);
-    color: white;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-}
-
-.btn i,
-.edit-btn i,
-.delete-btn i {
-    font-size: 1.1rem;
-}
-
-.delete-btn {
-    background-color: #ef4444;
+    color: var(--text-color);
+    font-size: 1rem;
+    display: block;
 }
 
 form.payment-form {
@@ -269,8 +252,77 @@ form.payment-form {
     outline: none;
     box-shadow: 0 0 0 2px rgba(60, 166, 166, 0.2);
 }
+.action-buttons {
+    display: flex;
+    gap: 0.7rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    background: transparent;
+}
 
-/* Animations */
+.btn-pay {
+    width: 100%;
+    height: 2.5rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: var(--transition);
+    position: relative;
+    color: white;
+    background-color: #007bff;
+}
+.edit-btn, 
+.delete-btn, 
+.chat-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: var(--transition);
+    position: relative;
+    padding: 0;
+    margin: 0;
+}
+
+.edit-btn {
+    background-color: #007bff;
+}
+.edit-btn:hover {
+    background-color: #0056b3;
+}
+
+.delete-btn {
+    background-color: #ff0000;
+}
+.delete-btn:hover {
+    background-color: #c80000;
+}
+
+.chat-btn {
+    background-color: #00b009;
+}
+.chat-btn:hover {
+    background-color: #008000;
+}
+
+.edit-btn i, 
+.delete-btn i, 
+.chat-btn i,
+.btn-pay i {
+    font-size: 1.2rem;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 @keyframes slideIn {
     from {
         transform: translateY(20px);
@@ -280,82 +332,4 @@ form.payment-form {
         transform: translateY(0);
         opacity: 1;
     }
-}
-
-/* Simple Button Styles */
-.btn {
-    padding: 0.7rem 1.2rem;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.btn:active {
-    transform: translateY(1px);
-}
-
-.btn-pay {
-    background-color: var(--primary-color);
-    color: var(--white);
-}
-
-.btn-pay:hover {
-    background-color: var(--secondary-color);
-}
-
-.btn-secondary {
-    background-color: #6b7280;
-    color: var(--white);
-}
-
-.btn-secondary:hover {
-    background-color: #4b5563;
-}
-
-.action-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-top: 1rem;
-}
-
-.edit-btn, .delete-btn {
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.edit-btn {
-    background-color: var(--primary-color);
-    color: var(--white);
-}
-
-.delete-btn {
-    background-color: #ef4444;
-    color: var(--white);
-}
-
-.edit-btn:hover {
-    background-color: var(--secondary-color);
-}
-
-.delete-btn:hover {
-    background-color: #dc2626;
-}
-
-.edit-btn i, .delete-btn i {
-    font-size: 1.1rem;
 }

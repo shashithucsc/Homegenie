@@ -32,50 +32,56 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
         <!-- Upcoming Appointments Tab -->
         <div class="tab-content active" id="pending-tab">
             <section class="tab-section">
-                <?php if(empty($data['p_appointments'])): ?>
+                <?php if (empty($data['p_appointments'])): ?>
                     <div class="no-appointments">
                         <p>You don't have any appointments yet.</p>
-                        <a href="<?php echo URLROOT; ?>/CustomerController/bookAppointment" class="btn btn-pay"><i class='bx bx-calendar-plus'></i> Book an Appointment</a>
+                        <a href="<?php echo URLROOT; ?>/CustomerController/services" class="btn btn-pay"><i
+                                class='bx bx-calendar-plus'></i> Book an Appointment</a>
                     </div>
                 <?php else: ?>
-                <div class="info-grid">
-                    <?php foreach ($data['p_appointments'] as $p_appointment): ?>
-                        <div class="info-item">
-                            <i class='bx bx-calendar-check'></i>
-                            <div class="content">
-                                <div class="field">
-                                    <label>Service Provider:</label>
-                                    <span><?php echo htmlspecialchars($p_appointment->sp_first_name . ' ' . $p_appointment->sp_last_name); ?></span>
-                                </div>
-                                <div class="field">
-                                    <label>Date:</label>
-                                    <span><?php echo htmlspecialchars($p_appointment->appointment_date); ?></span>
-                                </div>
-                                <div class="field">
-                                    <label>Time:</label>
-                                    <span><?php echo htmlspecialchars($p_appointment->appointment_time); ?></span>
-                                </div>
-                                <div class="field">
-                                    <label>Notes:</label>
-                                    <span><?php echo htmlspecialchars($p_appointment->description); ?></span>
-                                </div>
-                                <div class="action-buttons">
-                                    <span class="edit-btn" 
-                                        onclick="openEditModal(
+                    <div class="info-grid">
+                        <?php foreach ($data['p_appointments'] as $p_appointment): ?>
+                            <div class="info-item">
+                                <i class='bx bx-calendar-check'></i>
+                                <div class="content">
+                                    <div class="field">
+                                        <label>Service Provider:</label>
+                                        <span><?php echo htmlspecialchars($p_appointment->sp_first_name . ' ' . $p_appointment->sp_last_name); ?></span>
+                                    </div>
+                                    <div class="field">
+                                        <label>Date:</label>
+                                        <span><?php echo htmlspecialchars($p_appointment->appointment_date); ?></span>
+                                    </div>
+                                    <div class="field">
+                                        <label>Time:</label>
+                                        <span><?php echo htmlspecialchars($p_appointment->appointment_time); ?></span>
+                                    </div>
+                                    <div class="field">
+                                        <label>Notes:</label>
+                                        <span><?php echo htmlspecialchars($p_appointment->description); ?></span>
+                                    </div>
+                                    <div class="action-buttons">
+                                        <span class="edit-btn"
+                                            onclick="openEditModal(
                                             <?php echo $p_appointment->appointment_id; ?>, 
                                             '<?php echo $p_appointment->appointment_date; ?>', 
                                             '<?php echo $p_appointment->appointment_time; ?>', 
                                             '<?php echo addslashes(htmlspecialchars($p_appointment->description)); ?>')">
-                                        Reschedule
-                                    </span>
-                                    <span class="delete-btn" onclick="deleteAppointment(<?php echo $p_appointment->appointment_id; ?>)">
-                                        Cancel
-                                    </span>
+                                            <i class='bx bx-calendar-edit'></i>
+                                        </span>
+                                        <span class="delete-btn"
+                                            onclick="deleteAppointment(<?php echo $p_appointment->appointment_id; ?>)">
+                                            <i class='bx bx-calendar-x'></i>
+                                        </span>
+                                        <a href="<?php echo URLROOT; ?>/ChatController/index/<?php echo $p_appointment->service_provider_id; ?>"
+                                            class="chat-btn">
+                                            <i class='bx bx-message-square-dots'></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
+                        <?php endforeach; ?>
+                    </div>
                 <?php endif; ?>
             </section>
 
@@ -83,25 +89,28 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
                 <div class="modal-content">
                     <span class="close" onclick="closeEditModal()">&times;</span>
                     <h2>Edit Appointment</h2>
-                    <form id="editForm" method="POST" action="<?php echo URLROOT; ?>/CustomerController/editAppointment">
+                    <form id="editForm" method="POST"
+                        action="<?php echo URLROOT; ?>/CustomerController/editAppointment">
                         <input type="hidden" name="id" id="editId">
                         <div class="form-group">
                             <label for="editDate">Date:</label>
                             <input type="date" class="form-control" name="date" id="editDate" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="editTime">Time:</label>
                             <input type="time" class="form-control" name="time" id="editTime" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="editNotes">Notes:</label>
                             <textarea class="form-control" name="notes" id="editNotes" rows="4"></textarea>
                         </div>
-                        
-                        <div class="form-group" style="text-align: right; display:flex; flex-direction: column; gap: 10px;">
-                            <button type="button" onclick="closeEditModal()" class="btn btn-secondary" style="margin-right: 10px;">Cancel</button>
+
+                        <div class="form-group"
+                            style="text-align: right; display:flex; flex-direction: column; gap: 10px;">
+                            <button type="button" onclick="closeEditModal()" class="btn btn-secondary"
+                                style="margin-right: 10px;">Cancel</button>
                             <button type="submit" class="btn">Save Changes</button>
                         </div>
                     </form>
@@ -112,61 +121,68 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
         <!-- Completed Appointments Tab -->
         <div class="tab-content" id="approved-tab">
             <section class="tab-section">
-                <?php if(empty($data['a_appointments'])): ?>
+                <?php if (empty($data['a_appointments'])): ?>
                     <div class="no-appointments">
                         <p>You don't have any appointments yet.</p>
                     </div>
                 <?php else: ?>
-                <div class="info-grid">
-                    <?php foreach ($data['a_appointments'] as $a_appointment): ?>
-                        <div class="info-item">
-                            <i class='bx bx-calendar-check'></i>
-                            <div class="content">
-                                <div class="field">
-                                    <label>Service Provider:</label>
-                                    <span><?php echo htmlspecialchars($a_appointment->sp_first_name . ' ' . $a_appointment->sp_last_name); ?></span>
-                                </div>
-                                <div class="field">
-                                    <label>Date:</label>
-                                    <span><?php echo htmlspecialchars($a_appointment->appointment_date); ?></span>
-                                </div>
-                                <div class="field">
-                                    <label>Time:</label>
-                                    <span><?php echo htmlspecialchars($a_appointment->appointment_time); ?></span>
-                                </div>
-                                <div class="field">
-                                    <label>Notes:</label>
-                                    <span><?php echo htmlspecialchars($a_appointment->description); ?></span>
-                                </div>
-                                <?php if(isset($a_appointment->quotation_details)): ?>
-                                <div class="field">
-                                    <label>Quotation Details:</label>
-                                    <span><?php echo htmlspecialchars($a_appointment->quotation_details); ?></span>
-                                </div>
-                                <div class="field">
-                                    <label>Work Hours:</label>
-                                    <span><?php echo htmlspecialchars($a_appointment->work_hours); ?> hours</span>
-                                </div>
-                                <div class="field">
-                                    <label>Cost:</label>
-                                    <span>$<?php echo number_format($a_appointment->cost, 2); ?></span>
-                                </div>
-                                <?php endif; ?>
-                                <div class="action-buttons">
-                                    <form action="<?php echo URLROOT; ?>/CustomerController/payment/<?php echo $a_appointment->appointment_id; ?>" method="POST" class="payment-form">
-                                        <input type="hidden" name="amount" value="<?php echo $a_appointment->cost; ?>">
-                                        <button type="submit" class="btn btn-pay">
-                                            Pay Now
-                                        </button>
-                                    </form>
-                                    <span class="delete-btn" onclick="cancelAppointment(<?php echo $a_appointment->appointment_id; ?>)">
-                                        Cancel
-                                    </span>
+                    <div class="info-gridb">
+                        <?php foreach ($data['a_appointments'] as $a_appointment): ?>
+                            <div class="info-item">
+                                <i class='bx bx-calendar-check'></i>
+                                <div class="content">
+                                    <div class="field">
+                                        <label>Service Provider:</label>
+                                        <span><?php echo htmlspecialchars($a_appointment->sp_first_name . ' ' . $a_appointment->sp_last_name); ?></span>
+                                    </div>
+                                    <div class="field">
+                                        <label>Date:</label>
+                                        <span><?php echo htmlspecialchars($a_appointment->appointment_date); ?></span>
+                                    </div>
+                                    <div class="field">
+                                        <label>Time:</label>
+                                        <span><?php echo htmlspecialchars($a_appointment->appointment_time); ?></span>
+                                    </div>
+                                    <div class="field">
+                                        <label>Notes:</label>
+                                        <span><?php echo htmlspecialchars($a_appointment->description); ?></span>
+                                    </div>
+                                    <?php if (isset($a_appointment->quotation_details)): ?>
+                                        <div class="field">
+                                            <label>Quotation Details:</label>
+                                            <span><?php echo htmlspecialchars($a_appointment->quotation_details); ?></span>
+                                        </div>
+                                        <div class="field">
+                                            <label>Work Hours:</label>
+                                            <span><?php echo htmlspecialchars($a_appointment->work_hours); ?> hours</span>
+                                        </div>
+                                        <div class="field">
+                                            <label>Cost:</label>
+                                            <span>$<?php echo number_format($a_appointment->cost, 2); ?></span>
+                                        </div>
+                                    <?php endif; ?>
+                                    <div class="action-buttons">
+                                        <form
+                                            action="<?php echo URLROOT; ?>/CustomerController/payment/<?php echo $a_appointment->appointment_id; ?>"
+                                            method="POST" class="payment-form">
+                                            <input type="hidden" name="amount" value="<?php echo $a_appointment->cost; ?>">
+                                            <button type="submit" class="btn btn-pay">
+                                                Pay Now
+                                            </button>
+                                        </form>
+                                        <span class="delete-btn"
+                                            onclick="cancelAppointment(<?php echo $a_appointment->appointment_id; ?>)">
+                                            <i class='bx bx-x'></i>
+                                        </span>
+                                        <a href="<?php echo URLROOT; ?>/ChatController/index/<?php echo $p_appointment->service_provider_id; ?>"
+                                            class="chat-btn">
+                                            <i class='bx bx-message-square-dots'></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
+                        <?php endforeach; ?>
+                    </div>
                 <?php endif; ?>
             </section>
         </div>
@@ -192,7 +208,7 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
         }
 
         // Close modal when clicking outside of it
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             if (event.target == document.getElementById('editModal')) {
                 closeEditModal();
             }
@@ -208,11 +224,11 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 const tabId = tab.getAttribute('data-tab');
-                
+
                 // Remove active class from all tabs and contents
                 tabs.forEach(t => t.classList.remove('active'));
                 tabContents.forEach(c => c.classList.remove('active'));
-                
+
                 // Add active class to clicked tab and corresponding content
                 tab.classList.add('active');
                 document.getElementById(tabId + '-tab').classList.add('active');
@@ -220,6 +236,30 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
         });
     </script>
     <script src="<?php echo URLROOT; ?>/public/js/script-index.js"></script>
+
+    <!-- <style>
+        .chat-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background 0.3s;
+        }
+
+        .chat-btn:hover {
+            background: #45a049;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+    </style> -->
 
 </body>
 

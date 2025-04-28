@@ -270,7 +270,7 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
                 </div>
                 <div class="form-group">
                     <label for="comment">Comment</label>
-                    <textarea id="comment" name="comment" rows="4"></textarea>
+                    <textarea id="comment" name="comment" rows="4" required></textarea>
                 </div>
                 <div class="form-group" style="text-align: right; margin-top: 20px;">
                     <button type="button" onclick="closeRatingModal()"

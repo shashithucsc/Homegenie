@@ -261,6 +261,7 @@ class CustomerController extends Controller {
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
             
             $rating = isset($_POST['rating']) ? (int)$_POST['rating'] : 0;
+            $comment = isset($_POST['comment']) ? $_POST['comment'] : '';
             
             // Validate rating (1-5)
             if($rating < 1 || $rating > 5) {
@@ -269,7 +270,7 @@ class CustomerController extends Controller {
                 exit;
             }
             
-            if($this->CustomerModel->updateAppointmentWithRating($appointment_id, $rating)) {
+            if($this->CustomerModel->updateAppointmentWithRating($appointment_id, $rating, $comment)) {
                 flash('appointment_success', 'Appointment rated successfully!');
             } else {
                 flash('appointment_error', 'Failed to rate appointment', 'alert alert-danger');

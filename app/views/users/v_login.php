@@ -19,20 +19,20 @@
             <h2 class="title">Login</h2>
             <form action="<?php echo URLROOT; ?>/LoginController/login" method="POST">
 
-                <div class="input-field">
+                <div class="input-field <?php echo isset($data['email_err']) && !empty($data['email_err']) ? 'error' : ''; ?>">
                     <input type="text" name="email" placeholder="Email"
                         value="<?php echo isset($data['email']) ? $data['email'] : ''; ?>" required>
-                    <span class="error-message">
-                        <?php echo isset($data['email_err']) ? $data['email_err'] : ''; ?>
-                    </span>
+                    <?php if(isset($data['email_err']) && !empty($data['email_err'])): ?>
+                        <span class="error-message"><?php echo $data['email_err']; ?></span>
+                    <?php endif; ?>
                 </div>
 
-                <div class="input-field">
+                <div class="input-field <?php echo isset($data['password_err']) && !empty($data['password_err']) ? 'error' : ''; ?>">
                     <input type="password" name="password" placeholder="Password"
                         value="<?php echo isset($data['password']) ? $data['password'] : ''; ?>" required>
-                    <span class="error-message">
-                        <?php echo isset($data['password_err']) ? $data['password_err'] : ''; ?>
-                    </span>
+                    <?php if(isset($data['password_err']) && !empty($data['password_err'])): ?>
+                        <span class="error-message"><?php echo $data['password_err']; ?></span>
+                    <?php endif; ?>
                 </div>
                 <input type="submit" class="login-btn" value="Login">
 

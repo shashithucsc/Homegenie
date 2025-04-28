@@ -12,7 +12,22 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
+    <style>
+        .chat-btn {
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background 0.3s;
+        }
 
+        .chat-btn:hover {
+            background: #45a049;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -86,6 +101,9 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                             <button class="action-btn reject-btn" onclick="rejectAppointment(<?= $appointment->appointment_id ?>)">
                                 <i class="fas fa-times"></i> Reject
                             </button>
+                            <a href="<?php echo URLROOT; ?>/SpChatController/index/<?= $appointment->customer_id ?>" class="action-btn chat-btn">
+                                <i class="fas fa-comment"></i> Chat
+                            </a>
                         </div>
                         <div class="appointment-status">Pending</div>
                     </div>

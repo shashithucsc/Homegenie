@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="<?php echo URLROOT ?>/public/css/register.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/public/css/password-toggle.css">
     <style>
         a {
             text-decoration: none;
@@ -173,6 +174,7 @@
         </form>
     </div>
     <script src="<?php echo URLROOT ?>/public/js/register.js"></script>
+    <script src="<?php echo URLROOT; ?>/public/js/password-toggle.js"></script>
 </body>
 
 </html>

@@ -139,7 +139,7 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
                 </div>
                 <div class="form-group">
                     <label>Cardholder Name</label>
-                    <input type="text" name="cardholder_name" placeholder="John Doe" required>
+                    <input type="text" name="cardholder_name" placeholder="Sandun Sahiru" required>
                 </div>
                 <button type="submit" class="pay-button">Pay Now</button>
                 <div class="secure-badge">
@@ -151,14 +151,12 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
     </section>
 
     <script>
-        // Format card number input
         document.querySelector('input[name="card_number"]').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             value = value.replace(/(\d{4})/g, '$1 ').trim();
             e.target.value = value;
         });
 
-        // Format expiry date input
         document.querySelector('input[name="expiry_date"]').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length >= 2) {
@@ -167,7 +165,6 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
             e.target.value = value;
         });
 
-        // Format CVV input
         document.querySelector('input[name="cvv"]').addEventListener('input', function(e) {
             e.target.value = e.target.value.replace(/\D/g, '');
         });

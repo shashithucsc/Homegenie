@@ -29,7 +29,6 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
             <div class="tab" data-tab="approved">Pending Payment</div>
         </div>
 
-        <!-- Upcoming Appointments Tab -->
         <div class="tab-content active" id="pending-tab">
             <section class="tab-section">
                 <?php if (empty($data['p_appointments'])): ?>
@@ -85,40 +84,39 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
                 <?php endif; ?>
             </section>
 
-            <div id="editModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closeEditModal()">&times;</span>
-                    <h2>Edit Appointment</h2>
-                    <form id="editForm" method="POST"
-                        action="<?php echo URLROOT; ?>/CustomerController/editAppointment">
-                        <input type="hidden" name="id" id="editId">
-                        <div class="form-group">
-                            <label for="editDate">Date:</label>
-                            <input type="date" class="form-control" name="date" id="editDate" required>
-                        </div>
+        </div>
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeEditModal()">&times;</span>
+                <h2>Edit Appointment</h2>
+                <form id="editForm" method="POST"
+                    action="<?php echo URLROOT; ?>/CustomerController/editAppointment">
+                    <input type="hidden" name="id" id="editId">
+                    <div class="form-group">
+                        <label for="editDate">Date:</label>
+                        <input type="date" class="form-control" name="date" id="editDate" required min="<?= date('Y-m-d') ?>">
+                    </div>
 
-                        <div class="form-group">
-                            <label for="editTime">Time:</label>
-                            <input type="time" class="form-control" name="time" id="editTime" required>
-                        </div>
+                    <div class="form-group">
+                        <label for="editTime">Time:</label>
+                        <input type="time" class="form-control" name="time" id="editTime" required min="09:00" max="18:00" step="1800">
+                    </div>
 
-                        <div class="form-group">
-                            <label for="editNotes">Notes:</label>
-                            <textarea class="form-control" name="notes" id="editNotes" rows="4"></textarea>
-                        </div>
+                    <div class="form-group">
+                        <label for="editNotes">Notes:</label>
+                        <textarea class="form-control" name="notes" id="editNotes" rows="4"></textarea>
+                    </div>
 
-                        <div class="form-group"
-                            style="text-align: right; display:flex; flex-direction: column; gap: 10px;">
-                            <button type="button" onclick="closeEditModal()" class="btn btn-secondary"
-                                style="margin-right: 10px;">Cancel</button>
-                            <button type="submit" class="btn">Save Changes</button>
-                        </div>
-                    </form>
-                </div>
+                    <div class="form-group"
+                        style="text-align: right; display:flex; flex-direction: column; gap: 10px;">
+                        <button type="button" onclick="closeEditModal()" class="btn btn-secondary"
+                            style="margin-right: 10px;">Cancel</button>
+                        <button type="submit" class="btn">Save Changes</button>
+                    </div>
+                </form>
             </div>
         </div>
 
-        <!-- Completed Appointments Tab -->
         <div class="tab-content" id="approved-tab">
             <section class="tab-section">
                 <?php if (empty($data['a_appointments'])): ?>
@@ -174,10 +172,6 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
                                             onclick="cancelAppointment(<?php echo $a_appointment->appointment_id; ?>)">
                                             <i class='bx bx-x'></i>
                                         </span>
-                                        <a href="<?php echo URLROOT; ?>/ChatController/index/<?php echo $p_appointment->service_provider_id; ?>"
-                                            class="chat-btn">
-                                            <i class='bx bx-message-square-dots'></i>
-                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -207,17 +201,14 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
             }
         }
 
-        // Close modal when clicking outside of it
         window.onclick = function (event) {
             if (event.target == document.getElementById('editModal')) {
                 closeEditModal();
             }
         }
     </script>
-    <script src="<?php echo URLROOT; ?>/public/js/script-index.js"></script>
 
     <script>
-        // Tab switching functionality
         const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-content');
 
@@ -225,41 +216,15 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
             tab.addEventListener('click', () => {
                 const tabId = tab.getAttribute('data-tab');
 
-                // Remove active class from all tabs and contents
                 tabs.forEach(t => t.classList.remove('active'));
                 tabContents.forEach(c => c.classList.remove('active'));
-
-                // Add active class to clicked tab and corresponding content
+            
                 tab.classList.add('active');
                 document.getElementById(tabId + '-tab').classList.add('active');
             });
         });
     </script>
     <script src="<?php echo URLROOT; ?>/public/js/script-index.js"></script>
-
-    <!-- <style>
-        .chat-btn {
-            background: #4CAF50;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 5px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: background 0.3s;
-        }
-
-        .chat-btn:hover {
-            background: #45a049;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-    </style> -->
 
 </body>
 

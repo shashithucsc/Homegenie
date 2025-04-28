@@ -163,7 +163,7 @@
 </head>
 
 <body>
-    <?php require_once APPROOT . '/views/Customer/loggedNavBar.php'; ?>
+    <?php require_once APPROOT . '/views/ServiceProvider/navbar_svp.php'; ?>
     <div class="chat-container">
         <div class="chat-header">
             <div class="user-info">
@@ -171,7 +171,7 @@
                     alt="Profile Picture" class="profile-pic">
                 <h2><?php echo $data['other_user']->first_name . ' ' . $data['other_user']->last_name; ?></h2>
             </div>
-            <a href="<?php echo URLROOT; ?>/CustomerController/appointment" class="back-btn"><i
+            <a href="<?php echo URLROOT; ?>/ServiceProviderController/appointments" class="back-btn"><i
                     class='bx bx-arrow-back'></i> Back to Appointments</a>
         </div>
 
@@ -186,7 +186,7 @@
             <?php endforeach; ?>
         </div>
 
-        <form action="<?php echo URLROOT; ?>/ChatController/sendMessage" method="POST" class="chat-input-form">
+        <form action="<?php echo URLROOT; ?>/SpChatController/sendMessage" method="POST" class="chat-input-form">
             <input type="hidden" name="receiver_id" value="<?php echo $data['other_user']->user_id; ?>">
             <div class="input-group">
                 <textarea name="message" placeholder="Type your message..." required></textarea>
@@ -200,7 +200,6 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         });
     </script>
-    <script src="<?php echo URLROOT; ?>/public/js/script-index.js"></script>
 </body>
 
 </html>

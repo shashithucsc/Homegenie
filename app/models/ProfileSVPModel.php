@@ -23,7 +23,7 @@ class ProfileSVPModel
         $this->db->bind(':service_provider_id', $service_provider_id);
 
         $row = $this->db->single();
-        return $row;
+        return $row ? $row : null;
     }
 
 

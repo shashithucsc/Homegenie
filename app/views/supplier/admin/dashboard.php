@@ -47,8 +47,14 @@ require_once APPROOT . '/views/supplier/admin/sidebar.php';
                 <div class="supplier-summary-box supplier-earnings-card supplier-card-large" onclick="window.location.href='<?php echo URLROOT; ?>/SupplierController/storeWithdraw'">
                     <h3>Your Earnings</h3>
                     <p class="supplier-amount">
-                        <?php echo isset($data['yourEarnings']) ? '$' . number_format($data['yourEarnings'], 2) : '$0.00'; ?>
-                    </p>
+                    <?php
+if (isset($data['yourEarnings']) && is_numeric($data['yourEarnings'])) {
+    echo '$' . number_format($data['yourEarnings'], 2);
+} else {
+    echo '$0.00';
+}
+?>
+ </p>
                     <div class="supplier-card-icon"><i class="fas fa-wallet"></i></div>
                 </div>
 

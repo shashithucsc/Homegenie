@@ -20,7 +20,7 @@
             <form action="<?php echo URLROOT; ?>/LoginController/login" method="POST">
 
                 <div class="input-field">
-                    <input type="text" name="email" placeholder="Email or Phone Number"
+                    <input type="text" name="email" placeholder="Email"
                         value="<?php echo isset($data['email']) ? $data['email'] : ''; ?>" required>
                     <span class="error-message">
                         <?php echo isset($data['email_err']) ? $data['email_err'] : ''; ?>

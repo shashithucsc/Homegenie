@@ -91,7 +91,7 @@ class StorePageController extends Controller
 
 
 
-    //   Wishlist function
+   
     public function wishlist()
     {
         if (!isset($_SESSION['user_id'])) {
@@ -117,7 +117,7 @@ class StorePageController extends Controller
         }
 
         if (!isset($_POST['item_id'])) {
-            $this->showPopup("Item ID not provided.", URLROOT . "/StorePagesController/wishlist");
+            $this->showPopup("Item ID not provided.", URLROOT . "/StorePageController/wishlist");
             return;
         }
 
@@ -125,9 +125,9 @@ class StorePageController extends Controller
         $item_id = $_POST['item_id'];
 
         if ($this->StorePagesModel->removeSavedItem($user_id, $item_id)) {
-            $this->showPopup("Item removed from wishlist successfully!", URLROOT . "/StorePagesController/wishlist");
+            $this->showPopup("Item removed from wishlist successfully!", URLROOT . "/StorePageController/wishlist");
         } else {
-            $this->showPopup("Failed to remove item from wishlist.", URLROOT . "/StorePagesController/wishlist");
+            $this->showPopup("Failed to remove item from wishlist.", URLROOT . "/StorePageController/wishlist");
         }
     }
 
@@ -141,7 +141,7 @@ class StorePageController extends Controller
             }
 
             if (!isset($_POST['item_id'])) {
-                $this->showPopup("Missing required form fields.", URLROOT . "/StorePagesController");
+                $this->showPopup("Missing required form fields.", URLROOT . "/StorePageController");
                 return;
             }
 
@@ -151,11 +151,11 @@ class StorePageController extends Controller
             $result = $this->StorePagesModel->saveItem($user_id, $item_id);
 
             if ($result === 'saved') {
-                $this->showPopup("Item added to wishlist!", URLROOT . "/StorePagesController");
+                $this->showPopup("Item added to wishlist!", URLROOT . "/StorePageController");
             } elseif ($result === 'exists') {
-                $this->showPopup("Item is already in your wishlist!", URLROOT . "/StorePagesController");
+                $this->showPopup("Item is already in your wishlist!", URLROOT . "/StorePageController");
             } else {
-                $this->showPopup("Something went wrong. Please try again.", URLROOT . "/StorePagesController");
+                $this->showPopup("Something went wrong. Please try again.", URLROOT . "/StorePageController");
             }
         } else {
             die("Invalid request.");
@@ -198,10 +198,10 @@ class StorePageController extends Controller
 
         $customerId = $_SESSION['user_id'];
         $itemId = $_POST['item_id'];
-        $quantity = isset($_POST['quantity']) ? (int) $_POST['quantity'] : 1; // set default quantity 1
+        $quantity = isset($_POST['quantity']) ? (int) $_POST['quantity'] : 1;
 
         if ($quantity <= 0) {
-            $this->showPopup("Invalid quantity.", URLROOT . "/StorePagesController");
+            $this->showPopup("Invalid quantity.", URLROOT . "/StorePageController");
             return;
         }
 

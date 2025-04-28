@@ -52,7 +52,7 @@ class InventoryController extends Controller {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $itemId = trim($_POST['item_id']);
 
-            // Delete item
+            
             if ($this->inventoryModel->deleteItem($itemId)) {
                 header('Location: ' . URLROOT . '/InventoryController');
             } else {
@@ -73,12 +73,12 @@ class InventoryController extends Controller {
                 'quantity' => trim($_POST['quantity'])
             ];
     
-            // Validate inputs
+           
             if ($data['price'] <= 0 || $data['quantity'] < 0) {
                 die('Error: Invalid price or quantity.');
             }
     
-            // Update item
+           
             if ($this->inventoryModel->updateItemDetails($data)) {
                 header('Location: ' . URLROOT . '/InventoryController');
             } else {

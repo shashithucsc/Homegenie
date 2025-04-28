@@ -45,6 +45,14 @@ class InventoryModel {
         return $this->db->execute();
     }
 
+    public function sortItem($userId){
+        $this->db->query("SELECT * FROM inventory WHERE user_id = :user_id ORDER BY item_name ASC");
+        $this->db->query('SELECT TIMESTAMPDIFF(YEAR, join_date, CURDATE()) AS experience_years FROM service_providers WHERE provider_id = :provider_id');
+        $this->db->bind(':user_id', $userId);
+        $results = $this->db->resultSet();
+        return $results;
+    }
+
 
     
 }

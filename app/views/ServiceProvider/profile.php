@@ -29,29 +29,29 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                     $full_stars = floor($rating);
                     $half_star = $rating - $full_stars >= 0.5;
                     $empty_stars = 5 - $full_stars - ($half_star ? 1 : 0);
-                    
+
                     // Display full stars
                     for ($i = 0; $i < $full_stars; $i++) {
                         echo '<i class="fas fa-star"></i>';
                     }
-                    
+
                     // Display half star if needed
                     if ($half_star) {
                         echo '<i class="fas fa-star-half-alt"></i>';
                     }
-                    
+
                     // Display empty stars
                     for ($i = 0; $i < $empty_stars; $i++) {
                         echo '<i class="far fa-star"></i>';
                     }
-                    
+
                     // Display rating number
                     echo '<span class="rating-number">' . number_format($rating, 1) . '</span>';
                     ?>
                 </div>
                 <h2><?php echo htmlspecialchars($data['user']->first_name . ' ' . $data['user']->last_name); ?></h2>
                 <p class="text-secondary"><?php echo htmlspecialchars($data['provider']->expertise); ?></p>
-                
+
                 <!-- Quotation Statistics -->
                 <div class="quotation-stats">
                     <h3 class="stats-title">Quotation Summary</h3>
@@ -105,13 +105,13 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                     </div>
                     <div class="detail-item">
                         <div class="detail-label">Address</div>
-                        <div class="detail-value"><?php 
-                            echo htmlspecialchars(
-                                $data['user']->street . ', ' . 
-                                $data['user']->district . ', ' . 
-                                $data['user']->province
-                            ); 
-                        ?></div>
+                        <div class="detail-value"><?php
+                                                    echo htmlspecialchars(
+                                                        $data['user']->street . ', ' .
+                                                            $data['user']->district . ', ' .
+                                                            $data['user']->province
+                                                    );
+                                                    ?></div>
                     </div>
                 </div>
 
@@ -143,11 +143,31 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                                 <select name="service_areas[]" multiple>
                                     <?php
                                     $districts = [
-                                        "Colombo", "Gampaha", "Kalutara", "Kandy", "Matale",
-                                        "Nuwara Eliya", "Galle", "Matara", "Hambantota", "Jaffna",
-                                        "Kilinochchi", "Mannar", "Vavuniya", "Mullaitivu", "Batticaloa",
-                                        "Ampara", "Trincomalee", "Kurunegala", "Puttalam", "Anuradhapura",
-                                        "Polonnaruwa", "Badulla", "Monaragala", "Ratnapura", "Kegalle"
+                                        "Colombo",
+                                        "Gampaha",
+                                        "Kalutara",
+                                        "Kandy",
+                                        "Matale",
+                                        "Nuwara Eliya",
+                                        "Galle",
+                                        "Matara",
+                                        "Hambantota",
+                                        "Jaffna",
+                                        "Kilinochchi",
+                                        "Mannar",
+                                        "Vavuniya",
+                                        "Mullaitivu",
+                                        "Batticaloa",
+                                        "Ampara",
+                                        "Trincomalee",
+                                        "Kurunegala",
+                                        "Puttalam",
+                                        "Anuradhapura",
+                                        "Polonnaruwa",
+                                        "Badulla",
+                                        "Monaragala",
+                                        "Ratnapura",
+                                        "Kegalle"
                                     ];
                                     $selected_districts = explode(',', $data['provider']->service_areas);
                                     foreach ($districts as $district) {
@@ -200,46 +220,7 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                 </div>
 
 
-                <!-- Work Photos Section -->
-                <div class="work-photos">
-                    <div class="section-header">
-                        <h3 class="section-title">Work Photos</h3>
-                        <button class="edit-btn" onclick="toggleEditMode('photos')">
-                            <i class="fas fa-edit"></i> Manage Photos
-                        </button>
-                    </div>
-
-                    <form id="photos-form" action="<?php echo URLROOT; ?>/ServiceProviderController/updateWorkPhotos" method="POST" enctype="multipart/form-data" style="display: none;">
-                        <div class="photo-upload">
-                            <input type="file" name="work_photos[]" multiple accept="image/*">
-                            <button type="submit" class="upload-btn">
-                                <i class="fas fa-upload"></i> Upload New Photos
-                            </button>
-                        </div>
-                    </form>
-
-                    <div id="photos-view">
-                        <div class="photos-grid">
-                            <?php
-                            if (!empty($data['provider']->work_photos)) {
-                                $photos = explode(',', $data['provider']->work_photos);
-                                foreach ($photos as $index => $photo) {
-                                    if (!empty($photo)) {
-                                        echo '<div class="photo-item">
-                                                <img src="' . URLROOT . '/public/img/SVPpic/' . htmlspecialchars($photo) . '" alt="Work Photo">
-                                                <button class="delete-photo" onclick="deletePhoto(' . $index . ')">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                              </div>';
-                                    }
-                                }
-                            } else {
-                                echo '<p class="no-photos">No work photos uploaded yet.</p>';
-                            }
-                            ?>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>
@@ -261,25 +242,7 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
             }
         }
 
-        function deletePhoto(photoIndex) {
-            if (confirm('Are you sure you want to delete this photo?')) {
-                fetch('<?php echo URLROOT; ?>/ServiceProviderController/deleteWorkPhoto', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: 'photo_index=' + photoIndex
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        location.reload();
-                    } else {
-                        alert('Error deleting photo');
-                    }
-                });
-            }
-        }
+        
     </script>
 </body>
 

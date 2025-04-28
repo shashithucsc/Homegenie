@@ -11,7 +11,7 @@ if (session_status() == PHP_SESSION_NONE) {
                 class="nav-item <?= $current_page == 'appointments.php' ? 'active' : '' ?>" id="appointments-link">Appointments</a>
             <a href="<?php echo URLROOT; ?>/ServiceProviderController/quotation"
                 class="nav-item <?= $current_page == 'quotation.php' ? 'active' : '' ?>" id="quotation-link">Quotation</a>
-            <a href="../../supplier/HomeController.php"
+            <a href="<?php echo URLROOT; ?>/StorePageController/index"
                 class="nav-item <?= $current_page == 'store.php' ? 'active' : '' ?>" id="store-link">Store</a>
             <a href="<?php echo URLROOT; ?>/ServiceProviderController/support"
                 class="nav-item <?= $current_page == 'support.php' ? 'active' : '' ?>" id="support-link">Support</a>

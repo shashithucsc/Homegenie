@@ -165,6 +165,7 @@ class ServiceProviderController extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $data = [
                 'user_id' => $_SESSION['user_id'],
+                'title' => trim($_POST['title']),
                 'description' => trim($_POST['description'])
             ];
 
@@ -331,33 +332,7 @@ public function SubmittedQuotations()
     }
     
 
-    public function updateWorkPhotos()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['work_photos'])) {
-            $service_provider_id = $_SESSION['user_id'];
+
     
-            $result = $this->ProfileSVPModel->updateWorkPhotos($service_provider_id, $_FILES['work_photos']);
-    
-            if ($result) {
-                header('Location: ' . URLROOT . '/ServiceProviderController/profile?success=Photos uploaded successfully');
-            } else {
-                header('Location: ' . URLROOT . '/ServiceProviderController/profile?error=Failed to update photo information');
-            }
-            exit();
-        }
-    }
-    
-    public function deleteWorkPhoto()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['photo_index'])) {
-            $service_provider_id = $_SESSION['user_id'];
-            $photo_index = $_POST['photo_index'];
-    
-            $result = $this->ProfileSVPModel->deleteWorkPhoto($service_provider_id, $photo_index);
-    
-            echo json_encode($result);
-            exit();
-        }
-    }
     
 }

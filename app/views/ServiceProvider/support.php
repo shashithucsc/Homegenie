@@ -29,6 +29,12 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                 <?php flash('issue_message'); ?>
                 <form class="issue-form" action="<?php echo URLROOT; ?>/ServiceProviderController/createIssue" method="POST">
                     <div class="form-group">
+                        <label for="issue-title">Issue Title</label>
+                        <input type="text" id="issue-title" name="title" class="form-control <?php echo (!empty($data['title_err'])) ? 'is-invalid' : ''; ?>" 
+                            placeholder="Enter a brief title for your issue" required>
+                        <span class="invalid-feedback"><?php echo isset($data['title_err']) ? $data['title_err'] : ''; ?></span>
+                    </div>
+                    <div class="form-group">
                         <label for="issue-description">Describe your issue</label>
                         <textarea id="issue-description" name="description" class="form-control <?php echo (!empty($data['description_err'])) ? 'is-invalid' : ''; ?>" rows="4"
                             placeholder="Please provide detailed information about your issue" required><?php echo isset($data['description']) ? $data['description'] : ''; ?></textarea>
@@ -50,12 +56,14 @@ require_once APPROOT . '/views/ServiceProvider/navbar_svp.php';
                         <?php foreach ($data['issues'] as $issue) : ?>
                             <div class="issue-item">
                                 <div class="issue-header">
-                                    <span class="issue-title"><?php echo htmlspecialchars($issue->description); ?></span>
+                                    <span class="issue-title"><?php echo htmlspecialchars($issue->title); ?></span>
                                     <span class="status-badge <?php echo $issue->status == 'completed' ? 'status-resolved' : 'status-pending'; ?>">
                                         <?php echo $issue->status == 'completed' ? 'Solved' : (!empty($issue->status) ? ucfirst($issue->status) : 'Pending'); ?>
                                     </span>
                                 </div>
-                                
+                                <div class="issue-description">
+                                    <?php echo htmlspecialchars($issue->description); ?>
+                                </div>
                                 <div class="issue-date">
                                     <?php echo date('F d, Y', strtotime($issue->created_at)); ?>
                                 </div>

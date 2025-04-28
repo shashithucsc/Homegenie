@@ -167,7 +167,7 @@ class StorePageController extends Controller
 
 
 
-    //cart functions
+    
     public function viewCart()
     {
         $customerId = $_SESSION['user_id'];
@@ -212,14 +212,14 @@ class StorePageController extends Controller
             die('Error: Supplier ID not found.');
         }
 
-        // Check available inventory
+        
         $availableQuantity = $this->cartModel->getAvailableQuantity($itemId);
         if ($quantity > $availableQuantity) {
             $this->showPopup("Not enough stock available.", URLROOT . "/StorePagesController");
             return;
         }
 
-        // Add item to cart and update inventory level
+        
         if ($this->cartModel->addItemToCart($customerId, $itemId, $quantity, $supplierId)) {
             $this->cartModel->updateInventoryLevel($itemId, $availableQuantity - $quantity);
             $this->showPopup("Item(s) added to cart successfully!", URLROOT . "/StorePageController/viewCart");
@@ -235,16 +235,16 @@ class StorePageController extends Controller
             return;
         }
 
-        // Get item details before removing it
+       
         $cartItem = $this->cartModel->getCartItemById($cartItemId);
         if ($cartItem) {
             $itemId = $cartItem->item_id;
             $quantity = $cartItem->quantity;
 
-            // Remove item from cart and update inventory level
+            
             if ($this->cartModel->removeItemFromCart($cartItemId)) {
                 $availableQuantity = $this->cartModel->getAvailableQuantity($itemId);
-                $newQuantity = $availableQuantity + $quantity; // Restore the removed quantity to inventory
+                $newQuantity = $availableQuantity + $quantity; 
                 $this->cartModel->updateInventoryLevel($itemId, $newQuantity);
                 $this->showPopup("Item removed from cart successfully!", URLROOT . "/StorePageController/viewCart");
             } else {
@@ -263,13 +263,13 @@ class StorePageController extends Controller
         $cartItemId = $_POST['cart_item_id'];
         $newQuantity = (int) $_POST['new_quantity'];
 
-        // Get item details
+        
         $cartItem = $this->cartModel->getCartItemById($cartItemId);
         $itemId = $cartItem->item_id;
         $availableQuantity = $this->cartModel->getAvailableQuantity($itemId);
 
         if ($newQuantity <= $availableQuantity) {
-            // Update cart and inventory
+           
             $this->cartModel->updateCartQuantity($cartItemId, $newQuantity);
             $this->cartModel->updateInventoryLevel($itemId, $availableQuantity - $newQuantity);
             $this->showPopup("Item quantity updated successfully!", URLROOT . "/StorePageController/viewCart");
@@ -314,11 +314,11 @@ class StorePageController extends Controller
 
         $numSuppliers = count($supplierIds);
 
-        // Get overall grand_total and delivery_fee 
+        
         $grandTotal = isset($_POST['grand_total']) ? floatval($_POST['grand_total']) : $subtotal;
         $deliveryFee = isset($_POST['delivery_fee']) ? floatval($_POST['delivery_fee']) : 0;
 
-        // Get supplier specific data 
+       
         $supplierData = json_decode($_POST['supplier_totals'], true);
         if ($supplierData) {
             $supplierTotals = $supplierData['totals'];
@@ -365,7 +365,7 @@ class StorePageController extends Controller
         }
 
         if ($paymentMethod === 'cod') {
-            // Cash on Delivery
+            
             foreach ($supplierIds as $supplierId) {
                 if (!isset($supplierTotals[$supplierId]) || !isset($supplierDeliveryFees[$supplierId])) {
                     $this->showPopup("Missing totals for supplier ID $supplierId.", URLROOT . "/StorePageController/viewCart");
@@ -376,7 +376,7 @@ class StorePageController extends Controller
                 $deliveryFee = (float) $supplierDeliveryFees[$supplierId];
                 $supplierGrandTotal = $itemTotal + $deliveryFee;
 
-                // Create an order per supplier
+                
                 $saleId = $this->cartModel->createOrder($customerId, $supplierGrandTotal, $paymentMethod, $deliveryAddress, $supplierId, $deliveryFee);
 
                 if (!$saleId) {
@@ -384,7 +384,7 @@ class StorePageController extends Controller
                     return;
                 }
 
-                // Get all cart items belonging to this supplier
+               
                 $cartItems = $this->cartModel->getCartItemsByUserIdAndSupplierId($customerId, $supplierId);
 
                 if (empty($cartItems)) {
@@ -397,13 +397,13 @@ class StorePageController extends Controller
                 }
             }
 
-            // Clear the cart
+           
             $this->cartModel->clearCart($customerId);
 
             $this->showPopup("Order placed successfully!", URLROOT . "/StorePageController/index");
 
         } elseif ($paymentMethod === 'card') {
-            // Card Payment
+           
             $_SESSION['pending_supplier_ids'] = $supplierIds;
             $_SESSION['pending_supplier_totals'] = $supplierTotals;
             $_SESSION['pending_supplier_delivery_fees'] = $supplierDeliveryFees;
@@ -497,7 +497,7 @@ class StorePageController extends Controller
         return;
     }
 
-    // Process payment for each supplier
+  
     foreach ($supplierIds as $supplierId) {
         if (!isset($supplierTotals[$supplierId]) || !isset($supplierDeliveryFees[$supplierId])) {
             $this->showPopup("Missing totals for supplier ID $supplierId.", URLROOT . "/StorePageController/viewCart");
@@ -508,7 +508,7 @@ class StorePageController extends Controller
         $deliveryFee = (float)$supplierDeliveryFees[$supplierId];
         $supplierGrandTotal = $itemTotal + $deliveryFee;
 
-        // Create an order per supplier
+      
         $saleId = $this->cartModel->createOrder($customerId, $supplierGrandTotal, 'card', $deliveryAddress, $supplierId, $deliveryFee);
 
         if (!$saleId) {
@@ -516,7 +516,7 @@ class StorePageController extends Controller
             return;
         }
 
-        // Get all cart items belonging to this supplier
+       
         $cartItems = $this->cartModel->getCartItemsByUserIdAndSupplierId($customerId, $supplierId);
 
         if (empty($cartItems)) {
@@ -529,10 +529,10 @@ class StorePageController extends Controller
         }
     }
 
-    // Clear the cart
+    
     $this->cartModel->clearCart($customerId);
 
-    // Clear pending session data
+   
     unset($_SESSION['pending_grand_total']);
     unset($_SESSION['pending_delivery_address']);
     unset($_SESSION['pending_supplier_ids']);

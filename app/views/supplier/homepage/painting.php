@@ -26,15 +26,21 @@
     </div>
 
     <section class="categories">
-        <h1>Explore Popular Categories</h1>
-        <div class="category-buttons">
-            <a href="<?php echo URLROOT; ?>/StorePageController/cleaning" class="category-btn">🧹 Cleaning</a>
-            <a href="<?php echo URLROOT; ?>/StorePageController/electricity" class="category-btn">💡 Electrical</a>
-            <a href="<?php echo URLROOT; ?>/StorePageController/painting" class="category-btn">🎨 Painting</a>
-            <a href="<?php echo URLROOT; ?>/StorePageController/carpentry" class="category-btn">🪚 Carpentry</a>
-            <a href="<?php echo URLROOT; ?>/StorePageController/masonary" class="category-btn">🧱 Masonry</a>
-        </div>
-    </section>
+            <h1>Explore Popular Categories</h1>
+            <div class="category-buttons">
+                <a href="<?php echo URLROOT; ?>/StorePageController/cleaning" class="category-btn"><i
+                        class="fa fa-broom"></i> Cleaning</a>
+                <a href="<?php echo URLROOT; ?>/StorePageController/electricity" class="category-btn"><i
+                        class="fa fa-lightbulb"></i> Electrical</a>
+                <a href="<?php echo URLROOT; ?>/StorePageController/painting" class="category-btn"><i
+                        class="fa fa-paint-brush"></i> Painting</a>
+                <a href="<?php echo URLROOT; ?>/StorePageController/carpentry" class="category-btn"><i
+                        class="fa fa-hammer"></i> Carpentry</a>
+                <a href="<?php echo URLROOT; ?>/StorePageController/masonary" class="category-btn"><i
+                        class="fa fa-hammer"></i> Masonry</a>
+            </div>
+        </section>
+
 
     <section class="box">
         <h1>Painting...</h1>

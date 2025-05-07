@@ -33,11 +33,11 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                 <div class="flex-row">
                     <div class="input-group">
                         <label for="first-name">First Name</label>
-                        <input type="text" id="first-name" name="first_name" required placeholder="Sandun">
+                        <input type="text" id="first-name" name="first_name" required placeholder="Sandun" pattern="[^\s]+" title="Name cannot contain spaces">
                     </div>
                     <div class="input-group">
                         <label for="last-name">Last Name</label>
-                        <input type="text" id="last-name" name="last_name" required placeholder="Sahiru">
+                        <input type="text" id="last-name" name="last_name" required placeholder="Sahiru" pattern="[^\s]+" title="Name cannot contain spaces">
                     </div>
                 </div>
                 <div class="flex-row">
@@ -101,12 +101,10 @@ require_once APPROOT . '/views/inc/components/logginNavbar.php';
                     <div class="input-group">
                         <label for="expertise">Expertise/Category of Service</label>
                         <select id="expertise" name="expertise" required>
-                            <option value="plumbing">Plumbing</option>
-                            <option value="electrical">Electrical Work</option>
-                            <option value="cleaning">Cleaning</option>
-                            <option value="painting">Painting</option>
-                            <option value="gardening">Gardening</option>
-                            <option value="masonry">Masonry</option>
+                            <option value="">-- Select Expertise --</option>
+                            <?php foreach($data['expertise_list'] as $expertise): ?>
+                                <option value="<?php echo htmlspecialchars($expertise->expertise_name); ?>"><?php echo htmlspecialchars($expertise->expertise_name); ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                 </div>

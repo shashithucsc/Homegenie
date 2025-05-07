@@ -2,9 +2,12 @@
 class SignUpController extends Controller {
 
     private $UserModel;
+    private $ExpertiseModel;
+    
     public function __construct()
     {
         $this->UserModel = $this->model('UserModel');
+        $this->ExpertiseModel = $this->model('ExpertiseModel');
         session_regenerate_id(true);
     }
 
@@ -19,7 +22,10 @@ class SignUpController extends Controller {
     }
 
     public function provider() {
-        $this->view('users/v_register_sp');
+        $data = [
+            'expertise_list' => $this->ExpertiseModel->getAllExpertise()
+        ];
+        $this->view('users/v_register_sp', $data);
     }
 
     public function register(){
@@ -70,7 +76,6 @@ class SignUpController extends Controller {
                 $province = 'Uva Province';
             }
     
-            // Common fields
             $data = [
                 'role' => $role,
                 'first_name' => trim($_POST['first_name']),
@@ -84,19 +89,15 @@ class SignUpController extends Controller {
                 'street' => trim($_POST['street']),
                 'agree_terms' => isset($_POST['agree_terms']) ? 1 : 0,
                 'profile_image' => ($role === 'customer') ? null : $this->processImageUpload($_FILES['profile_image'])
-     
-
             ];
     
-            // First validate common fields
             $missingFields = $this->validateCommonFields($data);
             if (!empty($missingFields)) {
                 $this->showPopup("Please fill in all required fields: " . implode(', ', $missingFields), URLROOT . '/register');
                 return;
             }
     
-            // Validate role-specific fields
-            if ($role === 'service_provider') {
+            if ($role === 'service_provider') {              
                 $serviceProviderData = [
                     'expertise' => trim($_POST['expertise']),
                     'description' => trim($_POST['description']),
@@ -106,7 +107,9 @@ class SignUpController extends Controller {
                     'bank_details' => trim($_POST['bank_details']),
                     'id_front' => $this->processImageUpload($_FILES['id_front']),
                     'id_back' => $this->processImageUpload($_FILES['id_back']),
+                    'work_photos' => ""
                 ];
+                
     
                 $missingProviderFields = $this->validateServiceProviderFields($serviceProviderData);
                 if (!empty($missingProviderFields)) {
@@ -116,10 +119,10 @@ class SignUpController extends Controller {
             } elseif ($role === 'supplier') {
                 $supplierData = [
                     'expertise' => trim($_POST['expertise']),
-                    'NIC' => trim($_POST['id_number']), // Changed from NIC to id_number
+                    'NIC' => trim($_POST['id_number']),
                     'bank_details' => trim($_POST['bank_details']),
-                    'id_front_photo' => $this->processImageUpload($_FILES['id_front']), // Changed from id_front_photo
-                    'id_back_photo' => $this->processImageUpload($_FILES['id_back'])    // Changed from id_back_photo
+                    'id_front_photo' => $this->processImageUpload($_FILES['id_front']),
+                    'id_back_photo' => $this->processImageUpload($_FILES['id_back']) 
                 ];
     
                 $missingSupplierFields = $this->validateSupplierFields($supplierData);
@@ -137,20 +140,16 @@ class SignUpController extends Controller {
             }
             error_log("Email is not taken, proceeding with registration");
     
-            // Hash password
             $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
     
-            // Register user (insert into users table)
             $userId = $this->UserModel->registerUser($data);
             
-            // Add error handling to debug the issue
             if (!$userId) {
                 error_log("User registration failed: " . print_r($data, true));
                 $this->showPopup("Error registering user. Please check logs.", URLROOT . '/LoginController/index');
                 return;
             }
     
-            // Insert into role-specific tables
             if ($role === 'service_provider') {
                 $serviceProviderData['provider_id'] = $userId;
                 $success = $this->UserModel->registerServiceProvider($serviceProviderData);
@@ -161,7 +160,6 @@ class SignUpController extends Controller {
                     $this->showPopup("Error registering service provider details", URLROOT . '/LoginController/index');
                 }
             } elseif ($role === 'supplier') {
-                // Here's the fix - pass user_id directly rather than supplier_id
                 $success = $this->UserModel->registerSupplier($userId, $supplierData);
     
                 if ($success) {
@@ -188,7 +186,6 @@ class SignUpController extends Controller {
         }
     }
 }
-    // Add this new method to handle multiple images
     private function processMultipleImages($files)
     {
         $images = [];
@@ -199,12 +196,9 @@ class SignUpController extends Controller {
                 }
             }
         }
-        return !empty($images) ? implode('|||', $images) : null; // Using a delimiter to separate multiple images
+        return !empty($images) ? implode('|||', $images) : null; 
     }
 
-
-
-    // Validate common fields
     private function validateCommonFields($data)
     {
         $required = [
@@ -227,7 +221,6 @@ class SignUpController extends Controller {
             }
         }
     
-        // Only check profile image for non-customer roles
         if ($data['role'] !== 'customer' && empty($data['profile_image'])) {
             $missing[] = 'profile_image';
         }
@@ -246,7 +239,6 @@ class SignUpController extends Controller {
 
     private function validateServiceProviderFields($serviceProviderData)
     {
-        // Only validate service provider specific fields
         $required = [
             'expertise',
             'working_hours',
@@ -270,7 +262,6 @@ class SignUpController extends Controller {
 
     public function validateSupplierFields($supplierData)
     {
-        // Only validate supplier specific fields
         $required = [
             'expertise',
             'NIC',
